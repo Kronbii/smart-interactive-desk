@@ -12,7 +12,7 @@ https://drive.google.com/drive/folders/1InH4OToC-3ZCmpd2p8zu-zYlxD98OoeB?usp=dri
 * Reports
 
 ## Repo Tree
-''' bash
+``` bash
 ├── CAD
 │   └── readme.md
 ├── final-report
@@ -32,4 +32,4 @@ https://drive.google.com/drive/folders/1InH4OToC-3ZCmpd2p8zu-zYlxD98OoeB?usp=dri
 │   └── python
 │       └── readme.md
 └── tree.sh
-'''
+```

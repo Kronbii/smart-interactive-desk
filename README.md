@@ -82,3 +82,108 @@ server.listen(PORT, LOCAL_IP, () => {
     console.log(Server running on http://${LOCAL_IP}:${PORT});
 });
 ```
+
+### Create Front End File
+create public folder in the project directory
+```
+mkdir public
+```
+
+create front.html file inside public directory
+```
+touch public/front.html
+```
+Open public/front.html and paste the following
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            margin: 10px;
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #actionDisplay {
+            margin-top: 20px;
+            font-size: 20px;
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <h1>Control Panel</h1>
+    <button id="upBtn">Up</button>
+    <button id="downBtn">Down</button>
+    <button id="tiltUpBtn">Tilting Up</button>
+    <button id="tiltDownBtn">Tilting Down</button>
+
+    <div id="actionDisplay"></div>
+
+    <!-- Include Socket.io client library -->
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+
+    <script>
+        // Connect to the server
+        const socket = io("http://192.168.1.122:3000");
+
+        // Listen for actions from the server
+        socket.on("action", (action) => {
+            document.getElementById("actionDisplay").innerText = Action: ${action};
+        });
+
+        // Function to send button action to the server
+        function sendAction(action) {
+            fetch("/send-action", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action: action })
+            })
+            .then(response => response.json())
+            .then(data => console.log(data.message))
+            .catch(error => console.error("Error:", error));
+        }
+
+        // Button event listeners
+        document.getElementById("upBtn").addEventListener("click", () => sendAction("up"));
+        document.getElementById("downBtn").addEventListener("click", () => sendAction("down"));
+        document.getElementById("tiltUpBtn").addEventListener("click", () => sendAction("tilting up"));
+        document.getElementById("tiltDownBtn").addEventListener("click", () => sendAction("tilting down"));
+    </script>
+</body>
+</html>
+```
+
+### Run the server
+```
+node server.js
+```
+you should see
+```
+Server running on http://your_ip:your_port
+```
+### Connect Client Device
+visit the following link
+```
+http://your_ip:your_port/front.html
+```
+
+### Final Project Structure
+```
+myexpress-app/
+├── server.js           # Backend server
+├── public/             # Frontend folder
+│   └── front.html      # Frontend HTML file
+├── node_modules/       # Installed dependencies
+├── package.json        # Project config
+└── package-lock.json   # Lock file
+```

@@ -45,7 +45,7 @@ npm install express socket.io
 touch server.js
 open server.js and paste the following code
 
-'''
+```
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
@@ -81,4 +81,4 @@ app.post("/send-action", (req, res) => {
 server.listen(PORT, LOCAL_IP, () => {
     console.log(Server running on http://${LOCAL_IP}:${PORT});
 });
-'''
+```

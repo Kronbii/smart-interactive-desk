@@ -45,7 +45,7 @@ npm install express socket.io
 touch server.js
 open server.js and paste the following code
 
-```
+``` js
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
@@ -69,32 +69,32 @@ app.use(express.json());
 // API Route to receive button presses from frontend
 app.post("/send-action", (req, res) => {
     const action = req.body.action;
-    console.log(Action received: ${action});
+    console.log(`Action received: ${action}`);
 
     // Emit action to all connected clients
     io.emit("action", action);
 
-    res.status(200).json({ message: Action "${action}" received });
+    res.status(200).json({`message: Action "${action}" received`});
 });
 
 // Start the server
 server.listen(PORT, LOCAL_IP, () => {
-    console.log(Server running on http://${LOCAL_IP}:${PORT});
+    console.log(`Server running on http://${LOCAL_IP}:${PORT}`);
 });
 ```
 
 ### Create Front End File
 create public folder in the project directory
-```
+``` bash
 mkdir public
 ```
 
 create front.html file inside public directory
-```
+``` bash
 touch public/front.html
 ```
 Open public/front.html and paste the following
-```
+``` html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -164,21 +164,21 @@ Open public/front.html and paste the following
 ```
 
 ### Run the server
-```
+``` bash
 node server.js
-```
+``` bash
 you should see
-```
+``` bash
 Server running on http://your_ip:your_port
 ```
 ### Connect Client Device
 visit the following link
-```
+``` bash
 http://your_ip:your_port/front.html
 ```
 
 ### Final Project Structure
-```
+``` bash
 myexpress-app/
 ├── server.js           # Backend server
 ├── public/             # Frontend folder

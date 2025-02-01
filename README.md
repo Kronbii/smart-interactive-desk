@@ -98,7 +98,7 @@ app.post("/send-action", (req, res) => {
     // Emit action to all connected clients
     io.emit("action", action);
 
-    res.status(200).json({message:` Action "${action}" received`});
+    res.status(200).json({message: `Action "${action}" received`});
 });
 
 // Start the server

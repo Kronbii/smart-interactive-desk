@@ -4,7 +4,7 @@ const socketIo = require("socket.io");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const LOCAL_IP = "192.168.1.122";  // Replace this with your actual local IP
+const LOCAL_IP = "192.168.1.109";  // Replace this with your actual local IP
 
 // Create the HTTP server
 const server = http.createServer(app);

@@ -197,10 +197,29 @@ Open public/front.html and paste the following
 </html>
 ```
 
+### Create Middleware for Logging
+Create Directory
+```bash
+mkdir middlewares
+cd middlewares
+touch logger.js
+```
+
+Paste The following code to logger.js files
+```js
+// middlewares/logger.js
+const logger = (req, res, next) => {
+    console.log(${req.method} ${req.url} - ${new Date().toISOString()});
+    next(); // Passes control to the next middleware or route handler
+};
+
+module.exports = logger; // Make sure the function is exported
+```
+
 ### Run the server
 ``` bash
 node server.js
-``` bash
+```
 you should see
 ``` bash
 Server running on http://your_ip:your_port

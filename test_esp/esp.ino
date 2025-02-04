@@ -2,8 +2,8 @@
 #include <PubSubClient.h>
 
 // Wi-Fi and MQTT Settings
-const char* ssid = "RaspberryPi_Hotspot";
-const char* password = "yourpassword";
+const char* ssid = "kronbii";
+const char* password = "kornbiii";
 const char* mqtt_server = "192.168.4.1";  // Change to your Raspberry Pi's IP if different
 
 WiFiClient espClient;

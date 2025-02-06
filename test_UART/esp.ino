@@ -34,3 +34,5 @@ void loop() {
   delay(1000); // Adjust delay as needed
   digitalWrite(LED_BUILTIN, LOW);
 }
+
+https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json

@@ -225,3 +225,8 @@ myexpress-app/
 ├── package.json        # Project config
 └── package-lock.json   # Lock file
 ```
+
+## ESP32 Boards Repo
+```
+https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+```

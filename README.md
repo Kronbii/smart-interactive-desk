@@ -12,7 +12,6 @@
 
 #### **Subdirectories**
 - **Reports**
-(src/ds4_control)
 
 ## **Repository Structure**
 ```bash
@@ -59,50 +58,7 @@ npm install express socket.io
 ### **4️⃣ Create Backend Server**
 Create `server.js` and paste the following code:
 
-```javascript
-const express = require("express");
-const http = require("http");
-const socketIo = require("socket.io");
-const os = require("os");
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Function to get the local IP address dynamically
-function getLocalIP() {
-    const interfaces = os.networkInterfaces();
-    for (const iface of Object.values(interfaces)) {
-        for (const config of iface) {
-            if (config.family === "IPv4" && !config.internal) {
-                return config.address;
-            }
-        }
-    }
-    return "127.0.0.1";
-}
-
-const LOCAL_IP = getLocalIP();
-const server = http.createServer(app);
-const io = socketIo(server);
-
-app.use(express.static("public"));
-app.use(express.json());
-
-app.post("/send-action", (req, res) => {
-    const action = req.body.action;
-    console.log(`Action received: ${action}`);
-    io.emit("action", action);
-    res.status(200).json({ message: `Action "${action}" received` });
-});
-
-app.get("/server-ip", (req, res) => {
-    res.json({ ip: LOCAL_IP });
-});
-
-server.listen(PORT, LOCAL_IP, () => {
-    console.log(`Server running on http://${LOCAL_IP}:${PORT}`);
-});
-```
+[Server Code](src/web-app-test/server.js)
 
 ---
 

@@ -1,51 +1,64 @@
-# Smart Learning Table For Classrooms
-## Members
+# **Smart Learning Table For Classrooms**
+
+## **Members**
 - Rami Kronbi
 - Bassam Kousa
-- ALi Daaboul
+- Ali Daaboul
 - Mohamad Berjawi
 - Mohamad Hariri
 
-## Google Drive Link
-https://drive.google.com/drive/folders/1InH4OToC-3ZCmpd2p8zu-zYlxD98OoeB?usp=drive_link
-#### Subdirectories 
-* Reports
+## **Google Drive Link**
+[Project Resources](https://drive.google.com/drive/folders/1InH4OToC-3ZCmpd2p8zu-zYlxD98OoeB?usp=drive_link)
 
-## Repo Tree
-``` bash
+#### **Subdirectories**
+- **Reports**
+
+## **Repository Structure**
+```bash
 ├── CAD
-│   └── readme.md
+│   └── readme.md
 ├── final-report
-│   └── readme.md
+│   └── readme.md
 ├── mems
-│   └── readme.md
+│   └── readme.md
 ├── progress-reports
-│   └── readme.md
+│   └── readme.md
 ├── prototype-video
-│   └── readme.md
+│   └── readme.md
 ├── README.md
 ├── Report
-│   └── readme.md
+│   └── readme.md
 ├── src
-│   ├── arduino
-│   │   └── readme.md
-│   └── python
-│       └── readme.md
+│   ├── arduino
+│   │   └── readme.md
+│   └── python
+│       └── readme.md
 └── tree.sh
 ```
 
-## Intializing Node.js Web App
-### Initialize Project Folder
-mkdir myexpress-app && cd myexpress-app
-### Initialize Node.js Project
-npm init -y
-### Install Required Dependencies
-npm install express socket.io
-### Create Backend Server
-touch server.js
-open server.js and paste the following code
+---
 
-``` js
+## **Initializing Node.js Web Application**
+
+### **1️⃣ Create Project Folder**
+```bash
+mkdir myexpress-app && cd myexpress-app
+```
+
+### **2️⃣ Initialize Node.js Project**
+```bash
+npm init -y
+```
+
+### **3️⃣ Install Required Dependencies**
+```bash
+npm install express socket.io
+```
+
+### **4️⃣ Create Backend Server**
+Create `server.js` and paste the following code:
+
+```javascript
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
@@ -60,61 +73,53 @@ function getLocalIP() {
     for (const iface of Object.values(interfaces)) {
         for (const config of iface) {
             if (config.family === "IPv4" && !config.internal) {
-                return config.address;  // Return first non-internal IPv4 address
+                return config.address;
             }
         }
     }
-    return "127.0.0.1"; // Fallback to localhost
+    return "127.0.0.1";
 }
 
 const LOCAL_IP = getLocalIP();
-
-// Create the HTTP server
 const server = http.createServer(app);
-
-// Initialize Socket.io
 const io = socketIo(server);
 
-// Serve static files from the "public" folder
 app.use(express.static("public"));
-
-// Middleware to parse JSON
 app.use(express.json());
 
-// API Route to receive button presses from frontend
 app.post("/send-action", (req, res) => {
     const action = req.body.action;
     console.log(`Action received: ${action}`);
-
-    // Emit action to all connected clients
     io.emit("action", action);
-
     res.status(200).json({ message: `Action "${action}" received` });
 });
 
-// API to serve the server's IP dynamically
 app.get("/server-ip", (req, res) => {
     res.json({ ip: LOCAL_IP });
 });
 
-// Start the server
 server.listen(PORT, LOCAL_IP, () => {
     console.log(`Server running on http://${LOCAL_IP}:${PORT}`);
 });
 ```
 
-### Create Front End File
-create public folder in the project directory
-``` bash
+---
+
+## **Frontend Setup**
+
+### **1️⃣ Create Public Folder**
+```bash
 mkdir public
 ```
 
-create front.html file inside public directory
-``` bash
+### **2️⃣ Create Frontend HTML File**
+```bash
 touch public/front.html
 ```
-Open public/front.html and paste the following
-``` html
+
+Paste the following content into `public/front.html`:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -149,33 +154,27 @@ Open public/front.html and paste the following
 
     <div id="actionDisplay"></div>
 
-    <!-- Include Socket.io client library -->
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-
     <script>
-        // Function to fetch server IP dynamically
         async function getServerIP() {
             try {
                 const response = await fetch("/server-ip");
                 const data = await response.json();
-                return data.ip;  // Get the dynamically retrieved IP
+                return data.ip;
             } catch (error) {
                 console.error("Error fetching server IP:", error);
-                return "127.0.0.1";  // Fallback to localhost
+                return "127.0.0.1";
             }
         }
 
-        // Initialize WebSocket connection dynamically
         async function initializeSocket() {
             const serverIP = await getServerIP();
             const socket = io(`http://${serverIP}:3000`);
 
-            // Listen for actions from the server
             socket.on("action", (action) => {
                 document.getElementById("actionDisplay").innerText = `Action: ${action}`;
             });
 
-            // Function to send button action to the server
             function sendAction(action) {
                 fetch("/send-action", {
                     method: "POST",
@@ -187,46 +186,38 @@ Open public/front.html and paste the following
                 .catch(error => console.error("Error:", error));
             }
 
-            // Button event listeners
             document.getElementById("upBtn").addEventListener("click", () => sendAction("up"));
             document.getElementById("downBtn").addEventListener("click", () => sendAction("down"));
             document.getElementById("tiltUpBtn").addEventListener("click", () => sendAction("tilting up"));
             document.getElementById("tiltDownBtn").addEventListener("click", () => sendAction("tilting down"));
         }
 
-        // Call the function to initialize the WebSocket connection
         initializeSocket();
     </script>
 </body>
 </html>
 ```
 
-### Run the server
-``` bash
+---
+
+## **Running the Server**
+```bash
 node server.js
 ```
-you should see
-``` bash
+You should see:
+```bash
 Server running on http://your_ip:your_port
 ```
-### Connect Client Device
-visit the following link
-``` bash
+
+## **Connecting a Client Device**
+Open the following URL on any browser:
+```bash
 http://your_ip:your_port/front.html
 ```
 
-### Final Project Structure
-``` bash
-myexpress-app/
-├── server.js           # Backend server
-├── public/             # Frontend folder
-│   └── front.html      # Frontend HTML file
-├── node_modules/       # Installed dependencies
-├── package.json        # Project config
-└── package-lock.json   # Lock file
-```
+---
 
-## ESP32 Boards Repo
+## **ESP32 Boards Repo**
 ```
 https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
 ```

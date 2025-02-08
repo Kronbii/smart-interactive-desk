@@ -8,14 +8,17 @@ class MyController(Controller):
         super().__init__(**kwargs)
         self.running = False  # Flag to control the loop
 
-    def on_up_arrow_press(self):
-        print("Up Arrow Pressed: Sending Signal...")
-        self.running = True
-
-        # Loop to keep sending the signal while button is pressed
+    def send_signal(self):
+        """Continuously sends signal while Up Arrow is pressed"""
         while self.running:
             print("🚀 Signal is being sent!")
             time.sleep(0.1)  # Adjust the frequency of the signal
+
+    def on_up_arrow_press(self):
+        print("Up Arrow Pressed: Sending Signal...")
+        if not self.running:  # Prevent duplicate loops
+            self.running = True
+            self.send_signal()
 
     def on_up_arrow_release(self):
         print("Up Arrow Released: Stopping Signal...")
@@ -26,52 +29,6 @@ class MyController(Controller):
         pass
 
     def on_any_release(self, button_id=None):
-        pass
-
-    # Override other event handlers to do nothing
-    def on_any_press(self, button_id=None):
-        pass
-
-    def on_any_release(self, button_id=None):
-        pass
-
-    def on_R3_y_at_rest(self):
-        pass
-
-    def on_R3_right(self, value):
-        pass
-
-    def on_L3_up(self, value):
-        pass
-
-    def on_L3_right(self, value):
-        pass
-
-    def on_L3_left(self, value):
-        pass
-
-    def on_R3_down(self, value):
-        pass
-
-    def on_R3_up(self, value):
-        pass
-
-    def on_L3_down(self, value):
-        pass
-
-    def on_R3_left(self, value):
-        pass
-
-    def on_R3_x_at_rest(self):
-        pass
-
-    def on_R3_y_at_rest(self):
-        pass
-
-    def on_L3_x_at_rest(self):
-        pass
-
-    def on_L3_y_at_rest(self):
         pass
 
 

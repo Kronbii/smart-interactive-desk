@@ -18,12 +18,12 @@ class MyController(Controller):
             time.sleep(0.1)
 
     def on_up_arrow_press(self):
-        if not self.running:  # Prevent duplicate loops
-            self.running = True
-            self.send_signal()
+        self.running = True
+        self.send_signal()
 
     def on_up_arrow_release(self):
         self.running = False  # Stop sending the signal
+        self.send_signal()
 
     # Override other event handlers to do nothing
     def on_any_press(self, button_id=None):

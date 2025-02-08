@@ -4,90 +4,37 @@ from pyPS4Controller.controller import Controller
 
 
 class MyController(Controller):
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.ser = serial.Serial("/dev/ttyUSB0", 115200, timeout=1)  # Serial connection
+        try:
+            self.ser = serial.Serial(
+                "/dev/ttyUSB0", 115200, timeout=1
+            )  # Serial connection
+        except serial.SerialException as e:
+            print(f"Serial Error: {e}")
+            self.ser = None  # Avoid crash if serial port isn't available
 
-    def send_signal(self):
-        """Continuously sends signal while a button is pressed"""
-        if self._stop:
-            message = b"s"
-        elif self._up:
-            message = b"u"
-        elif self._down:
-            message = b"d"
-        print(f"Sending: {message}")
-        self.ser.write(message)  # Send over serial
-        time.sleep(0.1)  # Adjust signal frequency
+        self.current_command = None  # Track the current command
+
+    def send_signal(self, command):
+        """Send a command only if it's different from the last command"""
+        if self.current_command != command:
+            self.current_command = command
+            if self.ser:
+                print(f"Sending: {command}")
+                self.ser.write(command.encode())  # Send over serial
 
     def on_up_arrow_press(self):
         """Start sending 'u' when Up Arrow is pressed"""
-        self._up = True
-        self._down = False
-        self._stop = False
-        self.send_signal()
+        self.send_signal("u")
 
     def on_down_arrow_press(self):
         """Start sending 'd' when Down Arrow is pressed"""
-        self._up = False
-        self._down = True
-        self._stop = False
-        self.send_signal()
+        self.send_signal("d")
 
     def on_up_down_arrow_release(self):
         """Stop sending signals when button is released"""
-        self._up = False
-        self._down = False
-        self._stop = True
-        self.send_signal()
-
-    # Override other event handlers to do nothing
-    def on_any_press(self, button_id=None):
-        pass
-
-    def on_any_release(self, button_id=None):
-        pass
-
-    # Override other event handlers to do nothing
-    def on_R3_y_at_rest(self):
-        pass
-
-    def on_R3_right(self, value):
-        pass
-
-    def on_L3_up(self, value):
-        pass
-
-    def on_L3_right(self, value):
-        pass
-
-    def on_L3_left(self, value):
-        pass
-
-    def on_R3_down(self, value):
-        pass
-
-    def on_R3_up(self, value):
-        pass
-
-    def on_L3_down(self, value):
-        pass
-
-    def on_R3_left(self, value):
-        pass
-
-    def on_R3_x_at_rest(self):
-        pass
-
-    def on_R3_y_at_rest(self):
-        pass
-
-    def on_L3_x_at_rest(self):
-        pass
-
-    def on_L3_y_at_rest(self):
-        pass
+        self.send_signal("s")
 
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)

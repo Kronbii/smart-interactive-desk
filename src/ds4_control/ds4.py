@@ -11,18 +11,18 @@ class MyController(Controller):
     def send_signal(self):
         """Continuously sends signal while Up Arrow is pressed"""
         if self.running:
-            print("Sending Signal...")
-            # Add your code here to send the signal
+            print("send up")
+            time.sleep(0.1)
+        if not self.running:
+            print("stop")
             time.sleep(0.1)
 
     def on_up_arrow_press(self):
-        print("Up Arrow Pressed: Sending Signal...")
         if not self.running:  # Prevent duplicate loops
             self.running = True
             self.send_signal()
 
     def on_up_arrow_release(self):
-        print("Up Arrow Released: Stopping Signal...")
         self.running = False  # Stop sending the signal
 
     # Override other event handlers to do nothing

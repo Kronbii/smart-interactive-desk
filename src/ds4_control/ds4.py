@@ -7,7 +7,7 @@ class MyController(Controller):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.ser = serial.Serial("/dev/ttyUSB0", 115200, timeout=1)  # Serial connection
+        self.ser = serial.Serial("/dev/ttyUSB1", 115200, timeout=1)  # Serial connection
 
     def send_signal(self, message):
         """Continuously sends signal while a button is pressed"""

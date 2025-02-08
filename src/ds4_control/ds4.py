@@ -24,14 +24,20 @@ class MyController(Controller):
 
     def on_up_arrow_press(self):
         self._up = True
+        self._down = False
+        self._stop = False
         self.send_signal()
 
     def on_down_arrow_press(self):
+        self._up = False
         self._down = True
+        self._stop = False
         self.send_signal()
 
     def on_up_down_arrow_release(self):
-        self._stop = False  # Stop sending the signal
+        self._up = False
+        self._down = False
+        self._stop = False
         self.send_signal()
 
     # Override other event handlers to do nothing

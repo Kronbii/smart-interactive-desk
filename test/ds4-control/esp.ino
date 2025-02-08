@@ -16,19 +16,28 @@ void loop() {
   if (laptop.available() > 0) {
     String input = laptop.readString();
     input.trim(); // Trim the input
-    if (input == "1") {
-      // Send signal to Raspberry Pi to start processing
-      Serial.print('1');
+    if (input == "u") {
+      digitalWrite(LED_BUILTIN, HIGH);
+      delay(1000); // Adjust delay as needed
+      digitalWrite(LED_BUILTIN, LOW);
+    }
+    else if (input == "d") {
+      digitalWrite(LED_BUILTIN, HIGH);
+      delay(1000); // Adjust delay as needed
+      digitalWrite(LED_BUILTIN, LOW);
+    }
+    else if (input == "s") {
+      digitalWrite(LED_BUILTIN, HIGH);
+      delay(1000); // Adjust delay as needed
+      digitalWrite(LED_BUILTIN, LOW);
     }
   }
 
   if (Serial.available() > 0) {
     String dataFromPi = Serial.readStringUntil('\n');
     if (dataFromPi.length() > 0) {
-      digitalWrite(LED_BUILTIN, HIGH);
+      laptop.println(dataFromPi);
     }
   }
 
-  delay(1000); // Adjust delay as needed
-  digitalWrite(LED_BUILTIN, LOW);
 }

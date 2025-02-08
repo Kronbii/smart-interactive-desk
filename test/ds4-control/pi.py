@@ -36,6 +36,46 @@ class MyController(Controller):
         """Stop sending signals when button is released"""
         self.send_signal("s")
 
+    # Override other event handlers to do nothing
+    def on_R3_y_at_rest(self):
+        pass
+
+    def on_R3_right(self, value):
+        pass
+
+    def on_L3_up(self, value):
+        pass
+
+    def on_L3_right(self, value):
+        pass
+
+    def on_L3_left(self, value):
+        pass
+
+    def on_R3_down(self, value):
+        pass
+
+    def on_R3_up(self, value):
+        pass
+
+    def on_L3_down(self, value):
+        pass
+
+    def on_R3_left(self, value):
+        pass
+
+    def on_R3_x_at_rest(self):
+        pass
+
+    def on_R3_y_at_rest(self):
+        pass
+
+    def on_L3_x_at_rest(self):
+        pass
+
+    def on_L3_y_at_rest(self):
+        pass
+
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
 

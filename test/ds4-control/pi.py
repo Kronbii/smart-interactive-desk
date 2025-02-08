@@ -9,16 +9,16 @@ class MyController(Controller):
         super().__init__(**kwargs)
         self.ser = serial.Serial("/dev/ttyUSB0", 115200, timeout=1)  # Serial connection
 
-    def send_signal(self, message):
+    def send_signal(self):
         """Continuously sends signal while a button is pressed"""
         if self._stop:
-            message = "s"
+            message = b"s"
         elif self._up:
-            message = "u"
+            message = b"u"
         elif self._down:
-            message = "d"
+            message = b"d"
         print(f"Sending: {message}")
-        self.ser.write(f"{message}\n".encode("utf-8"))  # Send over serial
+        self.ser.write(message)  # Send over serial
         time.sleep(0.1)  # Adjust signal frequency
 
     def on_up_arrow_press(self):
@@ -26,21 +26,21 @@ class MyController(Controller):
         self._up = True
         self._down = False
         self._stop = False
-        self.send_signal("u")
+        self.send_signal()
 
     def on_down_arrow_press(self):
         """Start sending 'd' when Down Arrow is pressed"""
         self._up = False
         self._down = True
         self._stop = False
-        self.send_signal("d")
+        self.send_signal()
 
     def on_up_down_arrow_release(self):
         """Stop sending signals when button is released"""
         self._up = False
         self._down = False
         self._stop = True
-        self.send_signal("s")
+        self.send_signal()
 
     # Override other event handlers to do nothing
     def on_any_press(self, button_id=None):

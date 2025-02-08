@@ -14,29 +14,31 @@ class MyController(Controller):
             print(f"Serial Error: {e}")
             self.ser = None  # Avoid crash if serial port isn't available
 
-        self.current_command = None  # Track the current command
+        self.last_command = None  # Track the last sent command
 
     def send_signal(self, command):
-        """Send a command only if it's different from the last command"""
-        if self.current_command != command:
-            self.current_command = command
+        """Send a command only if it's different from the last one"""
+        if self.last_command != command:
+            self.last_command = command
             if self.ser:
-                print(f"Sending: {command}")
-                self.ser.write(command.encode())  # Send over serial
+                formatted_command = f"{command}\n"  # Add newline
+                print(f"Sending: {formatted_command.strip()}")
+                self.ser.write(formatted_command.encode())  # Send over serial
 
     def on_up_arrow_press(self):
-        """Start sending 'u' when Up Arrow is pressed"""
+        """Send 'u' when Up Arrow is pressed"""
         self.send_signal("u")
 
     def on_down_arrow_press(self):
-        """Start sending 'd' when Down Arrow is pressed"""
+        """Send 'd' when Down Arrow is pressed"""
         self.send_signal("d")
 
     def on_up_down_arrow_release(self):
-        """Stop sending signals when button is released"""
+        """Send 's' when the button is released"""
         self.send_signal("s")
 
-    # Override other event handlers to do nothing
+        # Override other event handlers to do nothing
+
     def on_R3_y_at_rest(self):
         pass
 

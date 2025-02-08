@@ -13,7 +13,7 @@ class MyController(Controller):
         if self.running:
             print("send up")
             time.sleep(0.1)
-        if not self.running:
+        elif not self.running:
             print("stop")
             time.sleep(0.1)
 
@@ -21,7 +21,7 @@ class MyController(Controller):
         self.running = True
         self.send_signal()
 
-    def on_up_arrow_release(self):
+    def on_up_down_arrow_release(self):
         self.running = False  # Stop sending the signal
         self.send_signal()
 

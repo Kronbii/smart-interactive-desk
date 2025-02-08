@@ -6,23 +6,32 @@ class MyController(Controller):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.running = False  # Flag to control the loop
+        self._up = False  # Flag to control the loop
+        self._down = False  # Flag to control the loop
+        self._stop = False  # Flag to control the loop
 
     def send_signal(self):
         """Continuously sends signal while Up Arrow is pressed"""
-        if self.running:
+        if self._up:
             print("send up")
             time.sleep(0.1)
-        elif not self.running:
+        elif self._down:
+            print("send down")
+            time.sleep(0.1)
+        elif self._stop:
             print("stop")
             time.sleep(0.1)
 
     def on_up_arrow_press(self):
-        self.running = True
+        self._up = True
+        self.send_signal()
+
+    def on_down_arrow_press(self):
+        self._down = True
         self.send_signal()
 
     def on_up_down_arrow_release(self):
-        self.running = False  # Stop sending the signal
+        self._stop = False  # Stop sending the signal
         self.send_signal()
 
     # Override other event handlers to do nothing

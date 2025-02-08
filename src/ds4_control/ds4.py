@@ -12,11 +12,6 @@ class MyController(Controller):
         print("X pressed: fet ya bassam")
         self.running = True
 
-        # Run the continuous signal loop while button is pressed
-        while self.running:
-            print("Signal is being sent...")
-            time.sleep(0.1)  # Adjust frequency of the signal
-
     def on_x_release(self):
         print("X released: dahar ya bassam")
         self.running = False  # Stop the loop when button is released
@@ -70,3 +65,6 @@ class MyController(Controller):
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
 controller.listen(timeout=60)
+while controller.running:
+    print("Running")
+    time.sleep(1)

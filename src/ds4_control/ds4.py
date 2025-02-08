@@ -13,6 +13,9 @@ class MyController(Controller):
     # Only handle X button release
     def on_x_release(self):
         print("X released: dahar ya bassam")
+        
+    def on_up_arrow_press(self):
+        return super().on_up_arrow_press()
 
     # Override other event handlers to do nothing
     def on_R3_y_at_rest(self):

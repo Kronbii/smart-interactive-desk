@@ -6,15 +6,27 @@ class MyController(Controller):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.running = False  # Flag to control the signal loop
+        self.running = False  # Flag to control the loop
 
-    def on_x_press(self):
-        print("X pressed: fet ya bassam")
+    def on_up_arrow_press(self):
+        print("Up Arrow Pressed: Sending Signal...")
         self.running = True
 
-    def on_x_release(self):
-        print("X released: dahar ya bassam")
-        self.running = False  # Stop the loop when button is released
+        # Loop to keep sending the signal while button is pressed
+        while self.running:
+            print("🚀 Signal is being sent!")
+            time.sleep(0.1)  # Adjust the frequency of the signal
+
+    def on_up_arrow_release(self):
+        print("Up Arrow Released: Stopping Signal...")
+        self.running = False  # Stop sending the signal
+
+    # Override other event handlers to do nothing
+    def on_any_press(self, button_id=None):
+        pass
+
+    def on_any_release(self, button_id=None):
+        pass
 
     # Override other event handlers to do nothing
     def on_any_press(self, button_id=None):
@@ -64,11 +76,4 @@ class MyController(Controller):
 
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
-while True:
-    controller.listen(timeout=60)
-    if controller.running:
-        print("Running")
-        time.sleep(1)
-    else:
-        print("Stopped")
-        time.sleep(1)
+controller.listen(timeout=60)

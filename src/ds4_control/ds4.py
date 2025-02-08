@@ -64,7 +64,11 @@ class MyController(Controller):
 
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
-while controller.running:
-    print("Running")
-    time.sleep(1)
+while True:
     controller.listen(timeout=60)
+    if controller.running:
+        print("Running")
+        time.sleep(1)
+    else:
+        print("Stopped")
+        time.sleep(1)

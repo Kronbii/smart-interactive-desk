@@ -1,4 +1,4 @@
-#!/home/kronbii/github-repos/Smart-Table-BE/bemo/bin/python3
+#!/home/neora/Smart-Table-BE/bemo/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

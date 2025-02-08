@@ -39,10 +39,10 @@ deactivate nondestructive
 if [ "${OSTYPE:-}" = "cygwin" ] || [ "${OSTYPE:-}" = "msys" ] ; then
     # transform D:\path\to\venv to /d/path/to/venv on MSYS
     # and to /cygdrive/d/path/to/venv on Cygwin
-    export VIRTUAL_ENV=$(cygpath /home/kronbii/github-repos/Smart-Table-BE/bemo)
+    export VIRTUAL_ENV=$(cygpath /home/neora/Smart-Table-BE/bemo)
 else
     # use the path as-is
-    export VIRTUAL_ENV=/home/kronbii/github-repos/Smart-Table-BE/bemo
+    export VIRTUAL_ENV=/home/neora/Smart-Table-BE/bemo
 fi
 
 _OLD_VIRTUAL_PATH="$PATH"

@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV /home/kronbii/github-repos/Smart-Table-BE/bemo
+set -gx VIRTUAL_ENV /home/neora/Smart-Table-BE/bemo
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"bin $PATH

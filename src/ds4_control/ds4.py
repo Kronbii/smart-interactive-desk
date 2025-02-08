@@ -10,9 +10,10 @@ class MyController(Controller):
 
     def send_signal(self):
         """Continuously sends signal while Up Arrow is pressed"""
-        while self.running:
-            print("🚀 Signal is being sent!")
-            time.sleep(0.1)  # Adjust the frequency of the signal
+        if self.running:
+            print("Sending Signal...")
+            # Add your code here to send the signal
+            time.sleep(0.1)
 
     def on_up_arrow_press(self):
         print("Up Arrow Pressed: Sending Signal...")

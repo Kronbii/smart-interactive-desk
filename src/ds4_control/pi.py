@@ -4,52 +4,41 @@ from pyPS4Controller.controller import Controller
 
 
 class MyController(Controller):
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.ser = serial.Serial("/dev/ttyUSB1", 115200, timeout=1)  # Serial connection
+        try:
+            self.ser = serial.Serial(
+                "/dev/ttyUSB0", 115200, timeout=1
+            )  # Serial connection
+        except serial.SerialException as e:
+            print(f"Serial Error: {e}")
+            self.ser = None  # Avoid crash if serial port isn't available
 
-    def send_signal(self, message):
-        """Continuously sends signal while a button is pressed"""
-        if self._stop:
-            message = "s"
-        elif self._up:
-            message = "u"
-        elif self._down:
-            message = "d"
-        print(f"Sending: {message}")
-        self.ser.write(f"{message}\n".encode("utf-8"))  # Send over serial
-        time.sleep(0.1)  # Adjust signal frequency
+        self.last_command = None  # Track the last sent command
+
+    def send_signal(self, command):
+        """Send a command only if it's different from the last one"""
+        if self.last_command != command:
+            self.last_command = command
+            if self.ser:
+                formatted_command = f"{command}\n"  # Add newline
+                print(f"Sending: {formatted_command.strip()}")
+                self.ser.write(formatted_command.encode())  # Send over serial
 
     def on_up_arrow_press(self):
-        """Start sending 'u' when Up Arrow is pressed"""
-        self._up = True
-        self._down = False
-        self._stop = False
+        """Send 'u' when Up Arrow is pressed"""
         self.send_signal("u")
 
     def on_down_arrow_press(self):
-        """Start sending 'd' when Down Arrow is pressed"""
-        self._up = False
-        self._down = True
-        self._stop = False
+        """Send 'd' when Down Arrow is pressed"""
         self.send_signal("d")
 
     def on_up_down_arrow_release(self):
-        """Stop sending signals when button is released"""
-        self._up = False
-        self._down = False
-        self._stop = True
+        """Send 's' when the button is released"""
         self.send_signal("s")
 
-    # Override other event handlers to do nothing
-    def on_any_press(self, button_id=None):
-        pass
+        # Override other event handlers to do nothing
 
-    def on_any_release(self, button_id=None):
-        pass
-
-    # Override other event handlers to do nothing
     def on_R3_y_at_rest(self):
         pass
 

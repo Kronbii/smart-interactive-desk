@@ -37,7 +37,7 @@ class MyController(Controller):
     def on_up_down_arrow_release(self):
         self._up = False
         self._down = False
-        self._stop = False
+        self._stop = True
         self.send_signal()
 
     # Override other event handlers to do nothing

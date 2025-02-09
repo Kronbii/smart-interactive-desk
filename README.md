@@ -39,7 +39,7 @@
 ---
 
 ## **Initializing Node.js Web Application**
-[See](HOW TO INTIALIZE WEB APP)
+[HOW TO INTIALIZE WEB APP](src/web-app/README.md)
 
 ---
 

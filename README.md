@@ -13,7 +13,7 @@ Check the following link to access the resouces and reports used in this project
 [Project Resources](https://drive.google.com/drive/folders/1InH4OToC-3ZCmpd2p8zu-zYlxD98OoeB?usp=drive_link)
 
 
-## **Repository Structure**
+## **Repository Structure** #TODO: change the structure
 ```bash
 ├── CAD
 │   └── readme.md
@@ -39,6 +39,8 @@ Check the following link to access the resouces and reports used in this project
 ---
 
 ## **Initializing Node.js Web Application**
+Check the following link to check how to set-up the web app
+
 [HOW TO INTIALIZE WEB APP](src/web-app/README.md)
 
 ---

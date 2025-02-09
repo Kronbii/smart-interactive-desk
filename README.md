@@ -7,11 +7,10 @@
 - Mohamad Berjawi
 - Mohamad Hariri
 
-## **Google Drive Link**
+## **Project Resources**
+Check the following link to access the resouces and reports used in this project.
 [Project Resources](https://drive.google.com/drive/folders/1InH4OToC-3ZCmpd2p8zu-zYlxD98OoeB?usp=drive_link)
 
-#### **Subdirectories**
-- **Reports**
 
 ## **Repository Structure**
 ```bash

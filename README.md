@@ -41,7 +41,7 @@ Check the following link to access the resouces and reports used in this project
 ## **Initializing Node.js Web Application**
 Check the following link to check how to set-up the web app
 
-[HOW TO INTIALIZE WEB APP](src/web-app/README.md)
+[How To Initialize Web App](src/web-app/README.md)
 
 ---
 
@@ -49,3 +49,13 @@ Check the following link to check how to set-up the web app
 ```
 https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
 ```
+---
+
+## **How To Control Desk Using Dual-shock 4**
+1- install pyPS4Controller python module
+2- put the ds4 in pairing mode
+3- connect the ds4 to ur linux/macOS machine
+4- run the python script
+5- read data from the terminal
+
+[How To Setup DS4](src/ds4_control/README.md)

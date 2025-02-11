@@ -12,7 +12,13 @@ class MyController(Controller):
             )  # Serial connection
         except serial.SerialException as e:
             print(f"Serial Error: {e}")
-            self.ser = None  # Avoid crash if serial port isn't available
+            try:
+                self.ser = serial.Serial(
+                    "/dev/ttyUSB1", 115200, timeout=1
+                )  # Serial connection
+            except serial.SerialException as e:
+                print(f"Serial Error: {e}")
+                self.ser = None  # Avoid crash if serial port isn't available
 
         self.last_command = None  # Track the last sent command
 

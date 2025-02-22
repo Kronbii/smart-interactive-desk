@@ -1,3 +1,9 @@
+#include <HardwareSerial.h>
+
+// Define pins
+#define RXD2 16
+#define TXD2 17
+
 #define STEP1 3  // Step pin for Motor 1
 #define DIR1 2   // Direction pin for Motor 1
 #define STEP2 5  // Step pin for Motor 2
@@ -8,6 +14,11 @@
 
 #define STEP_DELAY 500  // Microseconds delay between steps
 
+HardwareSerial laptop(2);
+
+bool dir = false;  // Direction flag
+bool move = false; // Movement flag
+
 void setup() {
     pinMode(STEP1, OUTPUT);
     pinMode(DIR1, OUTPUT);
@@ -16,18 +27,38 @@ void setup() {
 
     pinMode(BTN_CW, INPUT_PULLUP);  // Internal pull-up resistor
     pinMode(BTN_CCW, INPUT_PULLUP); // Internal pull-up resistor
+
+    Serial.begin(115200);  // Start serial communication
+    laptop.begin(115200, SERIAL_8N1, RXD2, TXD2);
 }
 
 void loop() {
-    if (digitalRead(BTN_CW) == LOW) {  // Clockwise rotation
+
+    if (Serial.available() > 0) {
+        String ramy = Serial.readStringUntil('\n');  // Read full command
+        ramy.trim();  // Remove whitespace and newline
+
+        if (ramy == "u") {         // Move forward
+            move = true;
+            dir = true;
+        } else if (ramy == "d") {  // Move backward
+            move = true;
+            dir = false;
+        } else {  
+            laptop.println("Unknown command: " + ramy); // Debugging output
+        }
+    }
+
+    if (move && dir) {
         digitalWrite(DIR1, HIGH);
         digitalWrite(DIR2, HIGH);
         rotateBothMotors();
-    } 
-    else if (digitalRead(BTN_CCW) == LOW) {  // Counterclockwise rotation
+    } else if (move && !dir) {
         digitalWrite(DIR1, LOW);
         digitalWrite(DIR2, LOW);
         rotateBothMotors();
+    } else {
+        
     }
 }
 

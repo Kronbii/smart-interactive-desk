@@ -4,8 +4,9 @@
 # CONFIGURATION
 #######################################################
 PORT=3000
-TARGET_DIR="../web-app"
+TARGET_DIR="/home/kronbii/github-repos/smart-interactive-desk/koubeisically/web-app" #TODO: make this take ur corrent working directory and cd to the desired
 SERVER_SCRIPT="server.js"
+#TODO: make the targer dir of the log file a variable
 
 #######################################################
 # 1. Kill any existing processes on the port

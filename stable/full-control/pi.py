@@ -30,26 +30,32 @@ class MyController(Controller):
     def on_up_arrow_press(self):
         """Send 'u' when Up Arrow is pressed"""
         self.send_signal("u")
+        print("Up Arrow Pressed")
 
     def on_down_arrow_press(self):
         """Send 'd' when Down Arrow is pressed"""
         self.send_signal("d")
+        print("Down Arrow Pressed")
 
     def on_up_down_arrow_release(self):
         """Send 's' when the button is released"""
         self.send_signal("s")
+        print("Up/Down Arrow Released")
 
     def on_left_arrow_press(self):
         """Send 'l' when Left Arrow is pressed"""
         self.send_signal("l")
+        print("Left Arrow Pressed")
     
     def on_right_arrow_press(self):
         """Send 'r' when Right Arrow is pressed"""
         self.send_signal("r")
+        print("Right Arrow Pressed")
     
     def on_left_right_arrow_release(self):
         """Send 's' when the button is released"""
         self.send_signal("s")
+        print("Left/Right Arrow Released")
 
     def on_R3_y_at_rest(self):
         pass

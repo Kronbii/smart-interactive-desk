@@ -2,13 +2,15 @@ import time
 import serial
 from pyPS4Controller.controller import Controller
 
+esp32_port = "/dev/ttyUSB0"
+ds4_port = "/dev/input/js0"
 
 class MyController(Controller):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         try:
             self.ser = serial.Serial(
-                "/dev/ttyUSB0", 115200, timeout=1
+                esp32_port, 115200, timeout=1
             )  # Serial connection
         except serial.SerialException as e:
             print(f"Serial Error: {e}")
@@ -79,7 +81,7 @@ class MyController(Controller):
         pass
 
 
-controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
+controller = MyController(interface=ds4_port, connecting_using_ds4drv=False)
 
 
 def main():

@@ -39,7 +39,17 @@ class MyController(Controller):
         """Send 's' when the button is released"""
         self.send_signal("s")
 
-        # Override other event handlers to do nothing
+    def on_left_arrow_press(self):
+        """Send 'l' when Left Arrow is pressed"""
+        self.send_signal("l")
+    
+    def on_right_arrow_press(self):
+        """Send 'r' when Right Arrow is pressed"""
+        self.send_signal("r")
+    
+    def on_left_right_arrow_release(self):
+        """Send 's' when the button is released"""
+        self.send_signal("s")
 
     def on_R3_y_at_rest(self):
         pass

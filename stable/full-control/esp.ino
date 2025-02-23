@@ -74,7 +74,7 @@ void loop() {
             vertical_dir = false;
             tilt_dir = false;
             laptop.println(ramy); // Debugging output
-        } else if (ramy == "t") {
+        } else if (ramy == "r") {
             vertical_move = false;
             vertical_dir = false;
             tilt_move = true;

@@ -14,7 +14,9 @@ def get_esp_port():
     return found_port
 
 esp32_port = get_esp_port()
+
 ds4_port = "/dev/input/js0"
+ds4_port1 = "/dev/input/js1"
 
 class MyController(Controller):
     def __init__(self, **kwargs):
@@ -107,9 +109,11 @@ class MyController(Controller):
     def on_L3_y_at_rest(self):
         pass
 
+try:
+    controller = MyController(interface=ds4_port, connecting_using_ds4drv=False)
 
-controller = MyController(interface=ds4_port, connecting_using_ds4drv=False)
-
+except FileNotFoundError:
+    controller = MyController(interface=ds4_port1, connecting_using_ds4drv=False)
 
 def main():
     controller.listen(timeout=60)  # Keeps running until timeout

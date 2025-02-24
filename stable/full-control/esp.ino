@@ -6,21 +6,17 @@
 #define TXD2 17
 
 // Stepper motor pins
-#define STEP1 23   // Step pin for Motor 1
-#define DIR1 22    // Direction pin for Motor 1
-#define STEP2 18   // Step pin for Motor 2
-#define DIR2 19    // Direction pin for Motor 2
-
-// Push button pins for manual pins for tilting
-#define BTN_CW 2   // Button for clockwise rotation
-#define BTN_CCW 15 // Button for counterclockwise rotation
+#define STEP1 22
+#define DIR1 23
+#define STEP2 19
+#define DIR2 18
 
 // Stepper motor configuration
 #define STEP_DELAY 500  // Microseconds delay between steps
 #define STEPS_PER_CYCLE 200  // Adjust steps as needed
 
-#define RPWM 15   // Right PWM
-#define LPWM 2    // Left PWM
+#define RPWM 14   // Right PWM
+#define LPWM 12    // Left PWM
 
 // Initialize serial communication between esp and laptop
 HardwareSerial laptop(2);
@@ -40,9 +36,6 @@ void setup() {
     
     pinMode(RPWM, OUTPUT);
     pinMode(LPWM, OUTPUT);
-
-    pinMode(BTN_CW, INPUT_PULLUP);
-    pinMode(BTN_CCW, INPUT_PULLUP);
 
     Serial.begin(115200);  // Start serial communication
     laptop.begin(115200, SERIAL_8N1, RXD2, TXD2);
@@ -84,7 +77,7 @@ void loop() {
             vertical_move = false;
             vertical_dir = false;
             tilt_move = true;
-            tilt_dir = true;
+            tilt_dir = false;
             laptop.println(ramy); // Debugging output
         } else {
             vertical_move = false;

@@ -1,6 +1,6 @@
 # ----------------------- Flags -----------------------
 ds4_control = True
-web_control = True
+web_control = False
 manual_control = False
 auto_control = False
 

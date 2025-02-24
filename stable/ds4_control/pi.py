@@ -80,8 +80,6 @@ class MyController(Controller):
 
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
-
-
 def main():
     controller.listen(timeout=60)  # Keeps running until timeout
 

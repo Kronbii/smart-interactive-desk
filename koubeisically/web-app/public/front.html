@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <title>Control Panel</title>
+    
+    <!-- Link to the external JavaScript file -->
+    <script src="script.js" defer></script>
 </head>
 <body>
     <h1>Control Panel</h1>
@@ -17,51 +20,5 @@
 
     <!-- Include Socket.io client library -->
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-
-    <script>
-        // Function to fetch server IP dynamically
-        async function getServerIP() {
-            try {
-                const response = await fetch("/server-ip");
-                const data = await response.json();
-                return data.ip;  // Get the dynamically retrieved IP
-            } catch (error) {
-                console.error("Error fetching server IP:", error);
-                return "127.0.0.1";  // Fallback to localhost
-            }
-        }
-
-        // Initialize WebSocket connection dynamically
-        async function initializeSocket() {
-            const serverIP = await getServerIP();
-            const socket = io(`http://${serverIP}:3000`);
-
-            // Listen for actions from the server
-            socket.on("action", (action) => {
-                document.getElementById("actionDisplay").innerText = `Action: ${action}`;
-            });
-
-            // Function to send button action to the server
-            function sendAction(action) {
-                fetch("/send-action", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ action: action })
-                })
-                .then(response => response.json())
-                .then(data => console.log(data.message))
-                .catch(error => console.error("Error:", error));
-            }
-
-            // Button event listeners
-            document.getElementById("upBtn").addEventListener("click", () => sendAction("up"));
-            document.getElementById("downBtn").addEventListener("click", () => sendAction("down"));
-            document.getElementById("tiltUpBtn").addEventListener("click", () => sendAction("tilting up"));
-            document.getElementById("tiltDownBtn").addEventListener("click", () => sendAction("tilting down"));
-        }
-
-        // Call the function to initialize the WebSocket connection
-        initializeSocket();
-    </script>
 </body>
 </html>

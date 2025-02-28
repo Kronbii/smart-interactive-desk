@@ -33,17 +33,17 @@ async function initializeSocket() {
     }
 
     // Button event listeners for press and release
-    document.getElementById("upBtn").addEventListener("mousedown", () => sendAction("up")); // Action on press
-    document.getElementById("upBtn").addEventListener("mouseup", () => sendAction("up release")); // Action on release
+    document.getElementById("upBtn").addEventListener("mousedown", () => sendAction("u")); // Action on press
+    document.getElementById("upBtn").addEventListener("mouseup", () => sendAction("s")); // Action on release
     
-    document.getElementById("downBtn").addEventListener("mousedown", () => sendAction("down")); // Action on press
-    document.getElementById("downBtn").addEventListener("mouseup", () => sendAction("down release")); // Action on release
+    document.getElementById("downBtn").addEventListener("mousedown", () => sendAction("d")); // Action on press
+    document.getElementById("downBtn").addEventListener("mouseup", () => sendAction("s")); // Action on release
 
-    document.getElementById("tiltUpBtn").addEventListener("mousedown", () => sendAction("tilting up")); // Action on press
-    document.getElementById("tiltUpBtn").addEventListener("mouseup", () => sendAction("tilting up release")); // Action on release
+    document.getElementById("tiltUpBtn").addEventListener("mousedown", () => sendAction("tu")); // Action on press
+    document.getElementById("tiltUpBtn").addEventListener("mouseup", () => sendAction("s")); // Action on release
 
-    document.getElementById("tiltDownBtn").addEventListener("mousedown", () => sendAction("tilting down")); // Action on press
-    document.getElementById("tiltDownBtn").addEventListener("mouseup", () => sendAction("tilting down release")); // Action on release
+    document.getElementById("tiltDownBtn").addEventListener("mousedown", () => sendAction("td")); // Action on press
+    document.getElementById("tiltDownBtn").addEventListener("mouseup", () => sendAction("s")); // Action on release
 }
 
 // Call the function to initialize the WebSocket connection

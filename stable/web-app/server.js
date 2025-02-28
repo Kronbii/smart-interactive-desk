@@ -2,6 +2,7 @@ const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
 const os = require("os");
+const { spawn } = require("child_process");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -41,7 +42,22 @@ app.post("/send-action", (req, res) => {
     // Emit action to all connected clients
     io.emit("action", action);
 
-    res.status(200).json({ message: `Action "${action}" received` });
+    // Run Python script with the received action
+    const pythonProcess = spawn("python3", ["anh.py"]);
+
+    // Send action to Python script
+    pythonProcess.stdin.write(action + "\n");
+
+    // Capture and send the Python script's response back to the client
+    pythonProcess.stdout.on("data", (data) => {
+        console.log(`${data.toString()}`); // python response
+        res.status(200).json({ message: `Action "${action}" processed by Python`, response: data.toString() });
+    });
+
+    pythonProcess.stderr.on("data", (data) => {
+        console.error(`stderr: ${data.toString()}`);
+        res.status(500).json({ message: "Error processing action", error: data.toString() });
+    });
 });
 
 // API to serve the server's IP dynamically

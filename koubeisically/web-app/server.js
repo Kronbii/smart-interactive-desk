@@ -1,50 +1,55 @@
-// Function to fetch server IP dynamically
-async function getServerIP() {
-    try {
-        const response = await fetch("/server-ip");
-        const data = await response.json();
-        return data.ip;  // Get the dynamically retrieved IP
-    } catch (error) {
-        console.error("Error fetching server IP:", error);
-        return "127.0.0.1";  // Fallback to localhost
+const express = require("express");
+const http = require("http");
+const socketIo = require("socket.io");
+const os = require("os");
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Function to get the local IP address dynamically
+function getLocalIP() {
+    const interfaces = os.networkInterfaces();
+    for (const iface of Object.values(interfaces)) {
+        for (const config of iface) {
+            if (config.family === "IPv4" && !config.internal) {
+                return config.address;  // Return first non-internal IPv4 address
+            }
+        }
     }
+    return "127.0.0.1"; // Fallback to localhost
 }
 
-// Initialize WebSocket connection dynamically
-async function initializeSocket() {
-    const serverIP = await getServerIP();
-    const socket = io(`http://${serverIP}:3000`);
+const LOCAL_IP = getLocalIP();
 
-    // Listen for actions from the server
-    socket.on("action", (action) => {
-        document.getElementById("actionDisplay").innerText = `Action: ${action}`;
-    });
+// Create the HTTP server
+const server = http.createServer(app);
 
-    // Function to send button action to the server
-    function sendAction(action) {
-        fetch("/send-action", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: action })
-        })
-        .then(response => response.json())
-        .then(data => console.log(data.message))
-        .catch(error => console.error("Error:", error));
-    }
+// Initialize Socket.io
+const io = socketIo(server);
 
-    // Button event listeners for press and release
-    document.getElementById("upBtn").addEventListener("mousedown", () => sendAction("up")); // Action on press
-    document.getElementById("upBtn").addEventListener("mouseup", () => sendAction("up release")); // Action on release
-    
-    document.getElementById("downBtn").addEventListener("mousedown", () => sendAction("down")); // Action on press
-    document.getElementById("downBtn").addEventListener("mouseup", () => sendAction("down release")); // Action on release
+// Serve static files from the "public" folder
+app.use(express.static("public"));
 
-    document.getElementById("tiltUpBtn").addEventListener("mousedown", () => sendAction("tilting up")); // Action on press
-    document.getElementById("tiltUpBtn").addEventListener("mouseup", () => sendAction("tilting up release")); // Action on release
+// Middleware to parse JSON
+app.use(express.json());
 
-    document.getElementById("tiltDownBtn").addEventListener("mousedown", () => sendAction("tilting down")); // Action on press
-    document.getElementById("tiltDownBtn").addEventListener("mouseup", () => sendAction("tilting down release")); // Action on release
-}
+// API Route to receive button presses from frontend
+app.post("/send-action", (req, res) => {
+    const action = req.body.action;
+    console.log(`Action received: ${action}`);
 
-// Call the function to initialize the WebSocket connection
-initializeSocket();
+    // Emit action to all connected clients
+    io.emit("action", action);
+
+    res.status(200).json({ message: `Action "${action}" received` });
+});
+
+// API to serve the server's IP dynamically
+app.get("/server-ip", (req, res) => {
+    res.json({ ip: LOCAL_IP });
+});
+
+// Start the server
+server.listen(PORT, LOCAL_IP, () => {
+    console.log(`Server running on http://${LOCAL_IP}:${PORT}`);
+});

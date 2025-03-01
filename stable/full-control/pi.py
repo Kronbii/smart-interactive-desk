@@ -8,12 +8,11 @@ def get_esp_port():
     found_port = list()  # list of all the ports connected
     
     for i in range(len(ports)):
-        print(ports[i])  # to print all the available ports connected
         if "USB" in ports[i].device:
             found_port.append(ports[i].device)  # append all the ports which have serial word in them
     return found_port
 
-esp32_port = get_esp_port()
+esp32_port = str(get_esp_port()[0])
 
 ds4_port = "/dev/input/js0"
 ds4_port1 = "/dev/input/js1"

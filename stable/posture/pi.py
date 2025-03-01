@@ -16,7 +16,7 @@ def get_esp_port():
 
 
 class PostureController():
-    def __init__(self, esp_port, cam_port, baudrate):
+    def __init__(self, esp_port, baudrate):
         try:
             self.ser = serial.Serial(esp_port, baudrate, timeout=1) 
         except serial.SerialException as e:
@@ -54,9 +54,8 @@ class PostureController():
 
 def main():
     esp_port = get_esp_port()
-    cam_port = "/dev/video0"
     baudrate = 115200
-    controller = PostureController(esp_port, cam_port, baudrate)
+    controller = PostureController(esp_port, baudrate)
     controller.el3ab()
 
 if __name__ == "__main__":

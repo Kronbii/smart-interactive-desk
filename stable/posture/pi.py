@@ -42,6 +42,10 @@ class PostureController:
 def detect_posture(controller):
     print("[INFO] Initializing Webcam...")
     cap = cv2.VideoCapture(0)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)  # Reduce resolution
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    cap.set(cv2.CAP_PROP_FPS, 30)  # Set FPS
+    cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)  # Reduce buffer delay
     if not cap.isOpened():
         print("[ERROR] Could not open webcam. Exiting.")
         return
@@ -64,8 +68,8 @@ def detect_posture(controller):
             results = holistic.process(image)
             image.flags.writeable = True
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-            up_threshold = h / 2 + 70
-            down_threshold = h / 2 - 70
+            up_threshold = h / 2 - 70
+            down_threshold = h / 2 + 70
 
             # Extract shoulder position
             if results.pose_landmarks:
@@ -74,8 +78,9 @@ def detect_posture(controller):
 
                 shoulder_mid_y = ((left_shoulder.y + right_shoulder.y) / 2) * h
 
-
-                if shoulder_mid_y < up_threshold:
+                if shoulder_mid_y > up_threshold and shoulder_mid_y < down_threshold:
+                    command = "s"
+                elif shoulder_mid_y < up_threshold:
                     command = "u"
                 elif shoulder_mid_y > down_threshold:
                     command = "d"
@@ -87,8 +92,8 @@ def detect_posture(controller):
 
             # Draw reference line
             cv2.line(image, (0, h // 2), (w, h // 2), (0, 0, 255), 2)
-            cv2.line(image, (0, up_threshold), (w, up_threshold), (0, 255, 255), 2)
-            cv2.line(image, (0, down_threshold), (w, down_threshold), (255, 255, 255), 2)
+            cv2.line(image, (0, int(up_threshold)), (w, int(up_threshold)), (0, 255, 255), 2)
+            cv2.line(image, (0, int(down_threshold)), (w, int(down_threshold)), (255, 255, 255), 2)
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
             # Display result

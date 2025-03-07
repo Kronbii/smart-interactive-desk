@@ -88,21 +88,21 @@ void loop() {
         }
     }
 
-    if (vertical_move && vertical_dir) {
-        move_table_up();
-    }
-    else if (vertical_move && !vertical_dir) {
+if (vertical_move && vertical_dir) {
+    move_table_up();
+}
+else if (vertical_move && !vertical_dir) {
         move_table_down();
     }
-    else if (tilt_move && tilt_dir) {
-        tilt_table_cw();
-    }
-    else if (tilt_move && !tilt_dir) {
-        tilt_table_ccw();
-    }
-    else {
-        stop_table();
-    }
+else if (tilt_move && tilt_dir) {
+    tilt_table_cw();
+}
+else if (tilt_move && !tilt_dir) {
+    tilt_table_ccw();
+}
+else {
+    stop_table();
+}
 }
 
 void move_table_up() {

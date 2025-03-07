@@ -12,10 +12,7 @@ def get_esp_port():
             found_port.append(ports[i].device)  # append all the ports which have serial word in them
     return found_port
 
-esp32_port = str(get_esp_port()[0])
-
-ds4_port = "/dev/input/js0"
-ds4_port1 = "/dev/input/js1"
+esp32_port = "/dev/ttyUSB0"
 
 class MyController(Controller):
     def __init__(self, **kwargs):

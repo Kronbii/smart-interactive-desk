@@ -44,13 +44,13 @@ def detect_posture(controller):
     cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)  # Reduce resolution
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-    cap.set(cv2.CAP_PROP_FPS, 30)  # Set FPS
+    cap.set(cv2.CAP_PROP_FPS, 60)  # Set FPS
     cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)  # Reduce buffer delay
     if not cap.isOpened():
         print("[ERROR] Could not open webcam. Exiting.")
         return
     
-    with mp_holistic.Holistic(min_detection_confidence=0.8, min_tracking_confidence=0.5) as holistic:
+    with mp_holistic.Holistic(min_detection_confidence=0.6, min_tracking_confidence=0.5) as holistic:
         print("[INFO] MediaPipe Model Initialized!")
         
         while cap.isOpened():
@@ -68,8 +68,8 @@ def detect_posture(controller):
             results = holistic.process(image)
             image.flags.writeable = True
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-            up_threshold = h / 2 - 70
-            down_threshold = h / 2 + 70
+            up_threshold = h / 2 - 60
+            down_threshold = h / 2 + 60
 
             # Extract shoulder position
             if results.pose_landmarks:

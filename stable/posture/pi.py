@@ -81,18 +81,8 @@ class PostureController:
                 self.ser.write(formatted_command.encode())
 
 # === Posture Detection Function === #
-def detect_posture(controller):
-    print("[INFO] Initializing Webcam...")
-    cap = cv2.VideoCapture(0)
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)  # Reduce resolution
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-    cap.set(cv2.CAP_PROP_FPS, 60)  # Set FPS
-    cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)  # Reduce buffer delay
-    if not cap.isOpened():
-        print("[ERROR] Could not open webcam. Exiting.")
-        return
-    
-    with mp_holistic.Holistic(min_detection_confidence=0.6, min_tracking_confidence=0.5) as holistic:
+def detect_posture(controller, video_stream):
+    with mp_holistic.Holistic(min_detection_confidence=0.8, min_tracking_confidence=0.5) as holistic:
         print("[INFO] MediaPipe Model Initialized!")
 
         while True:

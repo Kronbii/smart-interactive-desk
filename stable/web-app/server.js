@@ -1,56 +1,72 @@
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
+const cors = require("cors");
 const os = require("os");
 const { spawn } = require("child_process");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Function to get the local IP address dynamically
+// Get local IP address
 function getLocalIP() {
     const interfaces = os.networkInterfaces();
     for (const iface of Object.values(interfaces)) {
         for (const config of iface) {
             if (config.family === "IPv4" && !config.internal) {
-                return config.address;  // Return first non-internal IPv4 address
+                return config.address;
             }
         }
     }
-    return "127.0.0.1"; // Fallback to localhost
+    return "127.0.0.1";
 }
 
 const LOCAL_IP = getLocalIP();
 
-// Create the HTTP server
+// CORS needs to be BEFORE routes and sockets
+app.use(cors({ 
+    origin: "*", 
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"]
+}));
+
+app.use(express.json());
+app.use(express.static("public"));
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/public/index.html");
+});
+
+
 const server = http.createServer(app);
 
-// Initialize Socket.io
-const io = socketIo(server);
+const io = socketIo(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+        credentials: true
+    }
+});
 
-// Serve static files from the "public" folder
-app.use(express.static("public"));
+io.on("connection", (socket) => {
+    console.log("Client connected");
 
-// Middleware to parse JSON
-app.use(express.json());
+    socket.on("disconnect", () => {
+        console.log("Client disconnected");
+    });
+});
 
-// API Route to receive button presses from frontend
 app.post("/send-action", (req, res) => {
     const action = req.body.action;
     console.log(`Action received: ${action}`);
 
-    // Emit action to all connected clients
     io.emit("action", action);
 
-    // Run Python script with the received action
     const pythonProcess = spawn("python3", ["anh.py"]);
-
-    // Send action to Python script
     pythonProcess.stdin.write(action + "\n");
+    pythonProcess.stdin.end();
 
-    // Capture and send the Python script's response back to the client
     pythonProcess.stdout.on("data", (data) => {
-        console.log(`${data.toString()}`); // python response
+        console.log(`${data.toString()}`);
         res.status(200).json({ message: `Action "${action}" processed by Python`, response: data.toString() });
     });
 
@@ -60,12 +76,10 @@ app.post("/send-action", (req, res) => {
     });
 });
 
-// API to serve the server's IP dynamically
 app.get("/server-ip", (req, res) => {
     res.json({ ip: LOCAL_IP });
 });
 
-// Start the server
-server.listen(PORT, LOCAL_IP, () => {
-    console.log(`Server running on http://${LOCAL_IP}:${PORT}`);
+server.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running at http://${LOCAL_IP}:${PORT}`);
 });

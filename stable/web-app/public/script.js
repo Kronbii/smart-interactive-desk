@@ -12,8 +12,8 @@ async function getServerIP() {
 
 // Initialize WebSocket connection dynamically
 async function initializeSocket() {
-    const serverIP = await getServerIP();
-    const socket = io(`http://${serverIP}:3000`);
+    //const serverIP = await getServerIP();
+    const socket = io("http://192.168.0.100:3000");
 
     // Listen for actions from the server
     socket.on("action", (action) => {
@@ -22,10 +22,10 @@ async function initializeSocket() {
 
     // Function to send button action to the server
     function sendAction(action) {
-        fetch("/send-action", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: action })
+        fetch("http://192.168.0.100:3000/send-action", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action: action })
         })
         .then(response => response.json())
         .then(data => console.log(data.message))
@@ -48,3 +48,4 @@ async function initializeSocket() {
 
 // Call the function to initialize the WebSocket connection
 initializeSocket();
+

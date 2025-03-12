@@ -18,15 +18,27 @@ function sendAction(action) {
     .catch(error => console.error("Error:", error));
 }
 
-// Button event listeners for press and release
-document.getElementById("upBtn").addEventListener("mousedown", () => sendAction("u")); // Action on press
-document.getElementById("upBtn").addEventListener("mouseup", () => sendAction("s")); // Action on release
+// Utility function to add event listeners for press and release
+function addButtonEvents(buttonId, actionOnPress, actionOnRelease) {
+    const button = document.getElementById(buttonId);
+    
+    button.addEventListener("pointerdown", (event) => {
+        event.preventDefault(); // Prevent unwanted behaviors on touch
+        sendAction(actionOnPress);
+    });
 
-document.getElementById("downBtn").addEventListener("mousedown", () => sendAction("d")); // Action on press
-document.getElementById("downBtn").addEventListener("mouseup", () => sendAction("s")); // Action on release
+    button.addEventListener("pointerup", () => {
+        sendAction(actionOnRelease);
+    });
 
-document.getElementById("tiltUpBtn").addEventListener("mousedown", () => sendAction("tu")); // Action on press
-document.getElementById("tiltUpBtn").addEventListener("mouseup", () => sendAction("s")); // Action on release
+    // Handle pointer cancel (e.g., dragging finger off the button)
+    button.addEventListener("pointercancel", () => {
+        sendAction(actionOnRelease);
+    });
+}
 
-document.getElementById("tiltDownBtn").addEventListener("mousedown", () => sendAction("td")); // Action on press
-document.getElementById("tiltDownBtn").addEventListener("mouseup", () => sendAction("s")); // Action on release
+// Add events for each button
+addButtonEvents("upBtn", "u", "s");
+addButtonEvents("downBtn", "d", "s");
+addButtonEvents("tiltUpBtn", "tu", "s");
+addButtonEvents("tiltDownBtn", "td", "s");

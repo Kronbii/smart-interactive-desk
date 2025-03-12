@@ -6,17 +6,17 @@
 #define TXD2 17
 
 // Stepper motor pins
-#define STEP1 22
-#define DIR1 23
-#define STEP2 19
-#define DIR2 18
+#define M1IN1 19
+#define M1IN2 18
+#define M2IN1 16
+#define M2IN2 4
 
 // Stepper motor configuration
 #define STEP_DELAY 500  // Microseconds delay between steps
 #define STEPS_PER_CYCLE 200  // Adjust steps as needed
 
-#define RPWM 14   // Right PWM
-#define LPWM 12    // Left PWM
+#define RPWM 23   // Right PWM
+#define LPWM 22    // Left PWM
 
 // Initialize serial communication between esp and laptop
 HardwareSerial laptop(2);
@@ -96,7 +96,8 @@ void loop() {
     }
     else if (tilt_move && tilt_dir) {
         tilt_table_cw();
-    }
+    }#define M2IN1 19
+
     else if (tilt_move && !tilt_dir) {
         tilt_table_ccw();
     }

@@ -1,5 +1,5 @@
 //const serverIP = await getServerIP();
-const socket = io("http://192.168.0.100:3000");
+const socket = io("http://192.168.0.5:3000");
 
 // Listen for actions from the server
 socket.on("action", (action) => {
@@ -8,7 +8,7 @@ socket.on("action", (action) => {
 
 // Function to send button action to the server
 function sendAction(action) {
-    fetch("http://192.168.0.100:3000/send-action", {
+    fetch("http://192.168.0.5:3000/send-action", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ action: action })

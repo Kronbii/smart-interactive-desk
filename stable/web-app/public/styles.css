@@ -24,6 +24,10 @@ button {
     color: white;
     transition: background-color 0.3s, transform 0.3s;
     display: inline-block;
+    user-select: none; /* Prevent text selection */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
 button:hover {

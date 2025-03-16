@@ -32,7 +32,7 @@ def receive_data(ser):
         except Exception as e:
             print(f"Error while reading: {e}")
 
-
+    
 def main():
     ser = init_serial()
     if not ser:

@@ -61,7 +61,7 @@ app.post("/send-action", (req, res) => {
 
     io.emit("action", action);
 
-    const pythonProcess = spawn("python3", ["ramy.py"]);
+    const pythonProcess = spawn("python3", ["anh.py"]);
     pythonProcess.stdin.write(action + "\n");
     pythonProcess.stdin.end();
 

@@ -1,5 +1,6 @@
-//const serverIP = await getServerIP();
-const socket = io("http://192.168.0.5:3000");
+// Get the local IP automatically
+const serverIP = window.location.hostname;
+const socket = io(`http://${serverIP}:3000`);
 
 // Listen for actions from the server
 socket.on("action", (action) => {
@@ -8,7 +9,7 @@ socket.on("action", (action) => {
 
 // Function to send button action to the server
 function sendAction(action) {
-    fetch("http://192.168.0.5:3000/send-action", {
+    fetch(`http://${serverIP}:3000/send-action`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ action: action })
@@ -42,3 +43,5 @@ addButtonEvents("upBtn", "u", "s");
 addButtonEvents("downBtn", "d", "s");
 addButtonEvents("tiltUpBtn", "tu", "s");
 addButtonEvents("tiltDownBtn", "td", "s");
+
+console.log(`Connecting to server at http://${serverIP}:3000`);

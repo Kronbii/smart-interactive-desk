@@ -17,7 +17,6 @@ def init_serial():
         return ser
     
 def send_signal(command, last_command, ser):
-    print("hon")
     if ser:
         formatted_command = f"{command}\n"  # Add newline
         print(f"Sending: {formatted_command.strip()}")

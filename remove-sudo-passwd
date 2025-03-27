@@ -1,0 +1,6 @@
+```bash
+sudo visudo
+```
+```bash
+ALL ALL=(ALL) NOPASSWD:ALL
+```

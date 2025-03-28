@@ -12,7 +12,6 @@
 bool freeze_table_flag = false;
 
 // Direction and movement flags
-// u are my sunshine my only sunshine //HAHQAHAHAHAHAHAHH
 bool move_up_flag = false;
 bool move_down_flag = false;
 bool tilt_up_flag = false;
@@ -30,8 +29,8 @@ void setup() {
 
     pinMode(10, INPUT_PULLUP); // Set pin 10 as an input with internal pull-up resistor
 
-    Serial1.begin(115200);    // Main serial communication
-    Serial.begin(115200);    // Main serial communication
+    Serial1.begin(9600);    // Main serial communication
+    Serial.begin(9600);    // Main serial communication
 
     attachInterrupt(digitalPinToInterrupt(10), freeze_table, FALLING);  // Trigger on pin 10 falling edge (button press)
 

@@ -1,13 +1,15 @@
 #include <HardwareSerial.h>
 
 // Stepper motor pins
-#define M1IN1 19
-#define M1IN2 18
-#define M2IN1 5
-#define M2IN2 4
+#define M1IN1 5
+#define M1IN2 4
+#define M2IN1 2
+#define M2IN2 3
 
-#define RPWM 23   // Right PWM
-#define LPWM 22   // Left PWM
+#define RPWM 7   // Right PWM
+#define LPWM 6   // Left PWM
+
+bool freeze_table_flag = false;
 
 // Direction and movement flags
 bool move_up_flag = false;
@@ -25,15 +27,24 @@ void setup() {
     pinMode(RPWM, OUTPUT);
     pinMode(LPWM, OUTPUT);
 
-    Serial.begin(115200);    // Main serial communication
-    Serial1.begin(115200);   // Use Serial1 for communication with ESP32/laptop
+    pinMode(10, INPUT_PULLUP); // Set pin 10 as an input with internal pull-up resistor
+
+    Serial1.begin(9600);    // Main serial communication
+    Serial.begin(9600);    // Main serial communication
+
+    attachInterrupt(digitalPinToInterrupt(10), freeze_table, FALLING);  // Trigger on pin 10 falling edge (button press)
 
     stop_table();
 }
 
 void loop() {
-    if (Serial.available() > 0) {
-        String ramy = Serial.readStringUntil('\n');  // Read full command
+      if (freeze_table_flag) {
+        stop_table();  // If the table is frozen, stop all movements
+        return;
+    }
+
+    if (Serial1.available() > 0) {
+        String ramy = Serial1.readStringUntil('\n');  // Read full command
         ramy.trim();  // Remove whitespace and newline
 
         if (ramy == "u") {
@@ -42,42 +53,42 @@ void loop() {
             tilt_up_flag = false;
             tilt_down_flag = false;
             stop_motion_flag = false;
-            Serial1.println(ramy);
+            Serial.println(ramy);
         } else if (ramy == "d") {
             move_up_flag = false;
             move_down_flag = true;
             tilt_up_flag = false;
             tilt_down_flag = false;
             stop_motion_flag = false;
-            Serial1.println(ramy);
+            Serial.println(ramy);
         } else if (ramy == "s") {
             move_up_flag = false;
             move_down_flag = false;
             tilt_up_flag = false;
             tilt_down_flag = false;
             stop_motion_flag = true;
-            Serial1.println(ramy);
-        } else if (ramy == "r") {
+            Serial.println(ramy);
+        } else if (ramy == "tu") {
             move_up_flag = false;
             move_down_flag = false;
             tilt_up_flag = true;
             tilt_down_flag = false;
             stop_motion_flag = false;
-            Serial1.println(ramy);
-        } else if (ramy == "l") {
+            Serial.println(ramy);
+        } else if (ramy == "td") {
             move_up_flag = false;
             move_down_flag = false;
             tilt_up_flag = false;
             tilt_down_flag = true;
             stop_motion_flag = false;
-            Serial1.println(ramy);
+            Serial.println(ramy);
         } else {
             move_up_flag = false;
             move_down_flag = false;
             tilt_up_flag = false;
             tilt_down_flag = false;
             stop_motion_flag = true;
-            Serial1.println("Unknown command: " + ramy);
+            Serial.println("Unknown command: " + ramy);
         }
     }
 
@@ -91,6 +102,14 @@ void loop() {
         tilt_table_down();
     } else {
         stop_table();
+    }
+}
+
+void freeze_table() {
+    if (freeze_table_flag) {
+        Serial.println("Table is frozen!");  // Print message when frozen
+    } else {
+        Serial.println("Table is unfrozen!");  // Print message when unfrozen
     }
 }
 

@@ -8,7 +8,7 @@ esp32_port = "/dev/ttyUSB0"
 def init_serial():
     try:
         ser = serial.Serial(
-            esp32_port, 9600, timeout=1
+            esp32_port, 115200, timeout=1
         )  # Serial connection
         return ser
     except serial.SerialException as e:

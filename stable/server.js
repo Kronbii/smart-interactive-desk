@@ -24,18 +24,18 @@ function getLocalIP() {
 const LOCAL_IP = getLocalIP();
 
 // CORS needs to be BEFORE routes and sockets
-app.use(cors({
-    origin: "*",
+app.use(cors({ 
+    origin: "*", 
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"]
 }));
 
 app.use(express.json());
 app.use(express.static("public"));
-
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
 });
+
 
 const server = http.createServer(app);
 
@@ -55,37 +55,24 @@ io.on("connection", (socket) => {
     });
 });
 
-// Spawn Python process once and keep it running
-const pythonProcess = spawn("python3", ["anh.py"], {
-    stdio: ["pipe", "pipe", "pipe"] // Keep stdin open for continuous input
-});
-
-pythonProcess.stdout.on("data", (data) => {
-    console.log(`Python output: ${data.toString().trim()}`);
-});
-
-pythonProcess.stderr.on("data", (data) => {
-    console.error(`Python error: ${data.toString().trim()}`);
-});
-
 app.post("/send-action", (req, res) => {
     const action = req.body.action;
     console.log(`Action received: ${action}`);
 
     io.emit("action", action);
 
-    // Send the action to the already running Python process
+    const pythonProcess = spawn("python3", ["anh.py"]);
     pythonProcess.stdin.write(action + "\n");
+    pythonProcess.stdin.end();
 
-    // Listen for the Python response for this specific action
-    pythonProcess.stdout.once("data", (data) => {
-        console.log(`Python response: ${data.toString().trim()}`);
-        res.status(200).json({ message: `Action "${action}" processed by Python`, response: data.toString().trim() });
+    pythonProcess.stdout.on("data", (data) => {
+        console.log(`${data.toString()}`);
+        res.status(200).json({ message: `Action "${action}" processed by Python`, response: data.toString() });
     });
 
-    pythonProcess.stderr.once("data", (data) => {
-        console.error(`Python error: ${data.toString().trim()}`);
-        res.status(500).json({ message: "Error processing action", error: data.toString().trim() });
+    pythonProcess.stderr.on("data", (data) => {
+        console.error(`stderr: ${data.toString()}`);
+        res.status(500).json({ message: "Error processing action", error: data.toString() });
     });
 });
 

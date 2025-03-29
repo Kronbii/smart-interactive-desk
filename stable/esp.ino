@@ -3,21 +3,25 @@
 // Stepper motor pins
 #define M1IN1 5
 #define M1IN2 4
-#define M2IN1 2
-#define M2IN2 3
+#define M2IN1 3
+#define M2IN2 2
+
+#define btmSwitch 19  // Bottom switch pin
 
 #define RPWM 7   // Right PWM
 #define LPWM 6   // Left PWM
 
-bool freeze_table_flag = false;
-
 // Direction and movement flags
-// u are my sunshine my only sunshine //HAHQAHAHAHAHAHAHH
 bool move_up_flag = false;
 bool move_down_flag = false;
 bool tilt_up_flag = false;
 bool tilt_down_flag = false;
 bool stop_motion_flag = true;
+bool btm_limit_flag = false;  // Only the bottom limit flag now
+
+// Debouncing variables
+unsigned long lastDebounceTime = 0;
+unsigned long debounceDelay = 200; // Debounce delay (in milliseconds)
 
 void setup() {
     pinMode(M1IN1, OUTPUT);
@@ -28,24 +32,32 @@ void setup() {
     pinMode(RPWM, OUTPUT);
     pinMode(LPWM, OUTPUT);
 
-    pinMode(10, INPUT_PULLUP); // Set pin 10 as an input with internal pull-up resistor
+    pinMode(btmSwitch, INPUT_PULLUP); // Set bottom switch pin as input with internal pull-up resistor
 
-    Serial1.begin(115200);    // Main serial communication
+    Serial2.begin(115200);
     Serial.begin(115200);    // Main serial communication
 
-    attachInterrupt(digitalPinToInterrupt(10), freeze_table, FALLING);  // Trigger on pin 10 falling edge (button press)
+    attachInterrupt(digitalPinToInterrupt(btmSwitch), btm_int, FALLING);  // Trigger on pin 19 falling edge (button press)
 
     stop_table();
+    Serial.println("Begin of operations");
 }
 
 void loop() {
-      if (freeze_table_flag) {
-        stop_table();  // If the table is frozen, stop all movements
-        return;
+    // Handle bottom limit switch interrupt
+    if (btm_limit_flag) {
+        Serial.println("Bottom Interrupt Registered");
+        stop_table();  // Stop all movements if the table is frozen
+        delay(1000);   // Wait for a moment
+        move_table_up();
+        delay(2000);   // Wait for a moment
+        stop_table();
+        btm_limit_flag = false;
     }
 
-    if (Serial1.available() > 0) {
-        String ramy = Serial1.readStringUntil('\n');  // Read full command
+    // Read and handle commands from Serial2 (remote control)
+    if (Serial2.available() > 0) {
+        String ramy = Serial2.readStringUntil('\n');  // Read full command
         ramy.trim();  // Remove whitespace and newline
 
         if (ramy == "u") {
@@ -93,6 +105,7 @@ void loop() {
         }
     }
 
+    // Execute movements based on flags
     if (move_up_flag && !stop_motion_flag) {
         move_table_up();
     } else if (move_down_flag && !stop_motion_flag) {
@@ -106,14 +119,17 @@ void loop() {
     }
 }
 
-void freeze_table() {
-    if (freeze_table_flag) {
-        Serial.println("Table is frozen!");  // Print message when frozen
-    } else {
-        Serial.println("Table is unfrozen!");  // Print message when unfrozen
+// Bottom limit switch interrupt (with debouncing)
+void btm_int() {
+    unsigned long currentMillis = millis();
+    if (currentMillis - lastDebounceTime > debounceDelay) {  // Only trigger if debounce time has passed
+        Serial.println("Bottom Interrupt Function Entered");
+        btm_limit_flag = true;
+        lastDebounceTime = currentMillis;  // Update last debounce time
     }
 }
 
+// Motor control functions
 void move_table_up() {
     digitalWrite(RPWM, HIGH);
     digitalWrite(LPWM, LOW);

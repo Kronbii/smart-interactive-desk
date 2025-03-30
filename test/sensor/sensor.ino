@@ -1,4 +1,6 @@
 #include <HardwareSerial.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_PCD8544.h>
 
 // Stepper motor pins
 #define M1IN1 5
@@ -10,6 +12,8 @@
 
 #define RPWM 7   // Right PWM
 #define LPWM 6   // Left PWM
+
+
 
 // Direction and movement flags
 bool move_up_flag = false;
@@ -23,6 +27,16 @@ bool btm_limit_flag = false;  // Only the bottom limit flag now
 unsigned long lastDebounceTime = 0;
 unsigned long debounceDelay = 200; // Debounce delay (in milliseconds)
 
+// LCD pin connections (updated)
+#define PIN_RST  8    // Reset pin for the LCD
+#define PIN_CE   9    // Chip Enable pin for the LCD
+#define PIN_DC   10   // Data/Command pin for the LCD
+#define PIN_DIN  11   // Serial Data pin for the LCD
+#define PIN_CLK  12 
+
+Adafruit_PCD8544 display = Adafruit_PCD8544(PIN_CLK, PIN_DIN, PIN_DC, PIN_CE, PIN_RST);
+
+
 void setup() {
     pinMode(M1IN1, OUTPUT);
     pinMode(M1IN2, OUTPUT);
@@ -34,6 +48,11 @@ void setup() {
 
     pinMode(btmSwitch, INPUT_PULLUP); // Set bottom switch pin as input with internal pull-up resistor
 
+    display.begin();
+    display.setContrast(60);  //contrast (0-100)
+    display.clearDisplay();
+
+
     Serial2.begin(115200);
     Serial.begin(115200);    // Main serial communication
 
@@ -41,6 +60,7 @@ void setup() {
 
     stop_table();
     Serial.println("Begin of operations");
+
 }
 
 void loop() {
@@ -54,6 +74,11 @@ void loop() {
         stop_table();
         btm_limit_flag = false;
     }
+    display.clearDisplay();
+    display.setTextSize(1);
+    display.setTextColor(BLACK);
+    display.setCursor(0, 10);
+
 
     // Read and handle commands from Serial2 (remote control)
     if (Serial2.available() > 0) {
@@ -108,15 +133,24 @@ void loop() {
     // Execute movements based on flags
     if (move_up_flag && !stop_motion_flag) {
         move_table_up();
+        display.print("Going Up");
     } else if (move_down_flag && !stop_motion_flag) {
         move_table_down();
+        display.print("Going down");
     } else if (tilt_up_flag && !stop_motion_flag) {
         tilt_table_up();
+        display.print("tilting Up");
     } else if (tilt_down_flag && !stop_motion_flag) {
         tilt_table_down();
+        display.print("tilting down");
     } else {
         stop_table();
+          display.print("BEMO waiting");
     }
+
+    display.display();
+    
+
 }
 
 // Bottom limit switch interrupt (with debouncing)

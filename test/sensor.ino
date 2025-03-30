@@ -92,7 +92,7 @@ void loop() {
             Serial.println("Unknown command: " + ramy);
         }
     }
-
+//special thanks lal ka2id layth
     if (move_up_flag && !stop_motion_flag) {
         move_table_up();
     } else if (move_down_flag && !stop_motion_flag) {

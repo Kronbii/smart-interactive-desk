@@ -83,12 +83,10 @@ app.post("/send-action", (req, res) => {
 
     // Listen for the Python response for this specific action
     pythonProcess.stdout.once("data", (data) => {
-        console.log(`Python response: ${data.toString().trim()}`);
         res.status(200).json({ message: `Action "${action}" processed by Python`, response: data.toString().trim() });
     });
 
     pythonProcess.stderr.once("data", (data) => {
-        console.error(`Python error: ${data.toString().trim()}`);
         res.status(500).json({ message: "Error processing action", error: data.toString().trim() });
     });
 });

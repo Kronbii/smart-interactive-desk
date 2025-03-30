@@ -16,7 +16,7 @@ def init_serial():
 def send_signal(command, ser):
     if ser:
         formatted_command = f"{command}\n"  # Add newline
-        print(f"Sending: {formatted_command.strip()}", flush=True)
+        print(f"{formatted_command.strip()}", flush=True)
         ser.write(formatted_command.encode())  # Send over serial
 
 def main():
@@ -31,7 +31,7 @@ def main():
         send_signal(action, ser)  # Send to ESP32
 
         # Respond back to Node.js
-        print(f"Python received action: {action}", flush=True)
+        # print(f"Python received action: {action}", flush=True)
 
 if __name__ == "__main__":
     main()

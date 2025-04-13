@@ -141,41 +141,70 @@ alarms_page = tk.Frame(main_content, bg="#1a1f2c")
 settings_page = tk.Frame(main_content, bg="#1a1f2c")
 help_page = tk.Frame(main_content, bg="#1a1f2c")
 
+# Create a canvas to make the page content scrollable
+def create_scrollable_page(page_frame):
+    canvas = tk.Canvas(page_frame, bg="#1a1f2c")
+    scroll_y = tk.Scrollbar(page_frame, orient="vertical", command=canvas.yview)
+    canvas.config(yscrollcommand=scroll_y.set)
+    scroll_y.pack(side="right", fill="y")
+    canvas.pack(side="left", fill="both", expand=True)
+
+    page_container = tk.Frame(canvas, bg="#1a1f2c")
+    canvas.create_window((0, 0), window=page_container, anchor="nw")
+
+    page_container.grid_rowconfigure(0, weight=1)
+    page_container.grid_columnconfigure(0, weight=1)
+    
+    return page_container
+
 # Populate these pages with content (sample content here)
-home_label = tk.Label(home_page, text="This is the Home page", fg="white", bg="#1a1f2c")
-home_label.pack(pady=50)
+home_page_container = create_scrollable_page(home_page)
+home_label = tk.Label(home_page_container, text="This is the Home page", fg="white", bg="#1a1f2c")
+home_label.grid(row=0, column=0, pady=50, padx=20)
 
-control_label = tk.Label(control_page, text="This is the Control page", fg="white", bg="#1a1f2c")
-control_label.pack(pady=50)
+control_page_container = create_scrollable_page(control_page)
+control_label = tk.Label(control_page_container, text="This is the Control page", fg="white", bg="#1a1f2c")
+control_label.grid(row=0, column=0, pady=50, padx=20)
 
-music_label = tk.Label(music_page, text="This is the Music page", fg="white", bg="#1a1f2c")
-music_label.pack(pady=50)
+music_page_container = create_scrollable_page(music_page)
+music_label = tk.Label(music_page_container, text="This is the Music page", fg="white", bg="#1a1f2c")
+music_label.grid(row=0, column=0, pady=50, padx=20)
 
-stats_label = tk.Label(stats_page, text="This is the Statistics page", fg="white", bg="#1a1f2c")
-stats_label.pack(pady=50)
+stats_page_container = create_scrollable_page(stats_page)
+stats_label = tk.Label(stats_page_container, text="This is the Statistics page", fg="white", bg="#1a1f2c")
+stats_label.grid(row=0, column=0, pady=50, padx=20)
 
-lists_label = tk.Label(lists_page, text="This is the Statistics page", fg="white", bg="#1a1f2c")
-lists_label.pack(pady=50)
+lists_page_container = create_scrollable_page(lists_page)
+lists_label = tk.Label(lists_page_container, text="This is the Lists page", fg="white", bg="#1a1f2c")
+lists_label.grid(row=0, column=0, pady=50, padx=20)
 
-reminders_label = tk.Label(reminders_page, text="This is the Statistics page", fg="white", bg="#1a1f2c")
-reminders_label.pack(pady=50)
+reminders_page_container = create_scrollable_page(reminders_page)
+reminders_label = tk.Label(reminders_page_container, text="This is the Reminders page", fg="white", bg="#1a1f2c")
+reminders_label.grid(row=0, column=0, pady=50, padx=20)
 
-alarms_label = tk.Label(alarms_page, text="This is the Statistics page", fg="white", bg="#1a1f2c")
-alarms_label.pack(pady=50)
+alarms_page_container = create_scrollable_page(alarms_page)
+alarms_label = tk.Label(alarms_page_container, text="This is the Alarms page", fg="white", bg="#1a1f2c")
+alarms_label.grid(row=0, column=0, pady=50, padx=20)
 
-settings_label = tk.Label(settings_page, text="This is the Statistics page", fg="white", bg="#1a1f2c")
-settings_label.pack(pady=50)
+settings_page_container = create_scrollable_page(settings_page)
+settings_label = tk.Label(settings_page_container, text="This is the Settings page", fg="white", bg="#1a1f2c")
+settings_label.grid(row=0, column=0, pady=50, padx=20)
 
-help_label = tk.Label(help_page, text="This is the Statistics page", fg="white", bg="#1a1f2c")
-help_label.pack(pady=50)
+help_page_container = create_scrollable_page(help_page)
+help_label = tk.Label(help_page_container, text="This is the Help & Feedback page", fg="white", bg="#1a1f2c")
+help_label.grid(row=0, column=0, pady=50, padx=20)
 
 # Add pages to a dictionary for easy access
 pages = {
     "Home": home_page,
     "Control": control_page,
     "Music": music_page,
-    "Statistics": stats_page,  # Include the "Statistics" page
-    # Add more pages here...
+    "Statistics": stats_page,
+    "Lists": lists_page,
+    "Reminders": reminders_page,
+    "Alarms": alarms_page,
+    "Settings": settings_page,
+    "Help & Feedback": help_page,
 }
 
 # Set the default page to show

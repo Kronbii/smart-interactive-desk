@@ -1,12 +1,19 @@
 import tkinter as tk
-import tkinter.ttk as ttk
+
+border_effects = {
+    "flat": tk.FLAT,
+    "sunken": tk.SUNKEN,
+    "raised": tk.RAISED,
+    "groove": tk.GROOVE,
+    "ridge": tk.RIDGE,
+}
 
 window = tk.Tk()
-label = tk.Label(
-    text="Hello, Tkinter",
-    foreground="white",  # Set the text color to white
-    background="black"  # Set the background color to black
-)
-label.pack()
+
+for relief_name, relief in border_effects.items():
+    frame = tk.Frame(master=window, relief=relief, borderwidth=5)
+    frame.pack(side=tk.LEFT)
+    label = tk.Label(master=frame, text=relief_name)
+    label.pack()
 
 window.mainloop()

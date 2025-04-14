@@ -144,85 +144,95 @@ def create_statistics_content(parent):
     tree.pack()
     
 def create_list_content(parent):
-    # Frame to hold the task list
+    # Main container frame
     task_frame = tk.Frame(parent, bg="#1a1f2c")
     task_frame.pack(pady=20, fill="both", expand=True)
 
-    # Scrollable Canvas and Scrollbar
-    canvas = tk.Canvas(task_frame, bg="#1a1f2c")
-    scrollbar = tk.Scrollbar(task_frame, orient="vertical", command=canvas.yview)
-    canvas.config(yscrollcommand=scrollbar.set)
+    # Input for new task — Entry + Button (TOP)
+    task_entry_frame = tk.Frame(task_frame, bg="#1a1f2c")
+    task_entry_frame.pack(fill="x", pady=(0, 10))
+
+    task_entry = tk.Entry(task_entry_frame, font=("Segoe UI", 12), bg="#3e4a6d", fg="white", insertbackground="white")
+    task_entry.pack(side="left", padx=(10, 5), fill="x", expand=True)
+
+    add_task_btn = tk.Button(task_entry_frame, text="Add Task", font=("Segoe UI", 12, "bold"),
+                             bg="#2e3a59", fg="white", command=lambda: add_task())
+    add_task_btn.pack(side="right", padx=(5, 10))
+
+    # Scrollable canvas for tasks
+    canvas_frame = tk.Frame(task_frame, bg="#1a1f2c")
+    canvas_frame.pack(fill="both", expand=True)
+
+    canvas = tk.Canvas(canvas_frame, bg="#1a1f2c", highlightthickness=0)
     canvas.pack(side="left", fill="both", expand=True)
+
+    scrollbar = tk.Scrollbar(canvas_frame, orient="vertical", command=canvas.yview)
     scrollbar.pack(side="right", fill="y")
 
-    # Frame inside canvas to hold tasks
+    canvas.configure(yscrollcommand=scrollbar.set)
+
+    # Frame inside canvas to hold all tasks
     task_list_frame = tk.Frame(canvas, bg="#1a1f2c")
-    canvas.create_window((0, 0), window=task_list_frame, anchor="nw")
+    task_window = canvas.create_window((0, 0), window=task_list_frame, anchor="nw")
 
-    task_list_frame.grid_rowconfigure(0, weight=1)
-    task_list_frame.grid_columnconfigure(0, weight=1)
+    # Allow resizing and scrolling
+    def on_frame_configure(event):
+        canvas.configure(scrollregion=canvas.bbox("all"))
 
-    # List of tasks (initialized with some tasks)
-    tasks = [
-        "Task 1: Check the system status",
-        "Task 2: Update the software",
-        "Task 3: Run diagnostics",
-        "Task 4: Restart the system",
-        "Task 5: Backup the data"
-    ]
-    
+    def on_canvas_configure(event):
+        canvas.itemconfig(task_window, width=event.width)
+
+    def on_mousewheel(event):
+        canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+    task_list_frame.bind("<Configure>", on_frame_configure)
+    canvas.bind("<Configure>", on_canvas_configure)
+    canvas.bind_all("<MouseWheel>", on_mousewheel)  # enable scrolling with mousewheel
+
+    tasks = []
+
     def on_checkbox_toggle(task_name, var, task_box):
-        if var.get():  # If checkbox is checked, delete the task
+        if var.get():
             tasks.remove(task_name)
-            task_box.destroy()  # Remove task from display
+            task_box.destroy()
             refresh_task_list()
 
     def add_task():
         new_task = task_entry.get()
-        if new_task:  # Ensure the task is not empty
-            tasks.append(new_task)
-            task_entry.delete(0, tk.END)  # Clear the input box
+        if new_task.strip():
+            tasks.append(new_task.strip())
+            task_entry.delete(0, tk.END)
             refresh_task_list()
 
     def refresh_task_list():
-        # Clear the task frame and re-create the tasks
         for widget in task_list_frame.winfo_children():
             widget.destroy()
         create_task_list()
-        # Update the scroll region based on the content size
-        canvas.config(scrollregion=canvas.bbox("all"))
+        canvas.configure(scrollregion=canvas.bbox("all"))
 
     def create_task_list():
-        # Create each task with a checkbox
         for task in tasks:
             task_box = tk.Frame(task_list_frame, bg="#2e3a59", pady=10, padx=15, relief="solid", borderwidth=1)
-            task_box.pack(fill="x", pady=5)
+            task_box.pack(fill="x", pady=5, padx=10)
 
-            # Checkbox variable to track task state
             var = tk.BooleanVar()
-            
-            # Create the checkbox and task label
-            checkbox = tk.Checkbutton(task_box, variable=var, bg="#2e3a59", fg="white", selectcolor="#3e4a6d", activebackground="#2e4a69", command=lambda t=task, v=var, box=task_box: on_checkbox_toggle(t, v, box), height=2, width=2)
+            checkbox = tk.Checkbutton(
+                task_box, variable=var, bg="#2e3a59", fg="white",
+                selectcolor="#3e4a6d", activebackground="#2e4a69",
+                command=lambda t=task, v=var, box=task_box: on_checkbox_toggle(t, v, box),
+                font=("Segoe UI", 12), width=2
+            )
             checkbox.pack(side="left", padx=10)
-            
+
             label = tk.Label(task_box, text=task, bg="#2e3a59", fg="white", font=("Segoe UI", 12))
             label.pack(side="left", padx=10)
 
-    # Input for new task
-    task_entry_frame = tk.Frame(task_frame, bg="#1a1f2c")
-    task_entry_frame.pack(fill="x", pady=10)
-    
-    task_entry = tk.Entry(task_entry_frame, font=("Segoe UI", 12), bg="#3e4a6d", fg="white", insertbackground="white")
-    task_entry.pack(side="left", padx=10, fill="x", expand=True)
-    
-    add_task_btn = tk.Button(task_entry_frame, text="Add Task", font=("Segoe UI", 12, "bold"), bg="#2e3a59", fg="white", command=add_task)
-    add_task_btn.pack(side="right", padx=10)
+    # Optional: preload example tasks
+    tasks.extend(["Example Task 1", "Example Task 2"])
+    refresh_task_list()
 
-    # Create initial list of tasks
-    create_task_list()
-    # Update the scroll region when tasks are loaded
-    canvas.config(scrollregion=canvas.bbox("all"))
-
+    # 👉 Allow pressing Enter to add tasks
+    task_entry.bind("<Return>", lambda event: add_task())
 
 
 

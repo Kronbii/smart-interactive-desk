@@ -95,7 +95,7 @@ def create_control_content(parent):
     style.layout("Rounded.TButton", [
         ("Button.border", {"children": [("Button.padding", {"children": [("Button.label", {"sticky": "nswe"})]})], "sticky": "nswe"})
     ])
-    style.configure("Rounded.TButton", borderwidth=0, relief="flat", background="#2e3a59", padding=(25, 15), foreground="white", font=("Segoe UI", 12, "bold"))
+    style.configure("Rounded.TButton", borderwidth=5, relief="flat", background="#2e3a59", padding=(25, 15), foreground="white", font=("Segoe UI", 12, "bold"))
     style.map("Rounded.TButton", background=[("active", "#3e4a6d")])
 
     # Outer frame for padding
@@ -133,7 +133,6 @@ def create_control_content(parent):
     stop_btn.grid(row=2, column=0, padx=15, pady=15)
 
 
-
 def create_statistics_content(parent):
     tk.Label(parent, text="Statistics Overview", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
     tree = ttk.Treeview(parent, columns=("A", "B", "C"), show="headings", height=5)
@@ -143,6 +142,89 @@ def create_statistics_content(parent):
     tree.insert("", "end", values=("Speed", "120", "km/h"))
     tree.insert("", "end", values=("Power", "200", "W"))
     tree.pack()
+    
+def create_list_content(parent):
+    # Frame to hold the task list
+    task_frame = tk.Frame(parent, bg="#1a1f2c")
+    task_frame.pack(pady=20, fill="both", expand=True)
+
+    # Scrollable Canvas and Scrollbar
+    canvas = tk.Canvas(task_frame, bg="#1a1f2c")
+    scrollbar = tk.Scrollbar(task_frame, orient="vertical", command=canvas.yview)
+    canvas.config(yscrollcommand=scrollbar.set)
+    canvas.pack(side="left", fill="both", expand=True)
+    scrollbar.pack(side="right", fill="y")
+
+    # Frame inside canvas to hold tasks
+    task_list_frame = tk.Frame(canvas, bg="#1a1f2c")
+    canvas.create_window((0, 0), window=task_list_frame, anchor="nw")
+
+    task_list_frame.grid_rowconfigure(0, weight=1)
+    task_list_frame.grid_columnconfigure(0, weight=1)
+
+    # List of tasks (initialized with some tasks)
+    tasks = [
+        "Task 1: Check the system status",
+        "Task 2: Update the software",
+        "Task 3: Run diagnostics",
+        "Task 4: Restart the system",
+        "Task 5: Backup the data"
+    ]
+    
+    def on_checkbox_toggle(task_name, var, task_box):
+        if var.get():  # If checkbox is checked, delete the task
+            tasks.remove(task_name)
+            task_box.destroy()  # Remove task from display
+            refresh_task_list()
+
+    def add_task():
+        new_task = task_entry.get()
+        if new_task:  # Ensure the task is not empty
+            tasks.append(new_task)
+            task_entry.delete(0, tk.END)  # Clear the input box
+            refresh_task_list()
+
+    def refresh_task_list():
+        # Clear the task frame and re-create the tasks
+        for widget in task_list_frame.winfo_children():
+            widget.destroy()
+        create_task_list()
+        # Update the scroll region based on the content size
+        canvas.config(scrollregion=canvas.bbox("all"))
+
+    def create_task_list():
+        # Create each task with a checkbox
+        for task in tasks:
+            task_box = tk.Frame(task_list_frame, bg="#2e3a59", pady=10, padx=15, relief="solid", borderwidth=1)
+            task_box.pack(fill="x", pady=5)
+
+            # Checkbox variable to track task state
+            var = tk.BooleanVar()
+            
+            # Create the checkbox and task label
+            checkbox = tk.Checkbutton(task_box, variable=var, bg="#2e3a59", fg="white", selectcolor="#3e4a6d", activebackground="#2e4a69", command=lambda t=task, v=var, box=task_box: on_checkbox_toggle(t, v, box), height=2, width=2)
+            checkbox.pack(side="left", padx=10)
+            
+            label = tk.Label(task_box, text=task, bg="#2e3a59", fg="white", font=("Segoe UI", 12))
+            label.pack(side="left", padx=10)
+
+    # Input for new task
+    task_entry_frame = tk.Frame(task_frame, bg="#1a1f2c")
+    task_entry_frame.pack(fill="x", pady=10)
+    
+    task_entry = tk.Entry(task_entry_frame, font=("Segoe UI", 12), bg="#3e4a6d", fg="white", insertbackground="white")
+    task_entry.pack(side="left", padx=10, fill="x", expand=True)
+    
+    add_task_btn = tk.Button(task_entry_frame, text="Add Task", font=("Segoe UI", 12, "bold"), bg="#2e3a59", fg="white", command=add_task)
+    add_task_btn.pack(side="right", padx=10)
+
+    # Create initial list of tasks
+    create_task_list()
+    # Update the scroll region when tasks are loaded
+    canvas.config(scrollregion=canvas.bbox("all"))
+
+
+
 
 def create_placeholder_content(parent, title):
     tk.Label(parent, text=f"This is the {title} page", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
@@ -164,6 +246,8 @@ def create_pages(main_content, page_titles):
             create_control_content(content_wrapper)
         elif title == "Statistics":
             create_statistics_content(content_wrapper)
+        elif title == "Lists":
+            create_list_content(content_wrapper)
         else:
             create_placeholder_content(content_wrapper, title)
 
@@ -214,7 +298,7 @@ def main():
     header_title = setup_header(main_content)
     pages = create_pages(main_content, page_titles)
     setup_sidebar(menu_items, icons, pages, sidebar)
-    show_page("Home", pages)
+    show_page("Control Panel", pages)
     root.mainloop()
 
 if __name__ == "__main__":

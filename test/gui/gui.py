@@ -1,6 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
+import os
+
+def send_command(command):
+    # Placeholder function for sending commands
+    print(f"Command sent: {command}")
 
 def invert_icon_colors(image):
     image = image.convert("RGBA")
@@ -15,7 +20,8 @@ def invert_icon_colors(image):
 def load_icons(icon_names):
     icons = {}
     for name in icon_names:
-        image = Image.open(f"/home/kronbii/github-repos/smart-interactive-desk/test/gui/icons/{name}.png").resize((24, 24))
+        image_path = os.path.join(os.path.dirname(__file__), "icons", f"{name}.png")
+        image = Image.open(image_path).resize((24, 24))
         image = invert_icon_colors(image)
         icons[name] = ImageTk.PhotoImage(image)
     return icons
@@ -63,9 +69,70 @@ def create_home_content(parent):
     tk.Button(parent, text="Click Me", bg="#2e3a59", fg="white").pack()
 
 def create_control_content(parent):
-    tk.Label(parent, text="Control Panel", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
-    ttk.Button(parent, text="Start").pack(pady=5)
-    ttk.Button(parent, text="Stop").pack(pady=5)
+    style = ttk.Style()
+    
+    # Set theme engine to support styling (important for Linux)
+    style.theme_use("clam")
+
+    # Base style
+    style.configure(
+        "Base.TButton",
+        font=("Segoe UI", 12, "bold"),
+        padding=(25, 15), 
+        foreground="#ffffff",
+        background="#2e3a59",
+        borderwidth=0,
+        relief="flat",
+        focuscolor="none"
+    )
+    style.map(
+        "Base.TButton",
+        background=[("active", "#3e4a6d")],
+        foreground=[("active", "#ffffff")]
+    )
+
+    # Rounded buttons via element create hack (on some systems)
+    style.layout("Rounded.TButton", [
+        ("Button.border", {"children": [("Button.padding", {"children": [("Button.label", {"sticky": "nswe"})]})], "sticky": "nswe"})
+    ])
+    style.configure("Rounded.TButton", borderwidth=0, relief="flat", background="#2e3a59", padding=(25, 15), foreground="white", font=("Segoe UI", 12, "bold"))
+    style.map("Rounded.TButton", background=[("active", "#3e4a6d")])
+
+    # Outer frame for padding
+    frame = tk.Frame(parent, bg="#1a1f2c")
+    frame.pack(pady=40)
+
+    def on_button_release():
+        send_command("stop")
+    
+    # Buttons with hierarchy and layout
+    up_btn = ttk.Button(frame, text="↑ Up", style="Rounded.TButton")
+    down_btn = ttk.Button(frame, text="↓ Down", style="Rounded.TButton")
+    tilt_up_btn = ttk.Button(frame, text="↥ Tilt Up", style="Rounded.TButton")
+    tilt_down_btn = ttk.Button(frame, text="↧ Tilt Down", style="Rounded.TButton")
+    stop_btn = ttk.Button(frame, text="■ Stop", style="Rounded.TButton", command=lambda: send_command("stop"))  # visually prioritized
+
+    # Bind button press and release events to each button
+    up_btn.bind("<ButtonPress-1>", lambda e: send_command("up"))
+    up_btn.bind("<ButtonRelease-1>", lambda e: on_button_release())
+    
+    down_btn.bind("<ButtonPress-1>", lambda e: send_command("down"))
+    down_btn.bind("<ButtonRelease-1>", lambda e: on_button_release())
+    
+    tilt_up_btn.bind("<ButtonPress-1>", lambda e: send_command("tilt up"))
+    tilt_up_btn.bind("<ButtonRelease-1>", lambda e: on_button_release())
+    
+    tilt_down_btn.bind("<ButtonPress-1>", lambda e: send_command("tilt down"))
+    tilt_down_btn.bind("<ButtonRelease-1>", lambda e: on_button_release())
+    
+    # Grid layout
+    up_btn.grid(row=0, column=0, padx=15, pady=15)
+    down_btn.grid(row=0, column=1, padx=15, pady=15)
+    tilt_up_btn.grid(row=1, column=0, padx=15, pady=15)
+    tilt_down_btn.grid(row=1, column=1, padx=15, pady=15)
+    stop_btn.grid(row=2, column=0, padx=15, pady=15)
+
+
 
 def create_statistics_content(parent):
     tk.Label(parent, text="Statistics Overview", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
@@ -93,7 +160,7 @@ def create_pages(main_content, page_titles):
 
         if title == "Home":
             create_home_content(content_wrapper)
-        elif title == "Control":
+        elif title == "Control Panel":
             create_control_content(content_wrapper)
         elif title == "Statistics":
             create_statistics_content(content_wrapper)
@@ -105,6 +172,21 @@ def create_pages(main_content, page_titles):
 
 def main():
     global root, sidebar, main_content, sidebar_width, pages, header_title
+    
+    icon_names = ["home", "control", "music", "stats", "list", "reminder", "alarm", "settings", "help"]
+    page_titles = ["Home", "Control Panel", "Music", "Statistics", "Lists", "Reminders", "Alarms", "Settings", "Help & Feedback"]
+    menu_items = [
+    (page_titles[0], "home"),
+    (page_titles[1], "control"),
+    (page_titles[2], "music"),
+    (page_titles[3], "stats"),
+    (page_titles[4], "list"),
+    (page_titles[5], "reminder"),
+    (page_titles[6], "alarm"),
+    (page_titles[7], "settings"),
+    (page_titles[8], "help")
+]
+    
     root = tk.Tk()
     root.title("BEMO Smart Table")
     root.geometry("2560x1440")
@@ -127,23 +209,9 @@ def main():
     sidebar.grid_propagate(False)
     root.grid_columnconfigure(0, weight=0, minsize=sidebar_width)
 
-    icon_names = ["home", "control", "music", "stats", "list", "reminder", "alarm", "settings", "help"]
     icons = load_icons(icon_names)
 
-    menu_items = [
-        ("Home", "home"),
-        ("Control", "control"),
-        ("Music", "music"),
-        ("Statistics", "stats"),
-        ("Lists", "list"),
-        ("Reminders", "reminder"),
-        ("Alarms", "alarm"),
-        ("Settings", "settings"),
-        ("Help & Feedback", "help")
-    ]
-
     header_title = setup_header(main_content)
-    page_titles = ["Home", "Control", "Music", "Statistics", "Lists", "Reminders", "Alarms", "Settings", "Help & Feedback"]
     pages = create_pages(main_content, page_titles)
     setup_sidebar(menu_items, icons, pages, sidebar)
     show_page("Home", pages)

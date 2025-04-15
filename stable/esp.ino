@@ -1,6 +1,26 @@
 #include <HardwareSerial.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_PCD8544.h>
+#include "Adafruit_VL53L0X.h"
+
+// address we will assign if dual sensor is present
+#define LOX1_ADDRESS 0x30
+#define LOX2_ADDRESS 0x31
+
+// set the pins to shutdown
+#define SHT_LOX1 9
+#define SHT_LOX2 8
+
+// objects for the vl53l0x
+Adafruit_VL53L0X lox1 = Adafruit_VL53L0X();
+Adafruit_VL53L0X lox2 = Adafruit_VL53L0X();
+
+// this holds the measurement
+VL53L0X_RangingMeasurementData_t measure1;
+VL53L0X_RangingMeasurementData_t measure2;
+
+int sensor1 = 0;
+int sensor2 = 0;
 
 // Stepper motor pins
 #define M1IN1 5
@@ -34,6 +54,48 @@ unsigned long debounceDelay = 200; // Debounce delay (in milliseconds)
 
 Adafruit_PCD8544 display = Adafruit_PCD8544(PIN_CLK, PIN_DIN, PIN_DC, PIN_CE, PIN_RST);
 
+void setID() {
+  // all reset
+  digitalWrite(SHT_LOX1, LOW);    
+  digitalWrite(SHT_LOX2, LOW);
+  delay(10);
+  // all unreset
+  digitalWrite(SHT_LOX1, HIGH);
+  digitalWrite(SHT_LOX2, HIGH);
+  delay(10);
+
+  // activating LOX1 and resetting LOX2
+  digitalWrite(SHT_LOX1, HIGH);
+  digitalWrite(SHT_LOX2, LOW);
+
+  // initing LOX1
+  if(!lox1.begin(LOX1_ADDRESS)) {
+    Serial.println(F("Failed to boot first VL53L0X"));
+    while(1);
+  }
+  delay(10);
+
+  // activating LOX2
+  digitalWrite(SHT_LOX2, HIGH);
+  delay(10);
+
+  //initing LOX2
+  if(!lox2.begin(LOX2_ADDRESS)) {
+    Serial.println(F("Failed to boot second VL53L0X"));
+    while(1);
+  }
+}
+
+void read_dual_sensors(int &sensor1Reading, int &sensor2Reading) {
+    lox1.rangingTest(&measure1, false); // pass in 'true' to get debug data printout!
+    lox2.rangingTest(&measure2, false); // pass in 'true' to get debug data printout!
+    
+    // Store sensor one reading
+    sensor1Reading = (measure1.RangeStatus != 4) ? measure1.RangeMilliMeter : -1;
+    
+    // Store sensor two reading
+    sensor2Reading = (measure2.RangeStatus != 4) ? measure2.RangeMilliMeter : -1;
+}
 
 void setup() {
     pinMode(M1IN1, OUTPUT);
@@ -54,6 +116,21 @@ void setup() {
     Serial2.begin(115200);
     Serial.begin(115200);    // Main serial communication
 
+    while (! Serial) { delay(1); }
+
+    pinMode(SHT_LOX1, OUTPUT);
+    pinMode(SHT_LOX2, OUTPUT);
+
+    Serial.println(F("Shutdown pins inited..."));
+
+    digitalWrite(SHT_LOX1, LOW);
+    digitalWrite(SHT_LOX2, LOW);
+
+    Serial.println(F("Both in reset mode...(pins are low)"));
+  
+    Serial.println(F("Starting..."));
+    setID();
+
     attachInterrupt(digitalPinToInterrupt(btmSwitch), btm_int, FALLING);  // Trigger on pin 19 falling edge (button press)
 
     stop_table();
@@ -73,6 +150,7 @@ void loop() {
         stop_table();
         btm_limit_flag = false;
     }
+
     display.clearDisplay();
     display.setTextSize(1);
     display.setTextColor(BLACK);
@@ -129,6 +207,22 @@ void loop() {
         }
     }
 
+    read_dual_sensors(sensor1, sensor2);  // Read sensor values
+    Serial.print("Sensor 1: ");
+    Serial.print(sensor1);
+    Serial.print("Sensor 2: ");
+    Serial.print(sensor2);
+
+    if (((sensor1 + sensor2)/2) <= 75){
+        stop_motion_flag = true;
+    }
+    else if (((sensor1 + sensor2)/2) > 80){
+        stop_motion_flag = true;
+    }
+    else{
+        stop_motion_flag = false;
+    }
+
     // Execute movements based on flags
     if (move_up_flag && !stop_motion_flag) {
         move_table_up();
@@ -148,8 +242,6 @@ void loop() {
     }
 
     display.display();
-    
-
 }
 
 // Bottom limit switch interrupt (with debouncing)

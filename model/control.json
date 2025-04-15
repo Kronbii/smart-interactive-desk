@@ -1,0 +1,9 @@
+{
+  "mode": "manual",
+  "command": "s",
+  "active_user_id": 1,
+  "sensor_feedback": {
+    "height": 68,
+    "tilt": 10
+  }
+}

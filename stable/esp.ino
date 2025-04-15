@@ -28,8 +28,6 @@ int sensor2 = 0;
 #define M2IN1 3
 #define M2IN2 2
 
-#define btmSwitch 19  // Bottom switch pin
-
 #define RPWM 7   // Right PWM
 #define LPWM 6   // Left PWM
 
@@ -40,10 +38,6 @@ bool tilt_up_flag = false;
 bool tilt_down_flag = false;
 bool stop_motion_flag = true;
 bool btm_limit_flag = false;  // Only the bottom limit flag now
-
-// Debouncing variables
-unsigned long lastDebounceTime = 0;
-unsigned long debounceDelay = 200; // Debounce delay (in milliseconds)
 
 // LCD pin connections (updated)
 #define PIN_RST  8    // Reset pin for the LCD
@@ -106,12 +100,9 @@ void setup() {
     pinMode(RPWM, OUTPUT);
     pinMode(LPWM, OUTPUT);
 
-    pinMode(btmSwitch, INPUT_PULLUP); // Set bottom switch pin as input with internal pull-up resistor
-
     display.begin();
     display.setContrast(60);  //contrast (0-100)
     display.clearDisplay();
-
 
     Serial2.begin(115200);
     Serial.begin(115200);    // Main serial communication
@@ -131,25 +122,12 @@ void setup() {
     Serial.println(F("Starting..."));
     setID();
 
-    attachInterrupt(digitalPinToInterrupt(btmSwitch), btm_int, FALLING);  // Trigger on pin 19 falling edge (button press)
-
     stop_table();
     Serial.println("Begin of operations");
 
 }
 
 void loop() {
-    // Handle bottom limit switch interrupt
-    if (btm_limit_flag) {
-        stop_table();
-        Serial.println("Bottom Interrupt Registered");
-        stop_table();  // Stop all movements if the table is frozen
-        delay(1000);   // Wait for a moment
-        move_table_up();
-        delay(2000);   // Wait for a moment
-        stop_table();
-        btm_limit_flag = false;
-    }
 
     display.clearDisplay();
     display.setTextSize(1);
@@ -210,17 +188,14 @@ void loop() {
     read_dual_sensors(sensor1, sensor2);  // Read sensor values
     Serial.print("Sensor 1: ");
     Serial.print(sensor1);
-    Serial.print("Sensor 2: ");
-    Serial.print(sensor2);
+    Serial.print(", Sensor 2: ");
+    Serial.println(sensor2);
 
-    if (((sensor1 + sensor2)/2) <= 75){
-        stop_motion_flag = true;
+    if ( sensor1 <= 75){
+        move_down_flag = false;
     }
-    else if (((sensor1 + sensor2)/2) > 80){
-        stop_motion_flag = true;
-    }
-    else{
-        stop_motion_flag = false;
+    else if ( sensor1 > 95){
+        move_up_flag = false;
     }
 
     // Execute movements based on flags
@@ -242,17 +217,6 @@ void loop() {
     }
 
     display.display();
-}
-
-// Bottom limit switch interrupt (with debouncing)
-void btm_int() {
-    unsigned long currentMillis = millis();
-    if (currentMillis - lastDebounceTime > debounceDelay) {  // Only trigger if debounce time has passed
-        stop_table();
-        Serial.println("Bottom Interrupt Function Entered");
-        btm_limit_flag = true;
-        lastDebounceTime = currentMillis;  // Update last debounce time
-    }
 }
 
 // Motor control functions

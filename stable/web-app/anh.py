@@ -1,7 +1,7 @@
 import sys
 import serial
 
-esp32_port = "/dev/ttyUSB0"
+esp32_port = "/dev/ttyACM0"
 
 def init_serial():
     try:

@@ -3,7 +3,7 @@ import time
 import serial
 import serial.tools.list_ports
 
-esp32_port = "/dev/ttyUSB0"
+esp32_port = "/dev/ttyACM0"
 
 def init_serial():
     try:

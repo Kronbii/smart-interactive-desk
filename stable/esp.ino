@@ -13,8 +13,6 @@
 #define RPWM 7   // Right PWM
 #define LPWM 6   // Left PWM
 
-
-
 // Direction and movement flags
 bool move_up_flag = false;
 bool move_down_flag = false;
@@ -66,6 +64,7 @@ void setup() {
 void loop() {
     // Handle bottom limit switch interrupt
     if (btm_limit_flag) {
+        stop_table();
         Serial.println("Bottom Interrupt Registered");
         stop_table();  // Stop all movements if the table is frozen
         delay(1000);   // Wait for a moment
@@ -81,8 +80,8 @@ void loop() {
 
 
     // Read and handle commands from Serial2 (remote control)
-    if (Serial2.available() > 0) {
-        String ramy = Serial2.readStringUntil('\n');  // Read full command
+    if (Serial.available() > 0) {
+        String ramy = Serial.readStringUntil('\n');  // Read full command
         ramy.trim();  // Remove whitespace and newline
 
         if (ramy == "u") {
@@ -157,6 +156,7 @@ void loop() {
 void btm_int() {
     unsigned long currentMillis = millis();
     if (currentMillis - lastDebounceTime > debounceDelay) {  // Only trigger if debounce time has passed
+        stop_table();
         Serial.println("Bottom Interrupt Function Entered");
         btm_limit_flag = true;
         lastDebounceTime = currentMillis;  // Update last debounce time

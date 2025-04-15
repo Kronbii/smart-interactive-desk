@@ -1,0 +1,26 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Ramy",
+      "password": "1234",
+      "preferred_positions": [
+        { "height": 80, "tilt": 0 },
+        { "height": 90, "tilt": 15 },
+        { "height": 95, "tilt": 10 },
+        { "height": 100, "tilt": 20 }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Berjawi",
+      "password": "abcd",
+      "preferred_positions": [
+        { "height": 85, "tilt": 15 },
+        { "height": 90, "tilt": 0 },
+        { "height": 95, "tilt": 10 },
+        { "height": 95, "tilt": 20 }
+      ]
+    }
+  ]
+}

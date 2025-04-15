@@ -1,7 +1,6 @@
 import sys
 import serial
 import control
-import serial
 import time
 
 SERIAL_PORT = "/dev/ttyACM0"
@@ -24,15 +23,24 @@ def watch():
     
     while True:
         state = control.get_control()
-        if state.get("emergency_stop"):
-            print("Emergency stop activated, stopping all actions.", flush=True)
-            continue
         cmd = state['command']
         if cmd != "none":
-            #if isinstance(cmd, dict) and cmd.get("type") == "manual":
             print(cmd, flush=True)
                 #ser.write(f"{cmd}\n".encode())
         time.sleep(0.2)
+        
+        if ser.in_waiting:
+            try:
+                line = ser.readline().decode(errors="ignore").strip()
+                if line.startswith("POS:"):
+                    parts = line[4:].split(",")
+                    if len(parts) == 2 and parts[0].isdigit() and parts[1].isdigit():
+                        height = int(parts[0])
+                        tilt = int(parts[1])
+                        control.update_sensor_feedback(height, tilt)
+            except Exception:
+                print("Error reading from serial port", flush=True)
+                pass
        
     
 if __name__ == "__main__":

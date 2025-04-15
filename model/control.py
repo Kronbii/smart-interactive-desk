@@ -35,11 +35,6 @@ def set_mode(mode):
     data['command'] = "none"
     set_control(data)
 
-def set_emergency_stop(state: bool):
-    data = get_control()
-    data['emergency_stop'] = state
-    set_control(data)
-
 def update_sensor_feedback(height, tilt):
     data = get_control()
     data['sensor_feedback'] = {"height": height, "tilt": tilt}
@@ -47,11 +42,3 @@ def update_sensor_feedback(height, tilt):
 
 def get_users():
     return read_json(USER_FILE)['users']
-
-def log_event(entry):
-    try:
-        data = read_json(HISTORY_FILE)
-    except:
-        data = {"logs": []}
-    data['logs'].append(entry)
-    write_json(HISTORY_FILE, data)

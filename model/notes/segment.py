@@ -1,12 +1,15 @@
 import cv2
 import numpy as np
 
-def main(frame):
+def main(frame, i):
     # === Load and Resize Image ===
     frame_y, frame_x = frame.shape[:2]
     
     # === Create a blank canvas ===
-    canvas = np.zeros((frame_y, frame_x, 3), dtype=np.uint8)
+    try:
+        canvas = cv2.imread('canvas.png')
+    except FileNotFoundError:
+        canvas = np.zeros((frame_y, frame_x, 3), dtype=np.uint8)
     
     # === Convert frame to Grayscale ===
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -39,6 +42,9 @@ def main(frame):
     inv_frame = cv2.resize(inv_frame, (int(frame_x / 3), int(frame_y / 3)))
     rgba_frame = cv2.resize(rgba_frame, (int(frame_x / 3), int(frame_y / 3)))
     
+    resized_x = inv_frame.shape[1]
+    resized_y = inv_frame.shape[0]
+    
      # === Show Intermediate and Final Results ===
     cv2.imshow('Canvas', canvas)
     cv2.waitKey(0)
@@ -61,10 +67,12 @@ def main(frame):
     # === Save Intermediate Results ===
     if save_flag:
         cv2.imwrite('output_image.png', rgba_frame)  # Save the final image
-        canvas[0:inv_frame.shape[0], 0:inv_frame.shape[1]] = cv2.cvtColor(inv_frame, cv2.COLOR_BGRA2BGR)
+        row = (i % 3)  # Determine the row (0, 1, 2)
+        col = (i // 3)  # Determine the column (0, 1, 2, ...)
+        canvas[(resized_y*row):(resized_y*row+resized_y), (resized_x*col):(resized_x*col+resized_x)] = cv2.cvtColor(inv_frame, cv2.COLOR_BGRA2BGR)
         cv2.imwrite('canvas.png', canvas)
     
 
 if __name__ == "__main__":
     img = cv2.imread("/home/kronbii/github-repos/smart-interactive-desk/test/segmentation/test1.jpeg")  # Load your image here
-    main(img)
+    main(img, 4)

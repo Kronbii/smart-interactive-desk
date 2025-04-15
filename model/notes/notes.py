@@ -8,7 +8,7 @@ cap = cv2.VideoCapture(0)
 if not cap.isOpened():
     print("Error: Could not open webcam.")
     exit()
-
+i=0
 while True:
     # Capture frame-by-frame
     ret, frame = cap.read()
@@ -23,7 +23,8 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     
-    segment.main(frame)  # Call the segment function with the captured frame
+    segment.main(frame, i)  # Call the segment function with the captured frame
+    i += 1
     
 
 # Release the webcam and close all OpenCV windows

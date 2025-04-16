@@ -66,22 +66,39 @@ def setup_header(main_content):
     return title
 
 def create_home_content(parent):
-    tk.Label(parent, text="Welcome to Home Page", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
-    tk.Button(parent, text="Click Me", bg="#2e3a59", fg="white").pack()
-    tk.Label(parent, text="Statistics Overview", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
+    parent.configure(bg="#1a1f2c")
     
-    # Create Treeview with columns: "Metric", "Value", and "Unit"
-    tree = ttk.Treeview(parent, columns=("A", "B", "C"), show="headings", height=5)
-    tree.heading("A", text="Metric")
-    tree.heading("B", text="Value")
-    tree.heading("C", text="Unit")
-    
-    # Insert new data for time metrics
-    tree.insert("", "end", values=("Time Standing", "120", "minutes"))
-    tree.insert("", "end", values=("Time Sitting", "0", "minutes"))
-    tree.insert("", "end", values=("Time on Table", "120", "minutes"))
-    
-    tree.pack()
+    tk.Label(parent, text="🎉 Welcome to the Home Page 🎉", font=("Comic Sans MS", 20, "bold"), bg="#1a1f2c", fg="white").pack(pady=20)
+
+    tk.Button(parent, text="✨ Click Me ✨", bg="#2e3a59", fg="white", font=("Comic Sans MS", 12, "bold")).pack(pady=5)
+
+    tk.Label(parent, text="📊 Statistics Overview", font=("Comic Sans MS", 18, "bold"), bg="#1a1f2c", fg="white").pack(pady=20)
+
+    stats_frame = tk.Frame(parent, bg="#1a1f2c")
+    stats_frame.pack(pady=10)
+
+    stats = [
+        ("🧍 Time Standing", "120", "min"),
+        ("🪑 Time Sitting", "0", "min"),
+        ("🖥️ Time on Table", "120", "min"),
+    ]
+
+    colors = ["#3a4a6d", "#2e3a59", "#4e5a7d"]
+
+    for i, (label_text, value, unit) in enumerate(stats):
+        stat_box = tk.Frame(stats_frame, bg=colors[i % len(colors)], padx=20, pady=10, highlightbackground="#5c6bc0", highlightthickness=2)
+        stat_box.pack(pady=5, fill="x", padx=20)
+
+        tk.Label(stat_box, text=label_text, font=("Courier New", 14, "bold"), bg=colors[i % len(colors)], fg="white").grid(row=0, column=0, sticky="w")
+        tk.Label(stat_box, text=value, font=("Courier New", 14), bg=colors[i % len(colors)], fg="white").grid(row=0, column=1, padx=10)
+        tk.Label(stat_box, text=unit, font=("Courier New", 14), bg=colors[i % len(colors)], fg="white").grid(row=0, column=2)
+
+        # Hover effect (optional)
+        def on_enter(e, box=stat_box): box.config(bg="#5c6bc0")
+        def on_leave(e, box=stat_box): box.config(bg=colors[i % len(colors)])
+        stat_box.bind("<Enter>", on_enter)
+        stat_box.bind("<Leave>", on_leave)
+
 
 
 def create_control_content(parent):

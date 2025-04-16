@@ -6,6 +6,33 @@ import page
 import subprocess
 import platform
 import threading
+from pygame import mixer
+from tkinter import filedialog
+
+mixer.init()
+
+def play_music():
+    song = filedialog.askopenfilename(title="Choose a song", filetypes=[("Audio Files", "*.mp3 *.wav")])
+    if song:
+        mixer.music.load(song)
+        mixer.music.play()
+        label_song.config(text=f"Now Playing: {song.split('/')[-1]}")  # Display song name
+
+def pause_music():
+    mixer.music.pause()
+    label_song.config(text="Music Paused... 😴")
+
+def unpause_music():
+    mixer.music.unpause()
+    label_song.config(text="Resumed 🎶")
+
+def stop_music():
+    mixer.music.stop()
+    label_song.config(text="Music Stopped... 🎵")
+
+def set_volume(val):
+    mixer.music.set_volume(float(val) / 100)
+
 
 def open_bluetooth_settings():
     system = platform.system()
@@ -96,6 +123,45 @@ def setup_header(main_content):
     title = tk.Label(header, text="", bg="#1a1f2c", fg="white", font=("Segoe UI", 20, "bold"), anchor="w")
     title.grid(row=0, column=1, sticky="w", padx=(10, 0))
     return title
+
+def create_music_content(parent):
+    parent.configure(bg="#1a1f2c")
+
+    # Header
+    tk.Label(parent, text="🎶 Quirky Music Player", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
+
+    # Song Info Label
+    global label_song
+    label_song = tk.Label(parent, text="No song playing", font=("Segoe UI", 12, "italic"), bg="#1a1f2c", fg="white")
+    label_song.pack(pady=10)
+
+    # Buttons: Play, Pause, Stop
+    button_frame = tk.Frame(parent, bg="#1a1f2c")
+    button_frame.pack(pady=20)
+
+    # Play Button
+    play_button = tk.Button(button_frame, text="Play 🎧", command=play_music, bg="#2e3a59", fg="white", font=("Segoe UI", 14, "bold"), padx=15, pady=5)
+    play_button.grid(row=0, column=0, padx=10)
+
+    # Pause Button
+    pause_button = tk.Button(button_frame, text="Pause ⏸️", command=pause_music, bg="#2e3a59", fg="white", font=("Segoe UI", 14, "bold"), padx=15, pady=5)
+    pause_button.grid(row=0, column=1, padx=10)
+
+    # Unpause Button
+    unpause_button = tk.Button(button_frame, text="Unpause ▶️", command=unpause_music, bg="#2e3a59", fg="white", font=("Segoe UI", 14, "bold"), padx=15, pady=5)
+    unpause_button.grid(row=0, column=2, padx=10)
+
+    # Stop Button
+    stop_button = tk.Button(button_frame, text="Stop 🛑", command=stop_music, bg="#2e3a59", fg="white", font=("Segoe UI", 14, "bold"), padx=15, pady=5)
+    stop_button.grid(row=0, column=3, padx=10)
+
+    # Volume Control Slider
+    volume_label = tk.Label(parent, text="Volume 🎚️", font=("Segoe UI", 14), bg="#1a1f2c", fg="white")
+    volume_label.pack(pady=10)
+    volume_slider = tk.Scale(parent, from_=0, to=100, orient="horizontal", command=set_volume, bg="#1a1f2c", fg="white", sliderlength=20)
+    volume_slider.set(50)  # Set default volume to 50%
+    volume_slider.pack(pady=10)
+    
 
 def create_home_content(parent):
     parent.configure(bg="#1a1f2c")
@@ -371,6 +437,8 @@ def create_pages(main_content, page_titles):
             create_list_content(content_wrapper)
         elif title == "Settings":
             create_settings_content(content_wrapper)
+        elif title == "Music":
+            create_music_content(content_wrapper)
         else:
             create_placeholder_content(content_wrapper, title)
 

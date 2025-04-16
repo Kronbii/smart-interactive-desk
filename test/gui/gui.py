@@ -3,6 +3,24 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 import os
 import page
+import subprocess
+import platform
+
+def open_bluetooth_settings():
+    system = platform.system()
+    try:
+        if system == "Windows":
+            subprocess.run(["start", "ms-settings:bluetooth"], shell=True)
+        elif system == "Darwin":  # macOS
+            subprocess.run(["open", "/System/Library/PreferencePanes/Bluetooth.prefPane"])
+        elif system == "Linux":
+            subprocess.run(["blueman-manager"])  # works if Blueman is installed
+        else:
+            print("Unsupported OS")
+    except Exception as e:
+        print(f"Error opening Bluetooth settings: {e}")
+
+
 
 def send_command(command):
     # Placeholder function for sending commands
@@ -99,6 +117,22 @@ def create_home_content(parent):
         stat_box.bind("<Enter>", on_enter)
         stat_box.bind("<Leave>", on_leave)
 
+
+def create_settings_content(parent):
+    parent.configure(bg="#1a1f2c")
+
+    tk.Label(parent, text="⚙️ Settings Page", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
+
+    tk.Button(
+        parent,
+        text="🔵 Open Bluetooth Settings",
+        command=open_bluetooth_settings,
+        bg="#2e3a59",
+        fg="white",
+        font=("Segoe UI", 12, "bold"),
+        padx=10,
+        pady=5
+    ).pack(pady=10)
 
 
 def create_control_content(parent):
@@ -296,6 +330,8 @@ def create_pages(main_content, page_titles):
             create_control_content(content_wrapper)
         elif title == "Lists":
             create_list_content(content_wrapper)
+        elif title == "Settings":
+            create_settings_content(content_wrapper)
         else:
             create_placeholder_content(content_wrapper, title)
 

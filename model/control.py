@@ -1,7 +1,11 @@
 import json
 import fcntl
 import os
-CONTROL_FILE = os.path.join(os.path.dirname(__file__), 'control.json')
+try:
+    CONTROL_FILE = os.path.join(os.path.dirname(__file__), 'control.json')
+except NameError:
+    CONTROL_FILE = 'control.json'
+
 USER_FILE = 'users.json'
 HISTORY_FILE = 'history.json'
 

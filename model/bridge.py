@@ -12,23 +12,26 @@ def init_serial():
             SERIAL_PORT, BAUD, timeout=1
         )  # Serial connection
         return ser
-    except serial.SerialException as e:
+    except Exception as e:
         print(f"Serial Error: {e}", flush=True)
-        return None  # Avoid crash if serial port isn't available
+        while True:
+            print("ana")
         
 
 def watch():
     print("Python process started, waiting for actions...", flush=True)
-    # ser = init_serial()
+    ser = init_serial()
     
     while True:
         state = control.get_control()
         cmd = state['command']
-        if cmd != "none":
-            print(cmd, flush=True)
-                #ser.write(f"{cmd}\n".encode())
-        time.sleep(0.2)
-        
+        cmd = f"{cmd}\n"
+        print(cmd.strip(), flush=True)
+        ser.write(cmd.encode())
+        ser.flush()
+        time.sleep(0.9)
+
+        """
         if ser.in_waiting:
             try:
                 line = ser.readline().decode(errors="ignore").strip()
@@ -41,7 +44,7 @@ def watch():
             except Exception:
                 print("Error reading from serial port", flush=True)
                 pass
-       
+       """
     
 if __name__ == "__main__":
     watch()

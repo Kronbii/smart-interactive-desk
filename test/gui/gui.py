@@ -78,67 +78,77 @@ def create_home_content(parent):
 
 def create_control_content(parent):
     style = ttk.Style()
-    
-    # Set theme engine to support styling (important for Linux)
     style.theme_use("clam")
 
-    # Base style
     style.configure(
         "Base.TButton",
         font=("Segoe UI", 12, "bold"),
-        padding=(25, 15), 
+        padding=(25, 15),
         foreground="#ffffff",
         background="#2e3a59",
         borderwidth=0,
         relief="flat",
         focuscolor="none"
     )
-    style.map(
-        "Base.TButton",
-        background=[("active", "#3e4a6d")],
-        foreground=[("active", "#ffffff")]
-    )
+    style.map("Base.TButton", background=[("active", "#3e4a6d")], foreground=[("active", "#ffffff")])
 
-    # Rounded buttons via element create hack (on some systems)
     style.layout("Rounded.TButton", [
         ("Button.border", {"children": [("Button.padding", {"children": [("Button.label", {"sticky": "nswe"})]})], "sticky": "nswe"})
     ])
     style.configure("Rounded.TButton", borderwidth=5, relief="flat", background="#2e3a59", padding=(25, 15), foreground="white", font=("Segoe UI", 12, "bold"))
     style.map("Rounded.TButton", background=[("active", "#3e4a6d")])
 
-    # Outer frame for padding
     frame = tk.Frame(parent, bg="#1a1f2c")
     frame.pack(pady=40)
 
     def on_button_release():
         send_command("stop")
-    
-    # Buttons with hierarchy and layout
+
+    # Command buttons
     up_btn = ttk.Button(frame, text="↑ Up", style="Rounded.TButton")
     down_btn = ttk.Button(frame, text="↓ Down", style="Rounded.TButton")
     tilt_up_btn = ttk.Button(frame, text="↥ Tilt Up", style="Rounded.TButton")
     tilt_down_btn = ttk.Button(frame, text="↧ Tilt Down", style="Rounded.TButton")
-    stop_btn = ttk.Button(frame, text="■ Stop", style="Rounded.TButton", command=lambda: send_command("stop"))  # visually prioritized
+    stop_btn = ttk.Button(frame, text="■ Stop", style="Rounded.TButton", command=lambda: send_command("stop"))
 
-    # Bind button press and release events to each button
     up_btn.bind("<ButtonPress-1>", lambda e: send_command("up"))
     up_btn.bind("<ButtonRelease-1>", lambda e: on_button_release())
-    
+
     down_btn.bind("<ButtonPress-1>", lambda e: send_command("down"))
     down_btn.bind("<ButtonRelease-1>", lambda e: on_button_release())
-    
+
     tilt_up_btn.bind("<ButtonPress-1>", lambda e: send_command("tilt up"))
     tilt_up_btn.bind("<ButtonRelease-1>", lambda e: on_button_release())
-    
+
     tilt_down_btn.bind("<ButtonPress-1>", lambda e: send_command("tilt down"))
     tilt_down_btn.bind("<ButtonRelease-1>", lambda e: on_button_release())
-    
-    # Grid layout
-    up_btn.grid(row=0, column=0, padx=10, pady=20)
-    down_btn.grid(row=0, column=1, padx=10, pady=20)
-    tilt_up_btn.grid(row=0, column=2, padx=10, pady=20)
-    tilt_down_btn.grid(row=0, column=3, padx=10, pady=20)
-    stop_btn.grid(row=0, column=4, padx=10, pady=20)
+
+    # Dynamic labels
+    height_var = tk.StringVar(value="Height: 0 cm")
+    tilt_var = tk.StringVar(value="Tilt: 0°")
+
+    height_label = tk.Label(frame, textvariable=height_var, bg="white", fg="black",
+                            font=("Segoe UI", 10, "bold"), width=20, height=2)
+    tilt_label = tk.Label(frame, textvariable=tilt_var, bg="white", fg="black",
+                          font=("Segoe UI", 10, "bold"), width=20, height=2)
+
+    frame.grid_columnconfigure(0, weight=1)
+    frame.grid_columnconfigure(1, weight=1)
+
+    # Layout
+    up_btn.grid(row=0, column=0, padx=10, pady=(20, 5), sticky="ew")
+    down_btn.grid(row=0, column=1, padx=10, pady=(20, 5), sticky="ew")
+    height_label.grid(row=1, column=0, columnspan=2, pady=(0, 20), sticky="ew")
+
+    tilt_up_btn.grid(row=2, column=0, padx=10, pady=(10, 5), sticky="ew")
+    tilt_down_btn.grid(row=2, column=1, padx=10, pady=(10, 5), sticky="ew")
+    tilt_label.grid(row=3, column=0, columnspan=2, pady=(0, 20), sticky="ew")
+
+    stop_btn.grid(row=4, column=0, columnspan=2, padx=10, pady=20, sticky="ew")
+
+    # Return label variables so you can update them externally
+    return height_var, tilt_var
+
 
    
     

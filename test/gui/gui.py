@@ -123,14 +123,20 @@ def create_control_content(parent):
     tilt_down_btn.bind("<ButtonPress-1>", lambda e: send_command("tilt down"))
     tilt_down_btn.bind("<ButtonRelease-1>", lambda e: on_button_release())
 
-    # Dynamic labels
-    height_var = tk.StringVar(value="Height: 0 cm")
-    tilt_var = tk.StringVar(value="Tilt: 0°")
+    # Dynamic variables
+    height_var = tk.StringVar(value="0 cm")  # Starting value for height
+    tilt_var = tk.StringVar(value="0°")     # Starting value for tilt
 
-    height_label = tk.Label(frame, textvariable=height_var, bg="white", fg="black",
-                            font=("Segoe UI", 10, "bold"), width=20, height=2)
-    tilt_label = tk.Label(frame, textvariable=tilt_var, bg="white", fg="black",
-                          font=("Segoe UI", 10, "bold"), width=20, height=2)
+    # Static text labels with dynamic value next to them
+    height_label = tk.Label(frame, text="Height:", bg="white", fg="black",
+                            font=("Segoe UI", 10, "bold"), width=15, height=2)
+    height_value_label = tk.Label(frame, textvariable=height_var, bg="white", fg="black",
+                                  font=("Segoe UI", 10, "bold"), width=15, height=2)
+
+    tilt_label = tk.Label(frame, text="Tilt:", bg="white", fg="black",
+                          font=("Segoe UI", 10, "bold"), width=15, height=2)
+    tilt_value_label = tk.Label(frame, textvariable=tilt_var, bg="white", fg="black",
+                                 font=("Segoe UI", 10, "bold"), width=15, height=2)
 
     frame.grid_columnconfigure(0, weight=1)
     frame.grid_columnconfigure(1, weight=1)
@@ -138,16 +144,19 @@ def create_control_content(parent):
     # Layout
     up_btn.grid(row=0, column=0, padx=10, pady=(20, 5), sticky="ew")
     down_btn.grid(row=0, column=1, padx=10, pady=(20, 5), sticky="ew")
-    height_label.grid(row=1, column=0, columnspan=2, pady=(0, 20), sticky="ew")
+    height_label.grid(row=1, column=0, padx=10, pady=(10, 5), sticky="ew")
+    height_value_label.grid(row=1, column=1, padx=10, pady=(10, 5), sticky="ew")
 
     tilt_up_btn.grid(row=2, column=0, padx=10, pady=(10, 5), sticky="ew")
     tilt_down_btn.grid(row=2, column=1, padx=10, pady=(10, 5), sticky="ew")
-    tilt_label.grid(row=3, column=0, columnspan=2, pady=(0, 20), sticky="ew")
+    tilt_label.grid(row=3, column=0, padx=10, pady=(10, 5), sticky="ew")
+    tilt_value_label.grid(row=3, column=1, padx=10, pady=(10, 5), sticky="ew")
 
     stop_btn.grid(row=4, column=0, columnspan=2, padx=10, pady=20, sticky="ew")
 
     # Return label variables so you can update them externally
     return height_var, tilt_var
+
 
 
    

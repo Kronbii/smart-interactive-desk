@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 import os
+import page
 
 def send_command(command):
     # Placeholder function for sending commands
@@ -68,13 +69,20 @@ def create_home_content(parent):
     tk.Label(parent, text="Welcome to Home Page", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
     tk.Button(parent, text="Click Me", bg="#2e3a59", fg="white").pack()
     tk.Label(parent, text="Statistics Overview", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
+    
+    # Create Treeview with columns: "Metric", "Value", and "Unit"
     tree = ttk.Treeview(parent, columns=("A", "B", "C"), show="headings", height=5)
     tree.heading("A", text="Metric")
     tree.heading("B", text="Value")
     tree.heading("C", text="Unit")
-    tree.insert("", "end", values=("Speed", "120", "km/h"))
-    tree.insert("", "end", values=("Power", "200", "W"))
+    
+    # Insert new data for time metrics
+    tree.insert("", "end", values=("Time Standing", "120", "minutes"))
+    tree.insert("", "end", values=("Time Sitting", "0", "minutes"))
+    tree.insert("", "end", values=("Time on Table", "120", "minutes"))
+    
     tree.pack()
+
 
 def create_control_content(parent):
     style = ttk.Style()

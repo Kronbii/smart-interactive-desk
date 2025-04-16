@@ -1,3 +1,5 @@
 serial
 pyserial
 opencv-python
+
+wget https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-arm64 -O code_arm64.deb

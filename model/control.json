@@ -3,7 +3,7 @@
   "command": "s",
   "active_user_id": 1,
   "sensor_feedback": {
-    "height": 68,
+    "height": 70,
     "tilt": 10
   }
 }

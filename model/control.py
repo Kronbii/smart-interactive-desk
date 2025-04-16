@@ -39,6 +39,11 @@ def update_sensor_feedback(height, tilt):
     data = get_control()
     data['sensor_feedback'] = {"height": height, "tilt": tilt}
     set_control(data)
+    
+def get_sensor_feedback():
+    data = get_control()
+    feedback = data['sensor_feedback']
+    return feedback['height'], feedback['tilt']
 
 def get_users():
     return read_json(USER_FILE)['users']

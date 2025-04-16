@@ -70,7 +70,7 @@ def setup_sidebar(menu_items, icons, pages, sidebar):
         btn.bind("<Leave>", lambda e, b=btn: b.config(bg="#101623"))
 
 def setup_header(main_content):
-    header = tk.Frame(main_content, bg="#1a1f2c", highlightbackground="green", highlightthickness=4)
+    header = tk.Frame(main_content, bg="#1a1f2c") #highlightbackground="green", highlightthickness=4
     header.grid(row=0, column=0, sticky="new", padx=30, pady=(30, 15))
     header.columnconfigure(1, weight=1)
     title = tk.Label(header, text="", bg="#1a1f2c", fg="white", font=("Segoe UI", 20, "bold"), anchor="w")
@@ -135,12 +135,46 @@ def create_control_content(parent):
     tilt_down_btn.bind("<ButtonPress-1>", lambda e: send_command("td"))
     tilt_down_btn.bind("<ButtonRelease-1>", lambda e: on_button_release())
     
-    # Grid layout
-    up_btn.grid(row=0, column=0, padx=15, pady=15)
-    down_btn.grid(row=0, column=1, padx=15, pady=15)
-    tilt_up_btn.grid(row=1, column=0, padx=15, pady=15)
-    tilt_down_btn.grid(row=1, column=1, padx=15, pady=15)
-    stop_btn.grid(row=2, column=0, padx=15, pady=15)
+    height, tilt = control.get_sensor_feedback()  # Get initial sensor feedback
+    
+    # Dynamic variables
+    height_var = tk.StringVar(value=height)  # Starting value for height
+    tilt_var = tk.StringVar(value=tilt)     # Starting value for tilt
+
+    # Static text labels with dynamic value next to them
+    height_label = tk.Label(frame, text="Height:", bg="white", fg="black",
+                            font=("Segoe UI", 10, "bold"), width=15, height=2)
+    height_value_label = tk.Label(frame, textvariable=height_var, bg="white", fg="black",
+                                  font=("Segoe UI", 10, "bold"), width=15, height=2)
+
+    tilt_label = tk.Label(frame, text="Tilt:", bg="white", fg="black",
+                          font=("Segoe UI", 10, "bold"), width=15, height=2)
+    tilt_value_label = tk.Label(frame, textvariable=tilt_var, bg="white", fg="black",
+                                 font=("Segoe UI", 10, "bold"), width=15, height=2)
+
+    frame.grid_columnconfigure(0, weight=1)
+    frame.grid_columnconfigure(1, weight=1)
+
+    # Layout
+    up_btn.grid(row=0, column=0, padx=10, pady=(20, 5), sticky="ew")
+    down_btn.grid(row=0, column=1, padx=10, pady=(20, 5), sticky="ew")
+    height_label.grid(row=1, column=0, padx=10, pady=(10, 5), sticky="ew")
+    height_value_label.grid(row=1, column=1, padx=10, pady=(10, 5), sticky="ew")
+
+    tilt_up_btn.grid(row=2, column=0, padx=10, pady=(10, 5), sticky="ew")
+    tilt_down_btn.grid(row=2, column=1, padx=10, pady=(10, 5), sticky="ew")
+    tilt_label.grid(row=3, column=0, padx=10, pady=(10, 5), sticky="ew")
+    tilt_value_label.grid(row=3, column=1, padx=10, pady=(10, 5), sticky="ew")
+
+    stop_btn.grid(row=4, column=0, columnspan=2, padx=10, pady=20, sticky="ew")
+    def update_sensor_values():
+        height, tilt = control.get_sensor_feedback()
+        height_var.set(height)
+        tilt_var.set(tilt)
+        frame.after(200, update_sensor_values)  # Call again after 200ms
+    update_sensor_values()  # Start periodic updates
+
+
 
 
 def create_statistics_content(parent):
@@ -254,7 +288,7 @@ def create_pages(main_content, page_titles):
     main_content.grid_rowconfigure(1, weight=1)
     main_content.grid_columnconfigure(0, weight=1)
     for title in page_titles:
-        page_frame = tk.Frame(main_content, bg="#1a1f2c", highlightbackground="pink", highlightthickness=6)
+        page_frame = tk.Frame(main_content, bg="#1a1f2c") # highlightbackground="pink", highlightthickness=6
         page_frame.grid_rowconfigure(0, weight=1)
         page_frame.grid_columnconfigure(0, weight=1)
         content_wrapper = tk.Frame(page_frame, bg="#1a1f2c")
@@ -299,11 +333,11 @@ def main():
     root.grid_rowconfigure(0, weight=1)
     sidebar_width = 220
 
-    main_content = tk.Frame(root, bg="#1a1f2c", highlightbackground="red", highlightthickness=6)
+    main_content = tk.Frame(root, bg="#1a1f2c") #highlightbackground="red", highlightthickness=6
     main_content.grid(row=0, column=1, sticky="nsew")
     for row in range(2):
         for col in range(1):
-            cell = tk.Frame(main_content, bg="#1a1f2c", highlightbackground="white", highlightthickness=1)
+            cell = tk.Frame(main_content, bg="#1a1f2c") # highlightbackground="white", highlightthickness=1
             cell.grid(row=row, column=col, sticky="nsew")
             main_content.grid_rowconfigure(row, weight=(0 if row == 0 else 1))
             main_content.grid_columnconfigure(col, weight=1)

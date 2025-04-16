@@ -104,7 +104,6 @@ void setup() {
     display.setContrast(60);  //contrast (0-100)
     display.clearDisplay();
 
-    Serial2.begin(115200);
     Serial.begin(115200);    // Main serial communication
 
     while (! Serial) { delay(1); }
@@ -191,10 +190,10 @@ void loop() {
     Serial.print(", Sensor 2: ");
     Serial.println(sensor2);
 
-    if ( sensor1 <= 75){
+    if (move_down_flag && sensor2 <= 750){
         move_down_flag = false;
     }
-    else if ( sensor1 > 95){
+    else if (move_up_flag && sensor2 >= 950){
         move_up_flag = false;
     }
 
@@ -217,6 +216,7 @@ void loop() {
     }
 
     display.display();
+    Serial.println(sensor2);
 }
 
 // Motor control functions

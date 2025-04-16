@@ -164,9 +164,6 @@ def create_control_content(parent):
 
     # Return label variables so you can update them externally
     return height_var, tilt_var
-
-
-
    
     
 def create_list_content(parent):

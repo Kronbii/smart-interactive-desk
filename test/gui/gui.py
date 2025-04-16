@@ -67,6 +67,14 @@ def setup_header(main_content):
 def create_home_content(parent):
     tk.Label(parent, text="Welcome to Home Page", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
     tk.Button(parent, text="Click Me", bg="#2e3a59", fg="white").pack()
+    tk.Label(parent, text="Statistics Overview", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
+    tree = ttk.Treeview(parent, columns=("A", "B", "C"), show="headings", height=5)
+    tree.heading("A", text="Metric")
+    tree.heading("B", text="Value")
+    tree.heading("C", text="Unit")
+    tree.insert("", "end", values=("Speed", "120", "km/h"))
+    tree.insert("", "end", values=("Power", "200", "W"))
+    tree.pack()
 
 def create_control_content(parent):
     style = ttk.Style()
@@ -126,22 +134,13 @@ def create_control_content(parent):
     tilt_down_btn.bind("<ButtonRelease-1>", lambda e: on_button_release())
     
     # Grid layout
-    up_btn.grid(row=0, column=0, padx=15, pady=15)
-    down_btn.grid(row=0, column=1, padx=15, pady=15)
-    tilt_up_btn.grid(row=1, column=0, padx=15, pady=15)
-    tilt_down_btn.grid(row=1, column=1, padx=15, pady=15)
-    stop_btn.grid(row=2, column=0, padx=15, pady=15)
+    up_btn.grid(row=0, column=0, padx=10, pady=20)
+    down_btn.grid(row=0, column=1, padx=10, pady=20)
+    tilt_up_btn.grid(row=0, column=2, padx=10, pady=20)
+    tilt_down_btn.grid(row=0, column=3, padx=10, pady=20)
+    stop_btn.grid(row=0, column=4, padx=10, pady=20)
 
-
-def create_statistics_content(parent):
-    tk.Label(parent, text="Statistics Overview", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
-    tree = ttk.Treeview(parent, columns=("A", "B", "C"), show="headings", height=5)
-    tree.heading("A", text="Metric")
-    tree.heading("B", text="Value")
-    tree.heading("C", text="Unit")
-    tree.insert("", "end", values=("Speed", "120", "km/h"))
-    tree.insert("", "end", values=("Power", "200", "W"))
-    tree.pack()
+   
     
 def create_list_content(parent):
     # Main container frame
@@ -254,8 +253,6 @@ def create_pages(main_content, page_titles):
             create_home_content(content_wrapper)
         elif title == "Control Panel":
             create_control_content(content_wrapper)
-        elif title == "Statistics":
-            create_statistics_content(content_wrapper)
         elif title == "Lists":
             create_list_content(content_wrapper)
         else:
@@ -267,18 +264,16 @@ def create_pages(main_content, page_titles):
 def main():
     global root, sidebar, main_content, sidebar_width, pages, header_title
     
-    icon_names = ["home", "control", "music", "stats", "list", "reminder", "alarm", "settings", "help"]
-    page_titles = ["Home", "Control Panel", "Music", "Statistics", "Lists", "Reminders", "Alarms", "Settings", "Help & Feedback"]
+    icon_names = ["home", "control", "music","list","alarm", "settings", "help"]
+    page_titles = ["Home", "Control Panel", "Music", "Statistics", "Lists", "Reminders and Alarms", "Settings", "Help & Feedback"]
     menu_items = [
     (page_titles[0], "home"),
     (page_titles[1], "control"),
     (page_titles[2], "music"),
-    (page_titles[3], "stats"),
     (page_titles[4], "list"),
-    (page_titles[5], "reminder"),
-    (page_titles[6], "alarm"),
-    (page_titles[7], "settings"),
-    (page_titles[8], "help")
+    (page_titles[5], "alarm"),
+    (page_titles[6], "settings"),
+    (page_titles[7], "help")
 ]
     
     root = tk.Tk()

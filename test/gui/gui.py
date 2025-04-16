@@ -5,6 +5,7 @@ import os
 import page
 import subprocess
 import platform
+import threading
 
 def open_bluetooth_settings():
     system = platform.system()
@@ -20,7 +21,20 @@ def open_bluetooth_settings():
     except Exception as e:
         print(f"Error opening Bluetooth settings: {e}")
 
-
+def open_wifi_settings():
+    system = platform.system()
+    try:
+        if system == "Windows":
+            subprocess.run(["start", "ms-settings:network-wifi"], shell=True)
+        elif system == "Darwin":  # macOS
+            subprocess.run(["open", "/System/Library/PreferencePanes/Network.prefPane"])
+        elif system == "Linux":
+            # GNOME-based desktops (Ubuntu, Pop!_OS, etc.)
+            subprocess.run(["nm-connection-editor"])
+        else:
+            print("Unsupported OS")
+    except Exception as e:
+        print(f"Error opening Wi-Fi settings: {e}")
 
 def send_command(command):
     # Placeholder function for sending commands
@@ -119,20 +133,45 @@ def create_home_content(parent):
 
 
 def create_settings_content(parent):
+    for widget in parent.winfo_children():
+        widget.destroy()
+
     parent.configure(bg="#1a1f2c")
 
-    tk.Label(parent, text="⚙️ Settings Page", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
+    title = tk.Label(parent, text="⚙️ Settings Page", font=("Comic Sans MS", 20, "bold"), bg="#1a1f2c", fg="#ffcc00")
+    title.grid(row=0, column=0, columnspan=2, pady=(30, 20))
 
-    tk.Button(
+    # Bluetooth button
+    bluetooth_btn = tk.Button(
         parent,
-        text="🔵 Open Bluetooth Settings",
+        text="🔵 Bluetooth Settings",
         command=open_bluetooth_settings,
-        bg="#2e3a59",
+        bg="#3a506b",
         fg="white",
         font=("Segoe UI", 12, "bold"),
-        padx=10,
-        pady=5
-    ).pack(pady=10)
+        padx=20,
+        pady=10,
+        relief="groove"
+    )
+    bluetooth_btn.grid(row=1, column=0, padx=30, pady=10, sticky="ew")
+
+    # Wi-Fi button
+    wifi_btn = tk.Button(
+        parent,
+        text="📶 Wi-Fi Settings",
+        command=open_wifi_settings,
+        bg="#3a506b",
+        fg="white",
+        font=("Segoe UI", 12, "bold"),
+        padx=20,
+        pady=10,
+        relief="groove"
+    )
+    wifi_btn.grid(row=1, column=1, padx=30, pady=10, sticky="ew")
+
+    # Make columns expand evenly
+    parent.grid_columnconfigure(0, weight=1)
+    parent.grid_columnconfigure(1, weight=1)
 
 
 def create_control_content(parent):

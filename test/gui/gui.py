@@ -50,7 +50,9 @@ def capture_image_from_webcam():
         print("Failed to capture image.")
 
 def remove_image():
+    global displayed_image
     current_image_label.configure(image=None)
+    displayed_image = None  # Important: release reference to the image
 
 
 def schedule_reminder(reminder_time, message):

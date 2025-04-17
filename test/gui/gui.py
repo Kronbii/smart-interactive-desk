@@ -5,13 +5,25 @@ import os
 import subprocess
 import platform
 import threading
+import time
+from datetime import datetime
 from pygame import mixer
 from tkinter import filedialog
+from tkinter import messagebox
 
 mixer.init()
 
 ###################################Functions#####################################
 
+def schedule_reminder(reminder_time, message):
+    def check_time():
+        while True:
+            now = datetime.now().strftime("%H:%M")
+            if now == reminder_time:
+                messagebox.showinfo("Reminder", message)
+                break
+            time.sleep(30)
+    threading.Thread(target=check_time, daemon=True).start()
 
 def save_note(text):
     with open("note.txt", "w") as file:
@@ -142,6 +154,68 @@ def setup_header(main_content):
     return title
 
 ###################################Create content#####################################
+
+def create_alarm_content(parent):
+    parent.configure(bg="#1a1f2c")
+
+    # Clear any previous widgets
+    for widget in parent.winfo_children():
+        widget.destroy()
+
+    # Header
+    tk.Label(
+        parent,
+        text="⏰ Alarm / Reminder",
+        font=("Segoe UI", 18, "bold"),
+        bg="#1a1f2c",
+        fg="#ffcc00"
+    ).pack(pady=20)
+
+    # Frame to hold the inputs side by side
+    input_frame = tk.Frame(parent, bg="#1a1f2c")
+    input_frame.pack()
+
+    # Time input
+    tk.Label(
+        input_frame,
+        text="Time (HH:MM):",
+        font=("Segoe UI", 12),
+        bg="#1a1f2c",
+        fg="white"
+    ).grid(row=0, column=0, padx=10, pady=5, sticky="w")
+    time_entry = tk.Entry(input_frame, font=("Segoe UI", 12), width=10)
+    time_entry.grid(row=1, column=0, padx=10, pady=5)
+
+    # Message input
+    tk.Label(
+        input_frame,
+        text="Message:",
+        font=("Segoe UI", 12),
+        bg="#1a1f2c",
+        fg="white"
+    ).grid(row=0, column=1, padx=10, pady=5, sticky="w")
+    message_entry = tk.Entry(input_frame, font=("Segoe UI", 12), width=40)
+    message_entry.grid(row=1, column=1, padx=10, pady=5)
+
+    # Set Reminder Button centered
+    def on_set_reminder():
+        reminder_time = time_entry.get()
+        message = message_entry.get()
+        schedule_reminder(reminder_time, message)
+        messagebox.showinfo("Reminder Set", f"Reminder set for {reminder_time}")
+
+    tk.Button(
+        parent,
+        text="➕ Set Reminder",
+        font=("Segoe UI", 12, "bold"),
+        bg="#3a506b",
+        fg="white",
+        padx=20,
+        pady=10,
+        relief="groove",
+        command=on_set_reminder
+    ).pack(pady=20)
+
 
 
 def create_music_content(parent):
@@ -544,6 +618,8 @@ def create_pages(main_content, page_titles):
             create_music_content(content_wrapper)
         elif title == "Notes":
             create_notes_content(content_wrapper)
+        elif title == "Alarm":
+            create_alarm_content(content_wrapper)
         else:
             create_placeholder_content(content_wrapper, title)
 
@@ -558,7 +634,7 @@ def main():
     global root, sidebar, main_content, sidebar_width, pages, header_title
     
     icon_names = ["home", "control","notes", "music","list","alarm", "settings", "help"]
-    page_titles = ["Home", "Control Panel","Notes", "Music","Lists", "Reminders and Alarms", "Settings", "Help & Feedback"]
+    page_titles = ["Home", "Control Panel","Notes", "Music","Lists", "Alarm", "Settings", "Help & Feedback"]
     menu_items = [
     (page_titles[0], "home"),
     (page_titles[1], "control"),

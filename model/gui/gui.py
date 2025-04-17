@@ -16,9 +16,7 @@ def send_command(command):
 def on_button_release():
     print(f"Command: s")
     send_command("s")
-    data = control.get_control()
-    data['command'] = "s"
-    control.set_control(data)
+
     
 def invert_icon_colors(image):
     image = image.convert("RGBA")

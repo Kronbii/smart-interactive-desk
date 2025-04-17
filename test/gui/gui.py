@@ -10,6 +10,24 @@ from tkinter import filedialog
 
 mixer.init()
 
+###################################Functions#####################################
+
+
+def save_note(text):
+    with open("note.txt", "w") as file:
+        file.write(text)
+    print("Note saved.")
+
+def update_note(text):
+    with open("note.txt", "w") as file:
+        file.write(text)
+    print("Note updated.")
+
+def delete_note():
+    with open("note.txt", "w") as file:
+        file.write("")
+    print("Note deleted.")
+
 def play_music():
     song = filedialog.askopenfilename(title="Choose a song", filetypes=[("Audio Files", "*.mp3 *.wav")])
     if song:
@@ -122,6 +140,9 @@ def setup_header(main_content):
     title = tk.Label(header, text="", bg="#1a1f2c", fg="white", font=("Segoe UI", 20, "bold"), anchor="w")
     title.grid(row=0, column=1, sticky="w", padx=(10, 0))
     return title
+
+###################################Create content#####################################
+
 
 def create_music_content(parent):
     parent.configure(bg="#1a1f2c")
@@ -300,6 +321,7 @@ def create_control_content(parent):
 
     # Static text labels with dynamic value next to them
     height_label = tk.Label(frame, text="Height:", bg="white", fg="black",
+                            
                             font=("Segoe UI", 10, "bold"), width=15, height=2)
     height_value_label = tk.Label(frame, textvariable=height_var, bg="white", fg="black",
                                   font=("Segoe UI", 10, "bold"), width=15, height=2)
@@ -327,8 +349,80 @@ def create_control_content(parent):
 
     # Return label variables so you can update them externally
     return height_var, tilt_var
-   
-    
+def create_notes_content(parent):
+    parent.configure(bg="#1a1f2c")
+    parent.grid_rowconfigure(1, weight=1)  # Let the notes area expand vertically
+    parent.grid_columnconfigure(0, weight=1)  # Let the notes area expand horizontally
+
+    # Header
+    tk.Label(
+        parent,
+        text="📝 Notes Page",
+        font=("Segoe UI", 18, "bold"),
+        bg="#1a1f2c",
+        fg="#ffcc00"
+    ).grid(row=0, column=0, pady=20)
+
+    # Notes Text Box inside a Frame with padding
+    text_frame = tk.Frame(parent, bg="#1a1f2c", padx=20, pady=10)
+    text_frame.grid(row=1, column=0, sticky="nsew")
+    text_frame.grid_rowconfigure(0, weight=1)
+    text_frame.grid_columnconfigure(0, weight=1)
+
+    notes_text = tk.Text(
+        text_frame,
+        wrap="word",
+        font=("Segoe UI", 12),
+        bg="#2e3a59",
+        fg="white",
+        insertbackground="white",
+        relief="flat"
+    )
+    notes_text.grid(row=0, column=0, sticky="nsew")
+
+    # Buttons Frame
+    buttons_frame = tk.Frame(parent, bg="#1a1f2c")
+    buttons_frame.grid(row=2, column=0, pady=10)
+
+    # Save Note Button
+    tk.Button(
+        buttons_frame,
+        text="💾 Save Note",
+        font=("Segoe UI", 12, "bold"),
+        bg="#3a506b",
+        fg="white",
+        padx=10,
+        pady=5,
+        relief="groove",
+        command=lambda: save_note(notes_text.get("1.0", "end-1c"))
+    ).grid(row=0, column=0, padx=5)
+
+    # Update Note Button
+    tk.Button(
+        buttons_frame,
+        text="🔄 Update Note",
+        font=("Segoe UI", 12, "bold"),
+        bg="#3a506b",
+        fg="white",
+        padx=10,
+        pady=5,
+        relief="groove",
+        command=lambda: update_note(notes_text.get("1.0", "end-1c"))
+    ).grid(row=0, column=1, padx=5)
+
+    # Delete Note Button
+    tk.Button(
+        buttons_frame,
+        text="❌ Delete Note",
+        font=("Segoe UI", 12, "bold"),
+        bg="#3a506b",
+        fg="white",
+        padx=10,
+        pady=5,
+        relief="groove",
+        command=delete_note
+    ).grid(row=0, column=2, padx=5)
+
 def create_list_content(parent):
     # Main container frame
     task_frame = tk.Frame(parent, bg="#1a1f2c")
@@ -421,6 +515,8 @@ def create_list_content(parent):
     task_entry.bind("<Return>", lambda event: add_task())
 
 
+###################################create pages#####################################
+
 
 def create_placeholder_content(parent, title):
     tk.Label(parent, text=f"This is the {title} page", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
@@ -446,11 +542,17 @@ def create_pages(main_content, page_titles):
             create_settings_content(content_wrapper)
         elif title == "Music":
             create_music_content(content_wrapper)
+        elif title == "Notes":
+            create_notes_content(content_wrapper)
         else:
             create_placeholder_content(content_wrapper, title)
 
         pages[title] = page_frame
     return pages
+
+
+###################################Add page icon and name#####################################
+
 
 def main():
     global root, sidebar, main_content, sidebar_width, pages, header_title

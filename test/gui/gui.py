@@ -10,10 +10,48 @@ from datetime import datetime
 from pygame import mixer
 from tkinter import filedialog
 from tkinter import messagebox
+from tkinter import filedialog
+import cv2
+import os
+
+current_image_label = None  # global holder to access image widget
+displayed_image = None      # to prevent image from being garbage collected
 
 mixer.init()
 
 ###################################Functions#####################################
+
+def load_image():
+    global displayed_image
+    filepath = filedialog.askopenfilename(filetypes=[("Image Files", "*.png;*.jpg;*.jpeg")])
+    if filepath:
+        img = Image.open(filepath)
+        img = img.resize((400, 300))  # Resize for aesthetics
+        displayed_image = ImageTk.PhotoImage(img)
+        current_image_label.configure(image=displayed_image)
+
+def capture_image_from_webcam():
+    global displayed_image
+    cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        print("Webcam could not be opened.")
+        return
+
+    ret, frame = cap.read()
+    cap.release()
+    if ret:
+        img_path = "captured_note_image.jpg"
+        cv2.imwrite(img_path, frame)
+        img = Image.open(img_path)
+        img = img.resize((400, 300))
+        displayed_image = ImageTk.PhotoImage(img)
+        current_image_label.configure(image=displayed_image)
+    else:
+        print("Failed to capture image.")
+
+def remove_image():
+    current_image_label.configure(image=None)
+
 
 def schedule_reminder(reminder_time, message):
     def check_time():
@@ -423,78 +461,53 @@ def create_control_content(parent):
 
     # Return label variables so you can update them externally
     return height_var, tilt_var
-def create_notes_content(parent):
-    parent.configure(bg="#1a1f2c")
-    parent.grid_rowconfigure(1, weight=1)  # Let the notes area expand vertically
-    parent.grid_columnconfigure(0, weight=1)  # Let the notes area expand horizontally
 
-    # Header
+def create_notes_content(parent):
+    global current_image_label
+
+    parent.configure(bg="#1a1f2c")
+
     tk.Label(
         parent,
         text="📝 Notes Page",
         font=("Segoe UI", 18, "bold"),
         bg="#1a1f2c",
         fg="#ffcc00"
-    ).grid(row=0, column=0, pady=20)
+    ).pack(pady=20)
 
-    # Notes Text Box inside a Frame with padding
-    text_frame = tk.Frame(parent, bg="#1a1f2c", padx=20, pady=10)
-    text_frame.grid(row=1, column=0, sticky="nsew")
-    text_frame.grid_rowconfigure(0, weight=1)
-    text_frame.grid_columnconfigure(0, weight=1)
+    # Container to hold image
+    current_image_label = tk.Label(parent, bg="#2e3a59")
+    current_image_label.pack(pady=10, ipadx=20, ipady=20)
 
-    notes_text = tk.Text(
-        text_frame,
-        wrap="word",
-        font=("Segoe UI", 12),
-        bg="#2e3a59",
-        fg="white",
-        insertbackground="white",
-        relief="flat"
-    )
-    notes_text.grid(row=0, column=0, sticky="nsew")
+    # Button Container (horizontal alignment)
+    button_frame = tk.Frame(parent, bg="#1a1f2c")
+    button_frame.pack(pady=10)
 
-    # Buttons Frame
-    buttons_frame = tk.Frame(parent, bg="#1a1f2c")
-    buttons_frame.grid(row=2, column=0, pady=10)
-
-    # Save Note Button
     tk.Button(
-        buttons_frame,
-        text="💾 Save Note",
-        font=("Segoe UI", 12, "bold"),
+        button_frame,
+        text="📁 Load Image",
+        font=("Segoe UI", 10, "bold"),
         bg="#3a506b",
         fg="white",
-        padx=10,
-        pady=5,
-        relief="groove",
-        command=lambda: save_note(notes_text.get("1.0", "end-1c"))
+        command=load_image
     ).grid(row=0, column=0, padx=5)
 
-    # Update Note Button
     tk.Button(
-        buttons_frame,
-        text="🔄 Update Note",
-        font=("Segoe UI", 12, "bold"),
+        button_frame,
+        text="📷 Capture Image",
+        font=("Segoe UI", 10, "bold"),
         bg="#3a506b",
         fg="white",
-        padx=10,
-        pady=5,
-        relief="groove",
-        command=lambda: update_note(notes_text.get("1.0", "end-1c"))
+        command=capture_image_from_webcam
     ).grid(row=0, column=1, padx=5)
 
-    # Delete Note Button
     tk.Button(
-        buttons_frame,
-        text="❌ Delete Note",
-        font=("Segoe UI", 12, "bold"),
+        button_frame,
+        text="🗑️ Remove Image",
+        font=("Segoe UI", 10, "bold"),
         bg="#3a506b",
         fg="white",
-        padx=10,
-        pady=5,
-        relief="groove",
-        command=delete_note
+        command=remove_image
     ).grid(row=0, column=2, padx=5)
 
 def create_list_content(parent):

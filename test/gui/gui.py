@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 import os
-import page
 import subprocess
 import platform
 import threading
@@ -128,7 +127,7 @@ def create_music_content(parent):
     parent.configure(bg="#1a1f2c")
 
     # Header
-    tk.Label(parent, text="🎶 Quirky Music Player", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
+    tk.Label(parent, text="🎶Music Player", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
 
     # Song Info Label
     global label_song
@@ -158,19 +157,26 @@ def create_music_content(parent):
     # Volume Control Slider
     volume_label = tk.Label(parent, text="Volume 🎚️", font=("Segoe UI", 14), bg="#1a1f2c", fg="white")
     volume_label.pack(pady=10)
-    volume_slider = tk.Scale(parent, from_=0, to=100, orient="horizontal", command=set_volume, bg="#1a1f2c", fg="white", sliderlength=20)
+
+    volume_slider = tk.Scale(
+        parent,
+        from_=0,
+        to=100,
+        orient="horizontal",
+        command=set_volume,
+        bg="#1a1f2c",
+        fg="white",
+        sliderlength=20,
+        length=300  # Wider slider here
+    )
     volume_slider.set(50)  # Set default volume to 50%
     volume_slider.pack(pady=10)
-    
 
+    
 def create_home_content(parent):
     parent.configure(bg="#1a1f2c")
-    
-    tk.Label(parent, text="🎉 Welcome to the Home Page 🎉", font=("Comic Sans MS", 20, "bold"), bg="#1a1f2c", fg="white").pack(pady=20)
 
-    tk.Button(parent, text="✨ Click Me ✨", bg="#2e3a59", fg="white", font=("Comic Sans MS", 12, "bold")).pack(pady=5)
-
-    tk.Label(parent, text="📊 Statistics Overview", font=("Comic Sans MS", 18, "bold"), bg="#1a1f2c", fg="white").pack(pady=20)
+    tk.Label(parent, text="📊 Statistics Overview", font=("Segoe UI", 18, "bold"), bg="#1a1f2c", fg="white").pack(pady=20)
 
     stats_frame = tk.Frame(parent, bg="#1a1f2c")
     stats_frame.pack(pady=10)
@@ -187,15 +193,10 @@ def create_home_content(parent):
         stat_box = tk.Frame(stats_frame, bg=colors[i % len(colors)], padx=20, pady=10, highlightbackground="#5c6bc0", highlightthickness=2)
         stat_box.pack(pady=5, fill="x", padx=20)
 
-        tk.Label(stat_box, text=label_text, font=("Courier New", 14, "bold"), bg=colors[i % len(colors)], fg="white").grid(row=0, column=0, sticky="w")
-        tk.Label(stat_box, text=value, font=("Courier New", 14), bg=colors[i % len(colors)], fg="white").grid(row=0, column=1, padx=10)
-        tk.Label(stat_box, text=unit, font=("Courier New", 14), bg=colors[i % len(colors)], fg="white").grid(row=0, column=2)
+        tk.Label(stat_box, text=label_text, font=("Segoe UI", 14, "bold"), bg=colors[i % len(colors)], fg="white").grid(row=0, column=0, sticky="w")
+        tk.Label(stat_box, text=value, font=("Segoe UI", 14), bg=colors[i % len(colors)], fg="white").grid(row=0, column=1, padx=10)
+        tk.Label(stat_box, text=unit, font=("Segoe UI", 14), bg=colors[i % len(colors)], fg="white").grid(row=0, column=2)
 
-        # Hover effect (optional)
-        def on_enter(e, box=stat_box): box.config(bg="#5c6bc0")
-        def on_leave(e, box=stat_box): box.config(bg=colors[i % len(colors)])
-        stat_box.bind("<Enter>", on_enter)
-        stat_box.bind("<Leave>", on_leave)
 
 
 def create_settings_content(parent):
@@ -204,7 +205,13 @@ def create_settings_content(parent):
 
     parent.configure(bg="#1a1f2c")
 
-    title = tk.Label(parent, text="⚙️ Settings Page", font=("Comic Sans MS", 20, "bold"), bg="#1a1f2c", fg="#ffcc00")
+    title = tk.Label(
+        parent,
+        text="⚙️ Settings Page",
+        font=("Segoe UI", 20, "bold"),  # Match button font style
+        bg="#1a1f2c",
+        fg="white"  # Match button text color
+    )
     title.grid(row=0, column=0, columnspan=2, pady=(30, 20))
 
     # Bluetooth button
@@ -448,12 +455,13 @@ def create_pages(main_content, page_titles):
 def main():
     global root, sidebar, main_content, sidebar_width, pages, header_title
     
-    icon_names = ["home", "control", "music","list","alarm", "settings", "help"]
-    page_titles = ["Home", "Control Panel", "Music", "Statistics", "Lists", "Reminders and Alarms", "Settings", "Help & Feedback"]
+    icon_names = ["home", "control","notes", "music","list","alarm", "settings", "help"]
+    page_titles = ["Home", "Control Panel","Notes", "Music","Lists", "Reminders and Alarms", "Settings", "Help & Feedback"]
     menu_items = [
     (page_titles[0], "home"),
     (page_titles[1], "control"),
-    (page_titles[2], "music"),
+    (page_titles[2], "notes"),
+    (page_titles[3], "music"),
     (page_titles[4], "list"),
     (page_titles[5], "alarm"),
     (page_titles[6], "settings"),

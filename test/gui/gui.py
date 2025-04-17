@@ -64,6 +64,16 @@ def schedule_reminder(reminder_time, message):
                 break
             time.sleep(30)
     threading.Thread(target=check_time, daemon=True).start()
+    def alarm_loop():
+        while True:
+            now = datetime.now().strftime("%H:%M")
+            if now == reminder_time:
+                messagebox.showinfo("⏰ Alarm!", f"{message}")
+                break
+            time.sleep(10)  # Check every 10 seconds
+
+    threading.Thread(target=alarm_loop, daemon=True).start()
+
 
 def save_note(text):
     with open("note.txt", "w") as file:

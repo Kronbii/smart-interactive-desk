@@ -45,20 +45,7 @@ def main(frame, i):
     resized_x = inv_frame.shape[1]
     resized_y = inv_frame.shape[0]
     
-     # === Show Intermediate and Final Results ===
-    cv2.imshow('Canvas', canvas)
-    cv2.waitKey(0)
-    cv2.imshow('Original Image', frame)
-    cv2.waitKey(0)
-    cv2.imshow('Grayscale', gray_frame)
-    cv2.waitKey(0)
-    cv2.imshow('Adaptive Threshold', bin_frame)
-    cv2.waitKey(0)
-    cv2.imshow('Morphology Cleaned', closed_frame)
-    cv2.waitKey(0)
-    cv2.imshow('inverted', inv_frame)
-    cv2.waitKey(0)
-    cv2.imshow('final', rgba_frame)
+     # === Show Intermediate and Final Results ===  
     cv2.waitKey(0)
     cv2.destroyAllWindows()
     

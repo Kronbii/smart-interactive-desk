@@ -22,6 +22,36 @@ mixer.init()
 
 ###################################Functions#####################################
 
+import tkinter as tk
+from tkinter import filedialog
+from PIL import Image, ImageTk
+import subprocess
+import os
+
+def open_qr_and_run_js():
+    # === Image and JS Paths ===
+    image_path = "/home/berjawi/Documents/smart-interactive-desk/test/gui/QR.png"
+    js_script_path = "/home/berjawi/Documents/smart-interactive-desk/test/web/server.js"
+
+    # === Open QR Image in Popup ===
+    if not os.path.exists(image_path):
+        print("QR image not found.")
+        return
+
+    img_win = tk.Toplevel()
+    img_win.title("📷 Remote QR")
+    img_win.configure(bg="#1a1f2c")
+
+    img = Image.open(image_path)
+    img = img.resize((500, 400))  # Adjust as needed
+    tk_img = ImageTk.PhotoImage(img)
+
+    tk.Label(img_win, image=tk_img, bg="#1a1f2c").pack(padx=10, pady=10)
+    img_win.image = tk_img  # Keep reference
+
+    # === Run JS Script in Background, Silently ===
+    subprocess.Popen(["node", js_script_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
 
 def load_image():
     global displayed_image
@@ -33,7 +63,7 @@ def load_image():
         current_image_label.configure(image=displayed_image)
 
 def capture_image_from_webcam():
-    subprocess.run(["python3", "segment.py"])
+    subprocess.Popen(["gnome-terminal", "--", "python3", "segment.py"])
 
 def remove_image():
     global displayed_image
@@ -305,52 +335,76 @@ def create_music_content(parent):
     volume_slider.pack(pady=10)
 
     
+import tkinter as tk
+from tkinter import filedialog
+from PIL import Image, ImageTk
+
+def open_remote_image():
+    filepath = filedialog.askopenfilename(title="Select Remote Control Image", filetypes=[("Image Files", "*.png;*.jpg;*.jpeg;*.bmp")])
+    if filepath:
+        img_window = tk.Toplevel()
+        img_window.title("Remote Control")
+        img = Image.open(filepath)
+        img = img.resize((500, 300))  # Resize as needed
+        photo = ImageTk.PhotoImage(img)
+        label = tk.Label(img_window, image=photo)
+        label.image = photo
+        label.pack()
+
 def create_home_content(parent):
     parent.configure(bg="#1a1f2c")
 
     # === Control Section Title ===
-    tk.Label(parent, text="🕹️ Control", font=("Segoe UI", 18, "bold"), bg="#1a1f2c", fg="white").pack(pady=(20, 5))
+    tk.Label(parent, text="🕹️ Control", font=("Segoe UI", 16, "bold"), bg="#1a1f2c", fg="white").pack(pady=(15, 5))
 
     # === Control Section ===
     control_frame = tk.Frame(parent, bg="#1a1f2c")
     control_frame.pack()
-
     height_var, tilt_var = create_control_content(control_frame)
 
     # === Statistics Section Title ===
-    tk.Label(parent, text="📊 Statistics Overview", font=("Segoe UI", 18, "bold"), bg="#1a1f2c", fg="white").pack(pady=(30, 10))
+    tk.Label(parent, text="📊 Statistics Overview", font=("Segoe UI", 16, "bold"), bg="#1a1f2c", fg="white").pack(pady=(20, 5))
 
     stats_frame = tk.Frame(parent, bg="#1a1f2c")
-    stats_frame.pack(pady=10)
+    stats_frame.pack(pady=5)
 
     stats = [
         ("🧍 Time Standing", "120", "min"),
         ("🪑 Time Sitting", "0", "min"),
         ("🖥️ Time on Table", "120", "min"),
     ]
-
     colors = ["#3a4a6d", "#2e3a59", "#4e5a7d"]
 
-    # === Adjusting the layout for horizontal alignment ===
     stat_frame = tk.Frame(stats_frame, bg="#1a1f2c")
-    stat_frame.pack(fill="x", padx=40, pady=10)
+    stat_frame.pack(fill="x", padx=30, pady=5)
 
     for i, (label_text, value, unit) in enumerate(stats):
         stat_box = tk.Frame(
             stat_frame,
             bg=colors[i % len(colors)],
-            padx=20,
-            pady=10,
+            padx=15,
+            pady=8,
             highlightbackground="#5c6bc0",
             highlightthickness=2
         )
-        stat_box.pack(side="left", padx=10, expand=True)
+        stat_box.pack(side="left", padx=8, expand=True)
 
-        tk.Label(stat_box, text=label_text, font=("Segoe UI", 14, "bold"), bg=colors[i % len(colors)], fg="white").pack(side="left")
-        tk.Label(stat_box, text=value, font=("Segoe UI", 14), bg=colors[i % len(colors)], fg="white").pack(side="left", padx=10)
-        tk.Label(stat_box, text=unit, font=("Segoe UI", 14), bg=colors[i % len(colors)], fg="white").pack(side="left")
+        tk.Label(stat_box, text=label_text, font=("Segoe UI", 12, "bold"), bg=colors[i], fg="white").pack(side="left")
+        tk.Label(stat_box, text=value, font=("Segoe UI", 12), bg=colors[i], fg="white").pack(side="left", padx=5)
+        tk.Label(stat_box, text=unit, font=("Segoe UI", 12), bg=colors[i], fg="white").pack(side="left")
 
+    # === Remote Control Button ===
+    tk.Button(
+    parent,
+    text="🖼️ Remote Control",
+    command=open_qr_and_run_js,
+    font=("Segoe UI", 12, "bold"),
+    bg="#3949ab",
+    fg="white",
+    relief="raised"
+).pack(pady=15)
     return height_var, tilt_var
+
 
 
 

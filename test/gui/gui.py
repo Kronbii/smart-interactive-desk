@@ -21,6 +21,7 @@ mixer.init()
 
 ###################################Functions#####################################
 
+
 def load_image():
     global displayed_image
     filepath = filedialog.askopenfilename(filetypes=[("Image Files", "*.png;*.jpg;*.jpeg")])
@@ -31,28 +32,13 @@ def load_image():
         current_image_label.configure(image=displayed_image)
 
 def capture_image_from_webcam():
-    global displayed_image
-    cap = cv2.VideoCapture(0)
-    if not cap.isOpened():
-        print("Webcam could not be opened.")
-        return
-
-    ret, frame = cap.read()
-    cap.release()
-    if ret:
-        img_path = "captured_note_image.jpg"
-        cv2.imwrite(img_path, frame)
-        img = Image.open(img_path)
-        img = img.resize((400, 300))
-        displayed_image = ImageTk.PhotoImage(img)
-        current_image_label.configure(image=displayed_image)
-    else:
-        print("Failed to capture image.")
+    subprocess.run(["python3", "segment.py"])
 
 def remove_image():
     global displayed_image
     current_image_label.configure(image=None)
     displayed_image = None  # Important: release reference to the image
+
 
 
 def schedule_reminder(reminder_time, message):
@@ -479,17 +465,13 @@ def create_notes_content(parent):
 
     parent.configure(bg="#1a1f2c")
 
-    tk.Label(
-        parent,
-        text="📝 Notes Page",
-        font=("Segoe UI", 18, "bold"),
-        bg="#1a1f2c",
-        fg="#ffcc00"
-    ).pack(pady=20)
+    # Expand image container to nearly full height
+    image_frame = tk.Frame(parent, bg="#2e3a59")
+    image_frame.pack(fill="both", expand=True, padx=20, pady=(20, 10))
+    image_frame.pack_propagate(False)
 
-    # Container to hold image
-    current_image_label = tk.Label(parent, bg="#2e3a59")
-    current_image_label.pack(pady=10, ipadx=20, ipady=20)
+    current_image_label = tk.Label(image_frame, bg="#2e3a59")
+    current_image_label.pack(expand=True)
 
     # Button Container (horizontal alignment)
     button_frame = tk.Frame(parent, bg="#1a1f2c")
@@ -521,6 +503,8 @@ def create_notes_content(parent):
         fg="white",
         command=remove_image
     ).grid(row=0, column=2, padx=5)
+
+
 
 def create_list_content(parent):
     # Main container frame

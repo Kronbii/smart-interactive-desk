@@ -9,6 +9,7 @@ if not cap.isOpened():
     print("Error: Could not open webcam.")
     exit()
 i=0
+
 while True:
     # Capture frame-by-frame
     ret, frame = cap.read()

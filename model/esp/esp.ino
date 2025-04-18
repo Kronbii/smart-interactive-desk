@@ -208,13 +208,8 @@ void loop() {
     rec_data(command);
     set_flags(command, last_command, move_up_flag, move_down_flag, tilt_up_flag, tilt_down_flag, stop_motion_flag);
     perform_command();
-
-    //read_dual_sensors(sensor1, sensor2);  // Read sensor values
-    //Serial.print("Sensor 1: ");
-    //Serial.print(sensor1);
-    //Serial.print(", Sensor 2: ");
-    //Serial.println(sensor2);
-
+    read_dual_sensors(sensor1, sensor2);  // Read sensor values
+    // add sensor limit
     display.display();
 }
 

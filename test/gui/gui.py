@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
+from tkinter import filedialog
 import os
 import subprocess
 import platform
@@ -307,7 +308,17 @@ def create_music_content(parent):
 def create_home_content(parent):
     parent.configure(bg="#1a1f2c")
 
-    tk.Label(parent, text="📊 Statistics Overview", font=("Segoe UI", 18, "bold"), bg="#1a1f2c", fg="white").pack(pady=20)
+    # === Control Section Title ===
+    tk.Label(parent, text="🕹️ Control", font=("Segoe UI", 18, "bold"), bg="#1a1f2c", fg="white").pack(pady=(20, 5))
+
+    # === Control Section ===
+    control_frame = tk.Frame(parent, bg="#1a1f2c")
+    control_frame.pack()
+
+    height_var, tilt_var = create_control_content(control_frame)
+
+    # === Statistics Section Title ===
+    tk.Label(parent, text="📊 Statistics Overview", font=("Segoe UI", 18, "bold"), bg="#1a1f2c", fg="white").pack(pady=(30, 10))
 
     stats_frame = tk.Frame(parent, bg="#1a1f2c")
     stats_frame.pack(pady=10)
@@ -320,13 +331,27 @@ def create_home_content(parent):
 
     colors = ["#3a4a6d", "#2e3a59", "#4e5a7d"]
 
-    for i, (label_text, value, unit) in enumerate(stats):
-        stat_box = tk.Frame(stats_frame, bg=colors[i % len(colors)], padx=20, pady=10, highlightbackground="#5c6bc0", highlightthickness=2)
-        stat_box.pack(pady=5, fill="x", padx=20)
+    # === Adjusting the layout for horizontal alignment ===
+    stat_frame = tk.Frame(stats_frame, bg="#1a1f2c")
+    stat_frame.pack(fill="x", padx=40, pady=10)
 
-        tk.Label(stat_box, text=label_text, font=("Segoe UI", 14, "bold"), bg=colors[i % len(colors)], fg="white").grid(row=0, column=0, sticky="w")
-        tk.Label(stat_box, text=value, font=("Segoe UI", 14), bg=colors[i % len(colors)], fg="white").grid(row=0, column=1, padx=10)
-        tk.Label(stat_box, text=unit, font=("Segoe UI", 14), bg=colors[i % len(colors)], fg="white").grid(row=0, column=2)
+    for i, (label_text, value, unit) in enumerate(stats):
+        stat_box = tk.Frame(
+            stat_frame,
+            bg=colors[i % len(colors)],
+            padx=20,
+            pady=10,
+            highlightbackground="#5c6bc0",
+            highlightthickness=2
+        )
+        stat_box.pack(side="left", padx=10, expand=True)
+
+        tk.Label(stat_box, text=label_text, font=("Segoe UI", 14, "bold"), bg=colors[i % len(colors)], fg="white").pack(side="left")
+        tk.Label(stat_box, text=value, font=("Segoe UI", 14), bg=colors[i % len(colors)], fg="white").pack(side="left", padx=10)
+        tk.Label(stat_box, text=unit, font=("Segoe UI", 14), bg=colors[i % len(colors)], fg="white").pack(side="left")
+
+    return height_var, tilt_var
+
 
 
 

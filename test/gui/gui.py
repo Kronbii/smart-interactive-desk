@@ -199,7 +199,7 @@ def invert_icon_colors(image):
         for j in range(image.height):
             r, g, b, a = pixels[i, j]
             if r == 0 and g == 0 and b == 0:
-                pixels[i, j] = (255, 255, 255, a)
+                pixels[i, j] = (40, 0, 120, a)
     return image
 
 def load_icons(icon_names):
@@ -263,7 +263,7 @@ def setup_sidebar(menu_items, icons, pages, sidebar):
         btn.bind("<Leave>", lambda e, b=btn: b.config(bg=config.theme.button_color))  # Default color from theme
 
 def setup_header(main_content):
-    header = tk.Frame(main_content, bg=config.theme.background_color, highlightbackground="green", highlightthickness=4)
+    header = tk.Frame(main_content, bg=config.theme.background_color)
     header.grid(row=0, column=0, sticky="new", padx=30, pady=(30, 15))
     header.columnconfigure(1, weight=1)
     title = tk.Label(header, text="", bg=config.theme.background_color, fg=config.theme.font_color, font=(config.theme.font_family, 20, "bold"), anchor="w")
@@ -762,7 +762,7 @@ def create_list_content(parent):
             var = tk.BooleanVar()
             checkbox = tk.Checkbutton(
                 task_box, variable=var, bg=config.theme.taskbox_color, fg="white",
-                selectcolor="#3e4a6d", activebackground="#2e4a69",
+                selectcolor=config.theme.font_color, activebackground=config.theme.taskbox_color,
                 command=lambda t=task, v=var, box=task_box: on_checkbox_toggle(t, v, box),
                 font=(config.theme.font_family, 12), width=2
             )
@@ -782,14 +782,14 @@ def create_list_content(parent):
 
 
 def create_placeholder_content(parent, title):
-    tk.Label(parent, text=f"This is the {title} page", font=(config.theme.font_family, 18), bg="#1a1f2c", fg="white").pack(pady=20)
+    tk.Label(parent, text=f"This is the {title} page", font=(config.theme.font_family, 18), bg=config.theme.background_color, fg="white").pack(pady=20)
 
 def create_pages(main_content, page_titles):
     pages = {}
     main_content.grid_rowconfigure(1, weight=1)
     main_content.grid_columnconfigure(0, weight=1)
     for title in page_titles:
-        page_frame = tk.Frame(main_content, bg=config.theme.page_color, highlightbackground="pink", highlightthickness=6)
+        page_frame = tk.Frame(main_content, bg=config.theme.page_color)
         page_frame.grid_rowconfigure(0, weight=1)
         page_frame.grid_columnconfigure(0, weight=1)
         content_wrapper = tk.Frame(page_frame, bg=config.theme.page_color)
@@ -840,7 +840,7 @@ def main():
     root.grid_rowconfigure(0, weight=1)
     sidebar_width = 220
 
-    main_content = tk.Frame(root, bg=config.theme.root_color, highlightbackground="red", highlightthickness=6)
+    main_content = tk.Frame(root, bg=config.theme.root_color)
     main_content.grid(row=0, column=1, sticky="nsew")
     for row in range(2):
         for col in range(1):

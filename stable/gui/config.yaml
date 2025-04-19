@@ -19,3 +19,9 @@ theme:
   header_text_color: "#E6E6EB"
   icon_color: "#E6E6EB"
   sidebar_width: 320
+
+serial:
+  port1: "/dev/ttyACM0"               # Serial port for device connection
+  port2: "/dev/ttyACM1"               # Alternate serial port
+  baudrate: 115200                # Common baud rate for serial communication
+  timeout: 1                      # Timeout for serial read/write operations

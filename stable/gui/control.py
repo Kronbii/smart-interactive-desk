@@ -4,18 +4,20 @@ import os
 from box import Box
 import yaml
 from .command import get_control, set_control
+from .init_serial import send_command
 
 CONFIG_PATH = os.path.join("/home/kronbii/github-repos/smart-interactive-desk/stable/gui/config.yaml")
 # Load config.yaml
 with open(CONFIG_PATH, "r") as file:
     config = Box(yaml.safe_load(file))
-    
+"""
 def send_command(command):
     # Placeholder function for sending commands
     print(f"Command: {command}")
     data = get_control()
     data['command'] = command
     set_control(data)
+"""    
     
 def on_button_release():
     print(f"Command: s")

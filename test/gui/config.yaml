@@ -3,6 +3,7 @@ theme:
   background_color: "#BFD7ED"
   font_family: "Poppins"
   font_color: "#101627"
+  font_dark: "#ffffff"
   accent_color: "#ffffff"
   button_color: "#ffffff"
   button_text_color: "#101627"

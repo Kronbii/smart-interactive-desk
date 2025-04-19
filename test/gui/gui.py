@@ -253,7 +253,7 @@ def setup_sidebar(menu_items, icons, pages, sidebar):
             relief="flat",
             padx=20,
             pady=17,
-            font=("Segoe UI", 11),
+            font=(config.theme.font_family, 11),
             bd=0,
             highlightthickness=0,
             command=lambda name=item: show_page(name, pages)
@@ -266,7 +266,7 @@ def setup_header(main_content):
     header = tk.Frame(main_content, bg=config.theme.background_color, highlightbackground="green", highlightthickness=4)
     header.grid(row=0, column=0, sticky="new", padx=30, pady=(30, 15))
     header.columnconfigure(1, weight=1)
-    title = tk.Label(header, text="", bg=config.theme.background_color, fg=config.theme.font_color, font=("Segoe UI", 20, "bold"), anchor="w")
+    title = tk.Label(header, text="", bg=config.theme.background_color, fg=config.theme.font_color, font=(config.theme.font_family, 20, "bold"), anchor="w")
     title.grid(row=0, column=1, sticky="w", padx=(10, 0))
     return title
 
@@ -284,7 +284,7 @@ def create_alarm_content(parent):
     tk.Label(
         parent,
         text="⏰ Alarm / Reminder",
-        font=("Segoe UI", 18),  # Removed "bold"
+        font=(config.theme.font_family, 18),  # Removed "bold"
         bg=config.theme.background_color,
         fg=config.theme.accent_color
     ).pack(pady=20)
@@ -293,21 +293,21 @@ def create_alarm_content(parent):
     time_frame = tk.Frame(parent, bg=config.theme.background_color)
     time_frame.pack(pady=10)
 
-    tk.Label(time_frame, text="Time:", font=("Segoe UI", 12), bg=config.theme.background_color, fg=config.theme.font_color).grid(row=0, column=0, columnspan=3, pady=(0, 5))
+    tk.Label(time_frame, text="Time:", font=(config.theme.font_family, 12), bg=config.theme.background_color, fg=config.theme.font_color).grid(row=0, column=0, columnspan=3, pady=(0, 5))
 
     hours = [f"{h:02}" for h in range(1, 13)]
     minutes = [f"{m:02}" for m in range(0, 60)]
     am_pm = ["AM", "PM"]
 
-    hour_box = ttk.Combobox(time_frame, values=hours, width=7, state="readonly", font=("Segoe UI", 14))
+    hour_box = ttk.Combobox(time_frame, values=hours, width=7, state="readonly", font=(config.theme.font_family, 14))
     hour_box.current(0)
     hour_box.grid(row=1, column=0, padx=10, pady=5)
 
-    minute_box = ttk.Combobox(time_frame, values=minutes, width=7, state="readonly", font=("Segoe UI", 14))
+    minute_box = ttk.Combobox(time_frame, values=minutes, width=7, state="readonly", font=(config.theme.font_family, 14))
     minute_box.current(0)
     minute_box.grid(row=1, column=1, padx=10, pady=5)
 
-    am_pm_box = ttk.Combobox(time_frame, values=am_pm, width=7, state="readonly", font=("Segoe UI", 14))
+    am_pm_box = ttk.Combobox(time_frame, values=am_pm, width=7, state="readonly", font=(config.theme.font_family, 14))
     am_pm_box.current(0)
     am_pm_box.grid(row=1, column=2, padx=10, pady=5)
 
@@ -315,8 +315,8 @@ def create_alarm_content(parent):
     msg_frame = tk.Frame(parent, bg=config.theme.background_color)
     msg_frame.pack(pady=(20, 10))
 
-    tk.Label(msg_frame, text="Message:", font=("Segoe UI", 12), bg=config.theme.background_color, fg=config.theme.font_color).pack(anchor="w")
-    message_entry = tk.Entry(msg_frame, font=("Segoe UI", 12), width=40)
+    tk.Label(msg_frame, text="Message:", font=(config.theme.font_family, 12), bg=config.theme.background_color, fg=config.theme.font_color).pack(anchor="w")
+    message_entry = tk.Entry(msg_frame, font=(config.theme.font_family, 12), width=40)
     message_entry.pack(pady=5)
 
     # Set Reminder button
@@ -329,7 +329,7 @@ def create_alarm_content(parent):
     tk.Button(
         parent,
         text="➕ Set Reminder",
-        font=("Segoe UI", 12, "bold"),
+        font=(config.theme.font_family, 12, "bold"),
         bg=config.theme.button_color,
         fg=config.theme.button_text_color,
         padx=20,
@@ -346,7 +346,7 @@ def create_music_content(parent):
     tk.Label(
         parent,
         text="🎶Music Player",
-        font=("Segoe UI", 18),
+        font=(config.theme.font_family, 18),
         bg=config.theme.background_color,
         fg=config.theme.font_color
     ).pack(pady=20)
@@ -356,7 +356,7 @@ def create_music_content(parent):
     label_song = tk.Label(
         parent,
         text="No song playing",
-        font=("Segoe UI", 12, "italic"),
+        font=(config.theme.font_family, 12, "italic"),
         bg=config.theme.background_color,
         fg=config.theme.font_color
     )
@@ -373,7 +373,7 @@ def create_music_content(parent):
         command=play_music,
         bg=config.theme.button_color,
         fg=config.theme.button_text_color,
-        font=("Segoe UI", 14, "bold"),
+        font=(config.theme.font_family, 14, "bold"),
         padx=15,
         pady=5
     )
@@ -386,7 +386,7 @@ def create_music_content(parent):
         command=pause_music,
         bg=config.theme.button_color,
         fg=config.theme.button_text_color,
-        font=("Segoe UI", 14, "bold"),
+        font=(config.theme.font_family, 14, "bold"),
         padx=15,
         pady=5
     )
@@ -399,7 +399,7 @@ def create_music_content(parent):
         command=unpause_music,
         bg=config.theme.button_color,
         fg=config.theme.button_text_color,
-        font=("Segoe UI", 14, "bold"),
+        font=(config.theme.font_family, 14, "bold"),
         padx=15,
         pady=5
     )
@@ -412,7 +412,7 @@ def create_music_content(parent):
         command=stop_music,
         bg=config.theme.button_color,
         fg=config.theme.button_text_color,
-        font=("Segoe UI", 14, "bold"),
+        font=(config.theme.font_family, 14, "bold"),
         padx=15,
         pady=5
     )
@@ -422,7 +422,7 @@ def create_music_content(parent):
     volume_label = tk.Label(
         parent,
         text="Volume 🎚️",
-        font=("Segoe UI", 14),
+        font=(config.theme.font_family, 14),
         bg=config.theme.background_color,
         fg=config.theme.font_color
     )
@@ -548,7 +548,7 @@ def create_settings_content(parent):
     title = tk.Label(
         parent,
         text="⚙️ Settings Page",
-        font=("Segoe UI", 20, "bold"),
+        font=(config.theme.font_family, 20, "bold"),
         bg=config.theme.background_color,
         fg=config.theme.font_color
     )
@@ -561,7 +561,7 @@ def create_settings_content(parent):
         command=open_bluetooth_settings,
         bg=config.theme.button_color,
         fg=config.theme.button_text_color,
-        font=("Segoe UI", 12, "bold"),
+        font=(config.theme.font_family, 12, "bold"),
         padx=20,
         pady=10,
         relief="groove"
@@ -575,7 +575,7 @@ def create_settings_content(parent):
         command=open_wifi_settings,
         bg=config.theme.button_color,
         fg=config.theme.button_text_color,
-        font=("Segoe UI", 12, "bold"),
+        font=(config.theme.font_family, 12, "bold"),
         padx=20,
         pady=10,
         relief="groove"
@@ -608,14 +608,14 @@ def create_control_content(parent):
 
     # Static text labels with dynamic value next to them
     height_label = tk.Label(frame, text="Height:", bg=config.theme.container_color, fg=config.theme.accent_color,
-                            font=("Segoe UI", 10, "bold"), width=15, height=2)
+                            font=(config.theme.font_family, 10, "bold"), width=15, height=2)
     height_value_label = tk.Label(frame, textvariable=height_var, bg=config.theme.container_color, fg=config.theme.accent_color,
-                                  font=("Segoe UI", 10, "bold"), width=15, height=2)
+                                  font=(config.theme.font_family, 10, "bold"), width=15, height=2)
 
     tilt_label = tk.Label(frame, text="Tilt:", bg=config.theme.container_color, fg=config.theme.accent_color,
-                          font=("Segoe UI", 10, "bold"), width=15, height=2)
+                          font=(config.theme.font_family, 10, "bold"), width=15, height=2)
     tilt_value_label = tk.Label(frame, textvariable=tilt_var, bg=config.theme.container_color, fg=config.theme.accent_color,
-                                 font=("Segoe UI", 10, "bold"), width=15, height=2)
+                                 font=(config.theme.font_family, 10, "bold"), width=15, height=2)
 
     frame.grid_columnconfigure(0, weight=1)
     frame.grid_columnconfigure(1, weight=1)
@@ -657,7 +657,7 @@ def create_notes_content(parent):
     tk.Button(
         button_frame,
         text="📁 Load Image",
-        font=("Segoe UI", 10, "bold"),
+        font=(config.theme.font_family, 10, "bold"),
         bg=config.theme.button_color,
         fg=config.theme.font_color,
         command=load_image
@@ -666,7 +666,7 @@ def create_notes_content(parent):
     tk.Button(
         button_frame,
         text="📷 Capture Image",
-        font=("Segoe UI", 10, "bold"),
+        font=(config.theme.font_family, 10, "bold"),
         bg=config.theme.button_color,
         fg=config.theme.font_color,
         command=capture_image_from_webcam
@@ -675,7 +675,7 @@ def create_notes_content(parent):
     tk.Button(
         button_frame,
         text="🗑️ Remove Image",
-        font=("Segoe UI", 10, "bold"),
+        font=(config.theme.font_family, 10, "bold"),
         bg=config.theme.button_color,
         fg=config.theme.font_color,
         command=remove_image
@@ -696,10 +696,10 @@ def create_list_content(parent):
     task_entry_frame = tk.Frame(task_frame, bg=config.theme.background_color)
     task_entry_frame.pack(fill="x", pady=(0, 10))
 
-    task_entry = tk.Entry(task_entry_frame, font=("Segoe UI", 12), bg=config.theme.task_entry_color, fg="white", insertbackground="white")
+    task_entry = tk.Entry(task_entry_frame, font=(config.theme.font_family, 12), bg=config.theme.task_entry_color, fg="white", insertbackground="white")
     task_entry.pack(side="left", padx=(10, 5), fill="x", expand=True)
 
-    add_task_btn = tk.Button(task_entry_frame, text="Add Task", font=("Segoe UI", 12, "bold"),
+    add_task_btn = tk.Button(task_entry_frame, text="Add Task", font=(config.theme.font_family, 12, "bold"),
                              bg=config.theme.add_task_color, fg="white", command=lambda: add_task())
     add_task_btn.pack(side="right", padx=(5, 10))
 
@@ -764,11 +764,11 @@ def create_list_content(parent):
                 task_box, variable=var, bg=config.theme.taskbox_color, fg="white",
                 selectcolor="#3e4a6d", activebackground="#2e4a69",
                 command=lambda t=task, v=var, box=task_box: on_checkbox_toggle(t, v, box),
-                font=("Segoe UI", 12), width=2
+                font=(config.theme.font_family, 12), width=2
             )
             checkbox.pack(side="left", padx=10)
 
-            label = tk.Label(task_box, text=task, bg=config.theme.taskbox_color, fg="white", font=("Segoe UI", 12))
+            label = tk.Label(task_box, text=task, bg=config.theme.taskbox_color, fg="white", font=(config.theme.font_family, 12))
             label.pack(side="left", padx=10)
 
     # Optional: preload example tasks
@@ -782,7 +782,7 @@ def create_list_content(parent):
 
 
 def create_placeholder_content(parent, title):
-    tk.Label(parent, text=f"This is the {title} page", font=("Segoe UI", 18), bg="#1a1f2c", fg="white").pack(pady=20)
+    tk.Label(parent, text=f"This is the {title} page", font=(config.theme.font_family, 18), bg="#1a1f2c", fg="white").pack(pady=20)
 
 def create_pages(main_content, page_titles):
     pages = {}

@@ -699,8 +699,6 @@ def create_pages(main_content, page_titles):
 
         if title == "Home":
             create_home_content(content_wrapper)
-        elif title == "Control Panel":
-            create_control_content(content_wrapper)
         elif title == "Lists":
             create_list_content(content_wrapper)
         elif title == "Settings":
@@ -725,7 +723,7 @@ def main():
     global root, sidebar, main_content, sidebar_width, pages, header_title
     
     icon_names = ["home","notes", "music","list","alarm", "settings", "help"]
-    page_titles = ["Home", "Control Panel","Notes", "Music","Lists", "Alarm", "Settings", "Help & Feedback"]
+    page_titles = ["Home","Notes", "Music","Lists", "Alarm", "Settings", "Help & Feedback"]
     menu_items = [
     (page_titles[0], "home"),
     (page_titles[1], "notes"),

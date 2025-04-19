@@ -225,48 +225,52 @@ def setup_header(main_content):
 def create_alarm_content(parent):
     parent.configure(bg="#1a1f2c")
 
-    # Clear any previous widgets
+    # Clear previous widgets
     for widget in parent.winfo_children():
         widget.destroy()
 
-    # Header
+    # Header (normal weight)
     tk.Label(
         parent,
         text="⏰ Alarm / Reminder",
-        font=("Segoe UI", 18, "bold"),
+        font=("Segoe UI", 18),  # Removed "bold"
         bg="#1a1f2c",
         fg="#ffcc00"
     ).pack(pady=20)
 
-    # Frame to hold the inputs side by side
-    input_frame = tk.Frame(parent, bg="#1a1f2c")
-    input_frame.pack()
+    # Time selector frame (centered)
+    time_frame = tk.Frame(parent, bg="#1a1f2c")
+    time_frame.pack(pady=10)
 
-    # Time input
-    tk.Label(
-        input_frame,
-        text="Time (HH:MM):",
-        font=("Segoe UI", 12),
-        bg="#1a1f2c",
-        fg="white"
-    ).grid(row=0, column=0, padx=10, pady=5, sticky="w")
-    time_entry = tk.Entry(input_frame, font=("Segoe UI", 12), width=10)
-    time_entry.grid(row=1, column=0, padx=10, pady=5)
+    tk.Label(time_frame, text="Time:", font=("Segoe UI", 12), bg="#1a1f2c", fg="white").grid(row=0, column=0, columnspan=3, pady=(0, 5))
 
-    # Message input
-    tk.Label(
-        input_frame,
-        text="Message:",
-        font=("Segoe UI", 12),
-        bg="#1a1f2c",
-        fg="white"
-    ).grid(row=0, column=1, padx=10, pady=5, sticky="w")
-    message_entry = tk.Entry(input_frame, font=("Segoe UI", 12), width=40)
-    message_entry.grid(row=1, column=1, padx=10, pady=5)
+    hours = [f"{h:02}" for h in range(1, 13)]
+    minutes = [f"{m:02}" for m in range(0, 60)]
+    am_pm = ["AM", "PM"]
 
-    # Set Reminder Button centered
+    hour_box = ttk.Combobox(time_frame, values=hours, width=7, state="readonly", font=("Segoe UI", 14))
+    hour_box.current(0)
+    hour_box.grid(row=1, column=0, padx=10, pady=5)
+
+    minute_box = ttk.Combobox(time_frame, values=minutes, width=7, state="readonly", font=("Segoe UI", 14))
+    minute_box.current(0)
+    minute_box.grid(row=1, column=1, padx=10, pady=5)
+
+    am_pm_box = ttk.Combobox(time_frame, values=am_pm, width=7, state="readonly", font=("Segoe UI", 14))
+    am_pm_box.current(0)
+    am_pm_box.grid(row=1, column=2, padx=10, pady=5)
+
+    # Message input below time selectors
+    msg_frame = tk.Frame(parent, bg="#1a1f2c")
+    msg_frame.pack(pady=(20, 10))
+
+    tk.Label(msg_frame, text="Message:", font=("Segoe UI", 12), bg="#1a1f2c", fg="white").pack(anchor="w")
+    message_entry = tk.Entry(msg_frame, font=("Segoe UI", 12), width=40)
+    message_entry.pack(pady=5)
+
+    # Set Reminder button
     def on_set_reminder():
-        reminder_time = time_entry.get()
+        reminder_time = f"{hour_box.get()}:{minute_box.get()} {am_pm_box.get()}"
         message = message_entry.get()
         schedule_reminder(reminder_time, message)
         messagebox.showinfo("Reminder Set", f"Reminder set for {reminder_time}")
@@ -282,7 +286,6 @@ def create_alarm_content(parent):
         relief="groove",
         command=on_set_reminder
     ).pack(pady=20)
-
 
 
 def create_music_content(parent):
@@ -721,17 +724,16 @@ def create_pages(main_content, page_titles):
 def main():
     global root, sidebar, main_content, sidebar_width, pages, header_title
     
-    icon_names = ["home", "control","notes", "music","list","alarm", "settings", "help"]
+    icon_names = ["home","notes", "music","list","alarm", "settings", "help"]
     page_titles = ["Home", "Control Panel","Notes", "Music","Lists", "Alarm", "Settings", "Help & Feedback"]
     menu_items = [
     (page_titles[0], "home"),
-    (page_titles[1], "control"),
-    (page_titles[2], "notes"),
-    (page_titles[3], "music"),
-    (page_titles[4], "list"),
-    (page_titles[5], "alarm"),
-    (page_titles[6], "settings"),
-    (page_titles[7], "help")
+    (page_titles[1], "notes"),
+    (page_titles[2], "music"),
+    (page_titles[3], "list"),
+    (page_titles[4], "alarm"),
+    (page_titles[5], "settings"),
+    (page_titles[6], "help")
 ]
     
     root = tk.Tk()
@@ -761,8 +763,9 @@ def main():
     header_title = setup_header(main_content)
     pages = create_pages(main_content, page_titles)
     setup_sidebar(menu_items, icons, pages, sidebar)
-    show_page("Control Panel", pages)
+    show_page("Home", pages)  # ← now opens Home first
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()

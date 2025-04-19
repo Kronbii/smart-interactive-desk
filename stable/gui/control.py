@@ -10,17 +10,9 @@ CONFIG_PATH = os.path.join("/home/kronbii/github-repos/smart-interactive-desk/st
 # Load config.yaml
 with open(CONFIG_PATH, "r") as file:
     config = Box(yaml.safe_load(file))
-"""
-def send_command(command):
-    # Placeholder function for sending commands
-    print(f"Command: {command}")
-    data = get_control()
-    data['command'] = command
-    set_control(data)
-"""    
-    
-def on_button_release():
-    print(f"Command: s")
+
+def on_button_release(event=None):
+    print("Command: s")
     send_command("s")
 
 def create_control_content(parent):
@@ -36,27 +28,33 @@ def create_control_content(parent):
               background=[("active", config.theme.button_hover_color), ("!disabled", config.theme.button_color)],
               foreground=[("active", config.theme.button_hover_text_color), ("!disabled", config.theme.button_text_color)])
 
+    # Helper to create press-release buttons
+    def create_control_button(parent, label, cmd):
+        btn = ttk.Button(parent, text=label, style="Rounded.TButton")
+        btn.bind("<ButtonPress-1>", lambda e: send_command(cmd))
+        btn.bind("<ButtonRelease-1>", on_button_release)
+        return btn
+
     # Command buttons
-    up_btn = ttk.Button(frame, text="↑ Up", style="Rounded.TButton", command=lambda: send_command("u"))
-    down_btn = ttk.Button(frame, text="↓ Down", style="Rounded.TButton", command=lambda: send_command("d"))
-    tilt_up_btn = ttk.Button(frame, text="↥ Tilt Up", style="Rounded.TButton", command=lambda: send_command("tu"))
-    tilt_down_btn = ttk.Button(frame, text="↧ Tilt Down", style="Rounded.TButton", command=lambda: send_command("td"))
+    up_btn = create_control_button(frame, "↑ Up", "u")
+    down_btn = create_control_button(frame, "↓ Down", "d")
+    tilt_up_btn = create_control_button(frame, "↥ Tilt Up", "tu")
+    tilt_down_btn = create_control_button(frame, "↧ Tilt Down", "td")
     stop_btn = ttk.Button(frame, text="■ Stop", style="Rounded.TButton", command=lambda: send_command("s"))
 
     # Dynamic variables
-    height_var = tk.StringVar(value="0 cm")  # Starting value for height
-    tilt_var = tk.StringVar(value="0°")     # Starting value for tilt
+    height_var = tk.StringVar(value="0 cm")
+    tilt_var = tk.StringVar(value="0°")
 
-    # Static text labels with dynamic value next to them
+    # Labels
     height_label = tk.Label(frame, text="Height:", bg=config.theme.container_color, fg=config.theme.accent_color,
                             font=(config.theme.font_family, 10, "bold"), width=15, height=2)
     height_value_label = tk.Label(frame, textvariable=height_var, bg=config.theme.container_color, fg=config.theme.accent_color,
                                   font=(config.theme.font_family, 10, "bold"), width=15, height=2)
-
     tilt_label = tk.Label(frame, text="Tilt:", bg=config.theme.container_color, fg=config.theme.accent_color,
                           font=(config.theme.font_family, 10, "bold"), width=15, height=2)
     tilt_value_label = tk.Label(frame, textvariable=tilt_var, bg=config.theme.container_color, fg=config.theme.accent_color,
-                                 font=(config.theme.font_family, 10, "bold"), width=15, height=2)
+                                font=(config.theme.font_family, 10, "bold"), width=15, height=2)
 
     frame.grid_columnconfigure(0, weight=1)
     frame.grid_columnconfigure(1, weight=1)
@@ -66,13 +64,10 @@ def create_control_content(parent):
     down_btn.grid(row=0, column=1, padx=10, pady=(20, 5), sticky="ew")
     height_label.grid(row=1, column=0, padx=10, pady=(10, 5), sticky="ew")
     height_value_label.grid(row=1, column=1, padx=10, pady=(10, 5), sticky="ew")
-
     tilt_up_btn.grid(row=2, column=0, padx=10, pady=(10, 5), sticky="ew")
     tilt_down_btn.grid(row=2, column=1, padx=10, pady=(10, 5), sticky="ew")
     tilt_label.grid(row=3, column=0, padx=10, pady=(10, 5), sticky="ew")
     tilt_value_label.grid(row=3, column=1, padx=10, pady=(10, 5), sticky="ew")
-
     stop_btn.grid(row=4, column=0, columnspan=2, padx=10, pady=20, sticky="ew")
 
-    # Return label variables so you can update them externally
     return height_var, tilt_var

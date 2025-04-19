@@ -3,15 +3,23 @@ from tkinter import ttk
 import os
 from box import Box
 import yaml
+from .command import get_control, set_control
 
 CONFIG_PATH = os.path.join("/home/kronbii/github-repos/smart-interactive-desk/stable/gui/config.yaml")
 # Load config.yaml
 with open(CONFIG_PATH, "r") as file:
     config = Box(yaml.safe_load(file))
-
+    
 def send_command(command):
     # Placeholder function for sending commands
-    print(f"Command sent: {command}")
+    print(f"Command: {command}")
+    data = get_control()
+    data['command'] = command
+    set_control(data)
+    
+def on_button_release():
+    print(f"Command: s")
+    send_command("s")
 
 def create_control_content(parent):
     parent.configure(bg=config.theme.background_color)
@@ -26,15 +34,12 @@ def create_control_content(parent):
               background=[("active", config.theme.button_hover_color), ("!disabled", config.theme.button_color)],
               foreground=[("active", config.theme.button_hover_text_color), ("!disabled", config.theme.button_text_color)])
 
-    def on_button_release():
-        send_command("stop")
-
     # Command buttons
-    up_btn = ttk.Button(frame, text="↑ Up", style="Rounded.TButton", command=lambda: send_command("up"))
-    down_btn = ttk.Button(frame, text="↓ Down", style="Rounded.TButton", command=lambda: send_command("down"))
-    tilt_up_btn = ttk.Button(frame, text="↥ Tilt Up", style="Rounded.TButton", command=lambda: send_command("tilt up"))
-    tilt_down_btn = ttk.Button(frame, text="↧ Tilt Down", style="Rounded.TButton", command=lambda: send_command("tilt down"))
-    stop_btn = ttk.Button(frame, text="■ Stop", style="Rounded.TButton", command=lambda: send_command("stop"))
+    up_btn = ttk.Button(frame, text="↑ Up", style="Rounded.TButton", command=lambda: send_command("u"))
+    down_btn = ttk.Button(frame, text="↓ Down", style="Rounded.TButton", command=lambda: send_command("d"))
+    tilt_up_btn = ttk.Button(frame, text="↥ Tilt Up", style="Rounded.TButton", command=lambda: send_command("tu"))
+    tilt_down_btn = ttk.Button(frame, text="↧ Tilt Down", style="Rounded.TButton", command=lambda: send_command("td"))
+    stop_btn = ttk.Button(frame, text="■ Stop", style="Rounded.TButton", command=lambda: send_command("s"))
 
     # Dynamic variables
     height_var = tk.StringVar(value="0 cm")  # Starting value for height

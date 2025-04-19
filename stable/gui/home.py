@@ -5,7 +5,7 @@ from box import Box
 import yaml
 import os
 from .control import create_control_content
-from .web import open_qr_and_run_js
+from .web import run_web
 
 CONFIG_PATH = os.path.join("/home/kronbii/github-repos/smart-interactive-desk/stable/gui/config.yaml")
 # Load config.yaml
@@ -88,7 +88,7 @@ def create_home_content(parent):
     tk.Button(
         parent,
         text="🖼️ Remote Control",
-        command=open_qr_and_run_js,
+        command=run_web,
         font=("Poppins", 12, "bold"),
         bg=config.theme.button_color,
         fg=config.theme.button_text_color,

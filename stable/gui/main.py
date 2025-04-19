@@ -21,7 +21,6 @@ displayed_image = None      # to prevent image from being garbage collected
 mixer.init()
 
 CONFIG_PATH = os.path.join("/home/kronbii/github-repos/smart-interactive-desk/stable/gui/config.yaml")
-print(f"Config path: {CONFIG_PATH}")
 
 # Load config.yaml
 with open(CONFIG_PATH, "r") as file:

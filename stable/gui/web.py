@@ -12,7 +12,7 @@ CONFIG_PATH = os.path.join("/home/kronbii/github-repos/smart-interactive-desk/st
 with open(CONFIG_PATH, "r") as file:
     config = Box(yaml.safe_load(file))
 
-def open_qr_and_run_js():
+def run_web():
     # === Image and JS Paths ===
     base_dir = os.path.dirname(os.path.abspath(__file__))
     image_path = os.path.join(base_dir, "assets", "QR.png")

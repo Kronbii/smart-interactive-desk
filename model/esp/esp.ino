@@ -2,55 +2,55 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_PCD8544.h>
 #include "Adafruit_VL53L0X.h"
+#include <HCSR04.h>
 
-// address we will assign if dual sensor is present
+// === ULTRASONIC VARIABLES === //
+byte triggerPin = 21;
+byte echoCount = 2;
+byte* echoPins = new byte[echoCount] { 12, 13 };
+float height;
+
+// === TOF SENSOR VARIABLES === //
 #define LOX1_ADDRESS 0x30
 #define LOX2_ADDRESS 0x31
-
-// set the pins to shutdown
 #define SHT_LOX1 9
 #define SHT_LOX2 8
-
-// objects for the vl53l0x
 Adafruit_VL53L0X lox1 = Adafruit_VL53L0X();
 Adafruit_VL53L0X lox2 = Adafruit_VL53L0X();
-
-// this holds the measurement
 VL53L0X_RangingMeasurementData_t measure1;
 VL53L0X_RangingMeasurementData_t measure2;
-
 int sensor1 = 0;
 int sensor2 = 0;
 
-String command;
-String last_command;
-
-// Stepper motor pins
+// === TILTING MOTORS VARIABLES === //
 #define M1IN1 5
 #define M1IN2 4
 #define M2IN1 3
 #define M2IN2 2
 
+// === LIFTING MOTORS VARIABLES === //
 #define RPWM 7   // Right PWM
 #define LPWM 6   // Left PWM
 
-// Direction and movement flags
+// === MOTION FLAGS AND VARIABLES === //
 bool move_up_flag = false;
 bool move_down_flag = false;
 bool tilt_up_flag = false;
 bool tilt_down_flag = false;
 bool stop_motion_flag = true;
 bool btm_limit_flag = false;  // Only the bottom limit flag now
+String command;
+String last_command;
 
-// LCD pin connections (updated)
+// === LCD VARIABLES === //
 #define PIN_RST  8    // Reset pin for the LCD
 #define PIN_CE   9    // Chip Enable pin for the LCD
 #define PIN_DC   10   // Data/Command pin for the LCD
 #define PIN_DIN  11   // Serial Data pin for the LCD
 #define PIN_CLK  12 
-
 Adafruit_PCD8544 display = Adafruit_PCD8544(PIN_CLK, PIN_DIN, PIN_DC, PIN_CE, PIN_RST);
 
+// === INITIALIZING TOF SENSORS === //
 void setID() {
   // all reset
   digitalWrite(SHT_LOX1, LOW);    
@@ -83,6 +83,8 @@ void setID() {
   }
 }
 
+
+// === READ TOF SENSOR DATA === //
 void read_dual_sensors(int &sensor1Reading, int &sensor2Reading) {
     lox1.rangingTest(&measure1, false); // pass in 'true' to get debug data printout!
     lox2.rangingTest(&measure2, false); // pass in 'true' to get debug data printout!
@@ -94,15 +96,15 @@ void read_dual_sensors(int &sensor1Reading, int &sensor2Reading) {
     sensor2Reading = (measure2.RangeStatus != 4) ? measure2.RangeMilliMeter : -1;
 }
 
-void rec_data(String &command) {
+void read_rpi(String &command) {
     // Read and handle commands from Serial2 (remote control)
     if (Serial.available() > 0) {
         command = Serial.readStringUntil('\n');  // Read full command
-        command = command.trim();  // Remove whitespace and newline
+        command.trim();  // Remove whitespace and newline
     }
 }
 
-void set_flags(String &command, String &last_command, bool &move_up_flag, bool &move_down_flag, bool &tilt_up_flag, bool &tilt_down_flag, bool &stop_motion_flag) {
+void update_flags(String &command, String &last_command, bool &move_up_flag, bool &move_down_flag, bool &tilt_up_flag, bool &tilt_down_flag, bool &stop_motion_flag) {
     if (command != last_command){
         if (command == "u") {
             move_up_flag = true;
@@ -164,6 +166,20 @@ void perform_command() {
     }
 }
 
+float read_ultrasonic(){
+    float* distances = HCSR04.measureDistanceMm();
+
+    for (int i = 0; i < echoCount; i++) {
+        Serial.print(i + 1);
+        Serial.print(": ");
+        Serial.print(distances[i]);
+        Serial.println(" cm");
+    }  
+    Serial.println("---");
+    delay(50);
+    return (float((distance[0]+distance[1])/2))
+}
+
 void setup() {
     pinMode(M1IN1, OUTPUT);
     pinMode(M1IN2, OUTPUT);
@@ -178,6 +194,7 @@ void setup() {
     display.clearDisplay();
 
     Serial.begin(115200);    // Main serial communication
+    HCSR04.begin(triggerPin, echoPins, echoCount);
 
     while (! Serial) { delay(1); }
 
@@ -195,6 +212,7 @@ void setup() {
     setID();
 
     stop_table();
+    height = read_ultrasonic();
     Serial.println("Begin of operations");
 }
 
@@ -205,11 +223,18 @@ void loop() {
     display.setTextColor(BLACK);
     display.setCursor(0, 10);
 
-    rec_data(command);
-    set_flags(command, last_command, move_up_flag, move_down_flag, tilt_up_flag, tilt_down_flag, stop_motion_flag);
+    read_rpi(command);
+    update_flags(command, last_command, move_up_flag, move_down_flag, tilt_up_flag, tilt_down_flag, stop_motion_flag);
     perform_command();
-    read_dual_sensors(sensor1, sensor2);  // Read sensor values
-    // add sensor limit
+    height = read_ultrasonic();
+    if (height < 750 && move_down_flag){
+        move_down_flag = false;
+    }
+    if (height > 1000 && move_up_flag){
+        move_up_flag = false;
+    }
+
+
     display.display();
 }
 

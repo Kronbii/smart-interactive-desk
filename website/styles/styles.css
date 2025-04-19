@@ -1,0 +1,90 @@
+/* Custom Styles for 2Sign Website */
+
+/* Base Styles */
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.8s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+
+.pulse-animation {
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Background Colors */
+.bg-secondary {
+  background-color: #BFD7ED;
+}
+
+/* Interactive Elements */
+.interactive-image {
+  transition: transform 0.3s ease;
+}
+
+.interactive-image:hover {
+  transform: scale(1.05);
+}
+
+/* Photo Card Effects */
+.photo-card {
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.photo-card:hover {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  transform: translateY(-5px) rotate(var(--rotate-amount, 3deg));
+}
+
+/* Curved Sections */
+.curved-top {
+  position: relative;
+}
+
+.curved-top:before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background-color: white;
+  border-top-left-radius: 50% 100%;
+  border-top-right-radius: 50% 100%;
+}
+
+/* Hide scrollbar for testimonial slider */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}

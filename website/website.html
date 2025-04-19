@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>2Sign – Lebanese Sign Language</title>
+  <!-- Lottie Player -->
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body class="text-gray-800">
+
+  <!-- Navbar / Header -->
+  <header class="w-full bg-white shadow-sm">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <!-- Left: Brand -->
+      <div class="text-2xl font-bold text-gray-900">2Sign</div>
+      <!-- Center: Menu links -->
+      <nav class="hidden md:flex space-x-6">
+        <a href="#" class="text-gray-900 hover:text-gray-800 transition font-semibold">Home</a>
+        <a href="pages/about.html" class="text-gray-900 hover:text-gray-800 transition">About</a>
+        <a href="pages/workshops.html" class="text-gray-900 hover:text-gray-800 transition">Workshops</a>
+        <a href="pages/community.html" class="text-gray-900 hover:text-gray-800 transition">Community</a>
+        <a href="pages/resources.html" class="text-gray-900 hover:text-gray-800 transition">Resources</a>
+        <a href="pages/contact.html" class="text-gray-900 hover:text-gray-800 transition">Contact</a>
+      </nav>
+      <!-- Right: CTA -->
+      <a href="login.html"
+         class="hidden md:inline-block text-sm font-medium bg-gray-900 border border-gray-900 text-white py-2 px-5 rounded-full hover:bg-gray-800 transition"
+      >
+        Login
+      </a>
+      <!-- Mobile Menu Icon -->
+      <button class="md:hidden text-gray-900 hover:text-gray-800 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+          <path d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section with Secondary Color Background -->
+<section class="relative bg-secondary py-20 overflow-hidden fade-in">
+    <div class="absolute bottom-0 w-full h-20 bg-white" style="border-top-left-radius: 50% 100%; border-top-right-radius: 50% 100%;"></div>
+    <div class="container mx-auto px-6 flex flex-col-reverse lg:flex-row items-center gap-10">
+      <!-- Left: Large Text & Subtext -->
+      <div class="w-full lg:w-1/2">
+        <h1 class="text-4xl md:text-6xl font-extrabold mb-4 text-gray-900">
+          Empower Communication with <span style="color: white;">Lebanese Sign Language</span>
+        </h1>
+        <p class="text-lg md:text-xl text-gray-700 mb-6">
+          Unlock the power of inclusive communication with 2Sign, bridging gaps for the Deaf community.
+        </p>
+        <button
+          class="bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-3 px-8 rounded-full text-sm transition"
+        >
+          Learn More
+        </button>
+      </div>
+      <!-- Right: 3D Illustration Placeholder (floating & pulsing) -->
+      <div class="w-full lg:w-1/2 flex justify-center">
+        <img
+          src="Homepic.avif"
+          alt="3D style illustration"
+          class="interactive-image float-animation pulse-animation w-full max-w-md"
+        />
+      </div>
+    </div>
+  </section><section class="relative bg-white pt-10 pb-20 fade-in">
+    <div class="container mx-auto px-6 flex flex-col gap-10">
+      
+      <!-- Testimonials Section -->
+      <div class="w-full overflow-hidden">
+        <!-- Testimonial Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Card 1 -->
+          <div class="bg-gray-50 rounded-2xl p-8 shadow-sm flex flex-col transform transition-all duration-300 hover:scale-105 hover:shadow-md">
+            <div class="text-xs uppercase tracking-wider text-gray-500 mb-2">NEW VISIT BY SIGN LANGUAGE CENTER</div>
+            <p class="text-lg font-medium text-gray-800 mb-6 flex-grow">
+              The interpreter isn't just about enhancing communication, but crafting confidence.
+            </p>
+            <div class="flex items-center mt-4">
+              <div class="flex-shrink-0 mr-6">
+                <img 
+                  class="w-20 h-20 rounded-full object-cover"
+                  src="person1.jpg"
+                  alt="Jenna Milton"
+                />
+              </div>
+              <div>
+                <h3 class="text-sm font-semibold text-gray-800">Jenna Milton</h3>
+                <p class="text-xs text-gray-500">Sign Interpreter</p>
+              </div>
+              <div class="ml-auto text-4xl text-gray-300">"</div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="bg-gray-50 rounded-2xl p-8 shadow-sm flex flex-col transform transition-all duration-300 hover:scale-105 hover:shadow-md">
+            <div class="text-xs uppercase tracking-wider text-gray-500 mb-2">SIGN LANGUAGE CENTER PATIENT</div>
+            <p class="text-lg font-medium text-gray-800 mb-6 flex-grow">
+              In the realm of care, my interpreter here isn't just a practitioner; they're a guardian of communication.
+            </p>
+            <div class="flex items-center mt-4">
+              <div class="flex-shrink-0 mr-6">
+                <img 
+                  class="w-20 h-20 rounded-full object-cover"
+                  src="person1.jpg"
+                  alt="Maria Reed"
+                />
+              </div>
+              <div>
+                <h3 class="text-sm font-semibold text-gray-800">Maria Reed</h3>
+                <p class="text-xs text-gray-500">Sign Language Student</p>
+              </div>
+              <div class="ml-auto text-4xl text-gray-300">"</div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="bg-gray-50 rounded-2xl p-8 shadow-sm flex flex-col transform transition-all duration-300 hover:scale-105 hover:shadow-md">
+            <div class="text-xs uppercase tracking-wider text-gray-500 mb-2">WORKSHOP 047</div>
+            <p class="text-lg font-medium text-gray-800 mb-6 flex-grow">
+              Trust isn't given; it's earned. And my sign language instructor here didn't just earn my trust, but my admiration.
+            </p>
+            <div class="flex items-center mt-4">
+              <div class="flex-shrink-0 mr-6">
+                <img 
+                  class="w-20 h-20 rounded-full object-cover"
+                  src="person1.jpg"
+                  alt="Michio Miller"
+                />
+              </div>
+              <div>
+                <h3 class="text-sm font-semibold text-gray-800">Michio Miller</h3>
+                <p class="text-xs text-gray-500">Workshop Attendee</p>
+              </div>
+              <div class="ml-auto text-4xl text-gray-300">"</div>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="bg-gray-50 rounded-2xl p-8 shadow-sm flex flex-col transform transition-all duration-300 hover:scale-105 hover:shadow-md">
+            <div class="text-xs uppercase tracking-wider text-gray-500 mb-2">COMMUNITY VISIT</div>
+            <p class="text-lg font-medium text-gray-800 mb-6 flex-grow">
+              My community center isn't just about teaching signs; it's about creating connections and building bridges.
+            </p>
+            <div class="flex items-center mt-4">
+              <div class="flex-shrink-0 mr-6">
+                <img 
+                  class="w-20 h-20 rounded-full object-cover"
+                  src="person1.jpg"
+                  alt="Sharon Roberts"
+                />
+              </div>
+              <div>
+                <h3 class="text-sm font-semibold text-gray-800">Sharon Roberts</h3>
+                <p class="text-xs text-gray-500">Community Leader</p>
+              </div>
+              <div class="ml-auto text-4xl text-gray-300">"</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Heading for Services Section -->
+      <div class="text-center mt-16 mb-10">
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-900">Plus 250 sign language workshops</h2>
+        <p class="text-xl text-gray-700 mt-2">all over the Lebanon!</p>
+      </div>
+
+      <!-- Arc Card Layout -->
+      <div class="relative w-full min-h-[500px] py-6">
+        <!-- Arc Container -->
+        <div class="relative w-full flex justify-center">
+          <div class="absolute w-full max-w-6xl h-[500px] rounded-t-[50%] top-[60px]"></div>
+          
+          <!-- Cards arranged in arc formation -->
+          <div class="relative flex justify-center items-end w-full max-w-6xl pt-5 z-10">
+            <!-- Card 1 -->
+            <div class="photo-card w-48 h-64 bg-white rounded-lg shadow-xl overflow-hidden mx-2 transform hover:rotate-3 transition-all duration-300 cursor-pointer relative -rotate-6 hover:z-20">
+              <img src="person1.jpg" alt="Master LSL" class="w-full h-3/4 object-cover" />
+              <div class="p-3">
+                <h3 class="font-semibold text-gray-800">Master LSL</h3>
+                <p class="text-xs text-gray-500">Sign Language Expert</p>
+              </div>
+              <div class="absolute top-2 right-2 bg-indigo-500 text-white text-xs px-2 py-1 rounded-full">Video</div>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="photo-card w-48 h-64 bg-white rounded-lg shadow-xl overflow-hidden mx-2 transform hover:rotate-3 transition-all duration-300 cursor-pointer relative -rotate-3 hover:z-20">
+              <img src="practice4.jpg" alt="Quick Tips" class="w-full h-3/4 object-cover" />
+              <div class="p-3">
+                <h3 class="font-semibold text-gray-800">Quick Tips</h3>
+                <p class="text-xs text-gray-500">Beginner Friendly</p>
+              </div>
+            </div>
+            
+            <!-- Card 3 -->
+            <div class="photo-card w-48 h-64 bg-white rounded-lg shadow-xl overflow-hidden mx-2 transform hover:rotate-3 transition-all duration-300 cursor-pointer relative hover:z-20">
+              <img src="practice3.jpg
+              " alt="Community" class="w-full h-3/4 object-cover" />
+              <div class="p-3">
+                <h3 class="font-semibold text-gray-800">Community</h3>
+                <p class="text-xs text-gray-500">Join Our Network</p>
+              </div>
+            </div>
+            
+            <!-- Card 4 -->
+            <div class="photo-card w-48 h-64 bg-white rounded-lg shadow-xl overflow-hidden mx-2 transform hover:rotate-3 transition-all duration-300 cursor-pointer relative rotate-3 hover:z-20">
+              <video src="movie1.MOV" class="w-full h-3/4 object-cover" controls></video>
+              <div class="p-3">
+                <h3 class="font-semibold text-gray-800">Workshops</h3>
+                <p class="text-xs text-gray-500">Hands-on Learning</p>
+              </div>
+            </div>
+            
+            <!-- Card 5 -->
+            <div class="photo-card w-48 h-64 bg-white rounded-lg shadow-xl overflow-hidden mx-2 transform hover:rotate-3 transition-all duration-300 cursor-pointer relative rotate-6 hover:z-20">
+              <img src="practice1.jpg" alt="Practice" class="w-full h-3/4 object-cover" />
+              <div class="p-3">
+                <h3 class="font-semibold text-gray-800">Practice</h3>
+                <p class="text-xs text-gray-500">Weekly Sessions</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Second row of cards (smaller and positioned to create arc effect) -->
+          <div class="relative flex justify-center w-full max-w-5xl -mt-4 z-0">
+            <!-- Card 6 -->
+            <div class="photo-card w-40 h-56 bg-white rounded-lg shadow-xl overflow-hidden mx-3 transform hover:rotate-3 transition-all duration-300 cursor-pointer relative -rotate-12 -mt-10 hover:z-20"><video src="movie2.MOV" class="w-full h-3/4 object-cover" controls></video><div class="p-2"><h3 class="font-semibold text-gray-800 text-sm">Learn</h3><p class="text-xs text-gray-500">Structured Courses</p></div>
+              <div class="p-2">
+                <h3 class="font-semibold text-gray-800 text-sm">Learn</h3>
+                <p class="text-xs text-gray-500">Structured Courses</p>
+              </div>
+            </div>
+            
+            <!-- Info Card 1 -->
+            <div class="photo-card w-40 h-56 bg-indigo-100 rounded-lg shadow-xl overflow-hidden mx-3 transform hover:rotate-3 transition-all duration-300 cursor-pointer relative -rotate-6 -mt-5 hover:z-20 flex items-center justify-center">
+              <div class="p-4 text-center">
+                <h3 class="font-semibold text-gray-800 text-sm">Join 1000+</h3>
+                <p class="text-xs text-gray-600">Students Learning LSL</p>
+              </div>
+            </div>
+            
+            <!-- Card 7 -->
+            <div class="photo-card w-40 h-56 bg-white rounded-lg shadow-xl overflow-hidden mx-3 transform hover:rotate-3 transition-all duration-300 cursor-pointer relative hover:z-20 -mt-2">
+              <img src="practice2.jpg" alt="Connect" class="w-full h-3/4 object-cover" />
+              <div class="p-2">
+                <h3 class="font-semibold text-gray-800 text-sm">Connect</h3>
+                <p class="text-xs text-gray-500">Build Relationships</p>
+              </div>
+            </div>
+            
+            <!-- Info Card 2 -->
+            <div class="photo-card w-40 h-56 bg-blue-100 rounded-lg shadow-xl overflow-hidden mx-3 transform hover:rotate-3 transition-all duration-300 cursor-pointer relative rotate-6 -mt-5 hover:z-20 flex items-center justify-center">
+              <div class="p-4 text-center">
+                <h3 class="font-semibold text-gray-800 text-sm">Weekly Live</h3>
+                <p class="text-xs text-gray-600">Classes & Workshops</p>
+              </div>
+            </div>
+            
+            <!-- Info Card 3 -->
+            <div class="photo-card w-40 h-56 bg-purple-100 rounded-lg shadow-xl overflow-hidden mx-3 transform hover:rotate-3 transition-all duration-300 cursor-pointer relative rotate-12 -mt-10 hover:z-20 flex items-center justify-center">
+              <div class="p-4 text-center">
+                <h3 class="font-semibold text-gray-800 text-sm">Expert</h3>
+                <p class="text-xs text-gray-600">Instructors & Mentors</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+  
+  
+  <!-- Third Section: "Benefits" -->
+  <section class="relative bg-secondary py-16 fade-in">
+    <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10">
+      <!-- Left: Benefits List -->
+      <div class="flex flex-col justify-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">BENEFITS OF USING 2Sign</h2>
+        <div class="space-y-5">
+          <div class="flex items-start space-x-3">
+            <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-gray-900 font-bold">1</div>
+            <p class="text-gray-700">Boost inclusivity in every interaction.</p>
+          </div>
+          <div class="flex items-start space-x-3">
+            <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-gray-900 font-bold">2</div>
+            <p class="text-gray-700">Enhance personal and professional communication.</p>
+          </div>
+          <div class="flex items-start space-x-3">
+            <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-gray-900 font-bold">3</div>
+            <p class="text-gray-700">Empower the Deaf community by bridging language gaps.</p>
+          </div>
+          <div class="flex items-start space-x-3">
+            <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-gray-900 font-bold">4</div>
+            <p class="text-gray-700">Access advanced resources &amp; personalized training with ease.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Right: Lottie Animation -->
+      <div class="flex justify-center items-center">
+        <!-- Replace this JSON URL with a real Lottie file -->
+        <lottie-player
+        src="Animation - 1744744855614 (1).json"
+        background="transparent"
+        speed="1"
+        style="width: 300px; height: 300px;"
+        loop
+        autoplay
+      ></lottie-player>
+      
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA Section -->
+  <section class="relative bg-white text-gray-800 py-16 curved-top fade-in">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">Ready to Embrace LSL?</h2>
+      <p class="text-gray-700 max-w-2xl mx-auto mb-8">
+        Discover the power of inclusive communication. Connect with 2Sign today and unlock the endless possibilities of Lebanese Sign Language.
+      </p>
+      <a href="login.html" 
+         class="inline-block bg-black text-white px-8 py-3 rounded-full text-sm font-medium hover:bg-gray-800 transition transform hover:scale-105">
+        Login
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="w-full bg-black text-gray-200 py-6 mt-2 fade-in">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between">
+      <p class="text-sm mb-3 md:mb-0">&copy; 2025 2Sign. All rights reserved.</p>
+      <div class="space-x-4 text-sm">
+        <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
+        <a href="terms.html" class="hover:text-white transition">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

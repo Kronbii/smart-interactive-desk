@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Workshops - 2Sign</title>
+  <!-- Lottie Player -->
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body class="text-gray-800">
+
+  <!-- Navbar / Header -->
+  <header class="w-full bg-white shadow-sm">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <!-- Left: Brand -->
+      <div class="text-2xl font-bold text-gray-900">2Sign</div>
+      <!-- Center: Menu links -->
+      <nav class="hidden md:flex space-x-6">
+        <a href="../website.html" class="text-gray-900 hover:text-gray-800 transition">Home</a>
+        <a href="about.html" class="text-gray-900 hover:text-gray-800 transition">About</a>
+        <a href="#" class="text-gray-900 hover:text-gray-800 transition font-semibold">Workshops</a>
+        <a href="community.html" class="text-gray-900 hover:text-gray-800 transition">Community</a>
+        <a href="resources.html" class="text-gray-900 hover:text-gray-800 transition">Resources</a>
+        <a href="contact.html" class="text-gray-900 hover:text-gray-800 transition">Contact</a>
+      </nav>
+      <!-- Right: CTA -->
+      <a href="../login.html"
+         class="hidden md:inline-block text-sm font-medium bg-gray-900 border border-gray-900 text-white py-2 px-5 rounded-full hover:bg-gray-800 transition"
+      >
+        Login
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative bg-secondary py-16 fade-in">
+    <div class="absolute bottom-0 w-full h-20 bg-white" style="border-top-left-radius: 50% 100%; border-top-right-radius: 50% 100%;"></div>
+    <div class="container mx-auto px-6 text-center relative z-10">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">LSL Workshops & Training</h1>
+    <p class="text-xl text-gray-700 max-w-2xl mx-auto mb-8">
+    Join our interactive workshops to learn Lebanese Sign Language from expert instructors in a supportive environment.
+    </p>
+    </div>
+  </section>
+
+  <!-- Workshop Categories -->
+  <section class="py-16 bg-white fade-in">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Beginner Workshop -->
+        <div class="bg-gray-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Beginner's Workshop</h3>
+          <ul class="space-y-3 text-gray-700 mb-6">
+            <li>• Basic LSL vocabulary and grammar</li>
+            <li>• Essential everyday phrases</li>
+            <li>• Cultural awareness training</li>
+            <li>• 8 weekly sessions</li>
+          </ul>
+          <a href="#" class="inline-block bg-gray-900 text-white px-6 py-2 rounded-full hover:bg-gray-800 transition">Learn More</a>
+        </div>
+
+        <!-- Intermediate Workshop -->
+        <div class="bg-gray-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Intermediate Course</h3>
+          <ul class="space-y-3 text-gray-700 mb-6">
+            <li>• Advanced vocabulary building</li>
+            <li>• Conversational practice</li>
+            <li>• Deaf culture immersion</li>
+            <li>• 12 weekly sessions</li>
+          </ul>
+          <a href="#" class="inline-block bg-gray-900 text-white px-6 py-2 rounded-full hover:bg-gray-800 transition">Learn More</a>
+        </div>
+
+        <!-- Professional Training -->
+        <div class="bg-gray-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Professional Training</h3>
+          <ul class="space-y-3 text-gray-700 mb-6">
+            <li>• Workplace communication</li>
+            <li>• Industry-specific terminology</li>
+            <li>• Team building exercises</li>
+            <li>• Customized duration</li>
+          </ul>
+          <a href="#" class="inline-block bg-gray-900 text-white px-6 py-2 rounded-full hover:bg-gray-800 transition">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Schedule Section -->
+  <section class="py-16 bg-secondary fade-in">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Upcoming Workshops</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Workshop 1 -->
+        <div class="bg-white rounded-2xl p-6 shadow-md">
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Beginner's Workshop - January 2024</h3>
+          <p class="text-gray-700 mb-4">Starting January 15th | Every Monday & Wednesday</p>
+          <p class="text-gray-600">Perfect for those starting their LSL journey. Limited spots available.</p>
+          <button class="mt-4 bg-gray-900 text-white px-6 py-2 rounded-full hover:bg-gray-800 transition">Register Now</button>
+        </div>
+
+        <!-- Workshop 2 -->
+        <div class="bg-white rounded-2xl p-6 shadow-md">
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Professional Training - February 2024</h3>
+          <p class="text-gray-700 mb-4">Starting February 1st | Flexible Schedule</p>
+          <p class="text-gray-600">Tailored for businesses and organizations. Contact us for custom arrangements.</p>
+          <button class="mt-4 bg-gray-900 text-white px-6 py-2 rounded-full hover:bg-gray-800 transition">Inquire Now</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="w-full bg-black text-gray-200 py-6 mt-2 fade-in">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between">
+      <p class="text-sm mb-3 md:mb-0">&copy; 2025 2Sign. All rights reserved.</p>
+      <div class="space-x-4 text-sm">
+        <a href="#" class="hover:text-white transition">Privacy Policy</a>
+        <a href="#" class="hover:text-white transition">Terms of Service</a>
+        <a href="#" class="hover:text-white transition">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

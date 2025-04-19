@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Community - 2Sign</title>
+  <!-- Lottie Player -->
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body class="text-gray-800">
+
+  <!-- Navbar / Header -->
+  <header class="w-full bg-white shadow-sm">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <!-- Left: Brand -->
+      <div class="text-2xl font-bold text-gray-900">2Sign</div>
+      <!-- Center: Menu links -->
+      <nav class="hidden md:flex space-x-6">
+        <a href="../website.html" class="text-gray-900 hover:text-gray-800 transition">Home</a>
+        <a href="about.html" class="text-gray-900 hover:text-gray-800 transition">About</a>
+        <a href="workshops.html" class="text-gray-900 hover:text-gray-800 transition">Workshops</a>
+        <a href="#" class="text-gray-900 hover:text-gray-800 transition font-semibold">Community</a>
+        <a href="resources.html" class="text-gray-900 hover:text-gray-800 transition">Resources</a>
+        <a href="contact.html" class="text-gray-900 hover:text-gray-800 transition">Contact</a>
+      </nav>
+      <!-- Right: CTA -->
+      <a href="../login.html"
+         class="hidden md:inline-block text-sm font-medium bg-gray-900 border border-gray-900 text-white py-2 px-5 rounded-full hover:bg-gray-800 transition"
+      >
+        Login
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative bg-secondary py-16 fade-in">
+    <div class="absolute bottom-0 w-full h-20 bg-white" style="border-top-left-radius: 50% 100%; border-top-right-radius: 50% 100%;"></div>
+    <div class="container mx-auto px-6 text-center relative z-10">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Join Our Community</h1>
+    <p class="text-xl text-gray-700 max-w-2xl mx-auto mb-8">
+    Connect with fellow learners, share experiences, and be part of a growing community dedicated to Lebanese Sign Language.
+    </p
+    </div>
+  </section>
+
+  <!-- Community Features -->
+  <section class="py-16 bg-white fade-in">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Events -->
+        <div class="bg-gray-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Community Events</h3>
+          <p class="text-gray-700 mb-6">Join our regular meetups, cultural celebrations, and social gatherings. Practice LSL in a friendly, supportive environment.</p>
+          <a href="#" class="inline-block bg-gray-900 text-white px-6 py-2 rounded-full hover:bg-gray-800 transition">View Events</a>
+        </div>
+
+        <!-- Discussion Forum -->
+        <div class="bg-gray-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Discussion Forum</h3>
+          <p class="text-gray-700 mb-6">Engage in conversations, ask questions, and share insights with other LSL learners and native signers.</p>
+          <a href="#" class="inline-block bg-gray-900 text-white px-6 py-2 rounded-full hover:bg-gray-800 transition">Join Forum</a>
+        </div>
+
+        <!-- Mentorship -->
+        <div class="bg-gray-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Mentorship Program</h3>
+          <p class="text-gray-700 mb-6">Connect with experienced LSL users who can guide you on your learning journey and provide valuable feedback.</p>
+          <a href="#" class="inline-block bg-gray-900 text-white px-6 py-2 rounded-full hover:bg-gray-800 transition">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Community Stories -->
+  <section class="py-16 bg-secondary fade-in">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Community Stories</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Story 1 -->
+        <div class="bg-white rounded-2xl p-6 shadow-md">
+          <div class="flex items-center mb-4">
+            <img src="../person1.jpg" alt="Community Member" class="w-12 h-12 rounded-full mr-4">
+            <div>
+              <h3 class="font-bold text-gray-900">Sarah K.</h3>
+              <p class="text-gray-600">LSL Learner</p>
+            </div>
+          </div>
+          <p class="text-gray-700">"The 2Sign community has been incredibly welcoming. I've made great friends and improved my signing skills through regular practice sessions."</p>
+        </div>
+
+        <!-- Story 2 -->
+        <div class="bg-white rounded-2xl p-6 shadow-md">
+          <div class="flex items-center mb-4">
+            <img src="../person1.jpg" alt="Community Member" class="w-12 h-12 rounded-full mr-4">
+            <div>
+              <h3 class="font-bold text-gray-900">Ahmad M.</h3>
+              <p class="text-gray-600">Deaf Community Advocate</p>
+            </div>
+          </div>
+          <p class="text-gray-700">"As a mentor in the 2Sign community, it's rewarding to see more people embracing LSL and bridging communication gaps."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Get Involved Section -->
+  <section class="py-16 bg-white fade-in">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold text-gray-900 mb-6">Get Involved</h2>
+      <p class="text-xl text-gray-700 max-w-2xl mx-auto mb-8">
+        There are many ways to contribute to our community. Whether you're a beginner or an experienced signer, your participation matters.
+      </p>
+      <a href="#" class="inline-block bg-gray-900 text-white px-8 py-3 rounded-full text-lg font-medium hover:bg-gray-800 transition transform hover:scale-105">
+        Join Us Today
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="w-full bg-black text-gray-200 py-6 mt-2 fade-in">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between">
+      <div class="space-x-4 text-sm md:order-1 order-2">
+        <a href="../privacy.html" class="hover:text-white transition">Privacy Policy</a>
+        <a href="../terms.html" class="hover:text-white transition">Terms of Service</a>
+      </div>
+      <p class="text-sm mb-3 md:mb-0 md:order-2 order-1">&copy; 2025 2Sign. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

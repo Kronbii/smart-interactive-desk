@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - 2Sign</title>
+  <!-- Lottie Player -->
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body class="text-gray-800">
+
+  <!-- Navbar / Header -->
+  <header class="w-full bg-white shadow-sm">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <!-- Left: Brand -->
+      <div class="text-2xl font-bold text-gray-900">2Sign</div>
+      <!-- Center: Menu links -->
+      <nav class="hidden md:flex space-x-6">
+        <a href="website.html" class="text-gray-900 hover:text-gray-800 transition">Home</a>
+        <a href="pages/about.html" class="text-gray-900 hover:text-gray-800 transition">About</a>
+        <a href="pages/workshops.html" class="text-gray-900 hover:text-gray-800 transition">Workshops</a>
+        <a href="pages/community.html" class="text-gray-900 hover:text-gray-800 transition">Community</a>
+        <a href="pages/resources.html" class="text-gray-900 hover:text-gray-800 transition">Resources</a>
+        <a href="pages/contact.html" class="text-gray-900 hover:text-gray-800 transition">Contact</a>
+      </nav>
+      <!-- Right: CTA -->
+      <a href="#"
+         class="hidden md:inline-block text-sm font-medium bg-gray-900 border border-gray-900 text-white py-2 px-5 rounded-full hover:bg-gray-800 transition font-semibold"
+      >
+        Login
+      </a>
+      <!-- Mobile Menu Icon -->
+      <button class="md:hidden text-gray-900 hover:text-gray-800 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+          <path d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Login/Register Section -->
+  <section class="relative bg-secondary py-16 fade-in">
+    <div class="absolute bottom-0 w-full h-20 bg-white" style="border-top-left-radius: 50% 100%; border-top-right-radius: 50% 100%;"></div>
+    <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-center gap-10">
+      <!-- Login Form -->
+      <div class="w-full md:w-1/2 max-w-md bg-white rounded-xl shadow-lg p-8 mb-10 md:mb-0 z-10">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Login</h2>
+        <form class="space-y-4">
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input type="email" id="email" name="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+          </div>
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input type="password" id="password" name="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+              <label for="remember-me" class="ml-2 block text-sm text-gray-700">Remember me</label>
+            </div>
+            <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">Forgot password?</a>
+          </div>
+          <div>
+            <button type="submit" class="w-full bg-gray-900 text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition">Sign in</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Register Form -->
+      <div class="w-full md:w-1/2 max-w-md bg-white rounded-xl shadow-lg p-8 z-10">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Register</h2>
+        <form class="space-y-4">
+          <div>
+            <label for="fullname" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+            <input type="text" id="fullname" name="fullname" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+          </div>
+          <div>
+            <label for="register-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input type="email" id="register-email" name="register-email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+          </div>
+          <div>
+            <label for="register-password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input type="password" id="register-password" name="register-password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+          </div>
+          <div>
+            <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+            <input type="password" id="confirm-password" name="confirm-password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+          </div>
+          <div class="flex items-center">
+            <input id="terms" name="terms" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" required>
+            <label for="terms" class="ml-2 block text-sm text-gray-700">I agree to the <a href="#" class="text-indigo-600 hover:text-indigo-500">Terms and Conditions</a></label>
+          </div>
+          <div>
+            <button type="submit" class="w-full bg-gray-900 text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition">Create Account</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="w-full bg-black text-gray-200 py-6 mt-2 fade-in fixed bottom-0 left-0 right-0 z-50">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between">
+      <div class="space-x-4 text-sm md:order-1 order-2">
+        <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
+        <a href="terms.html" class="hover:text-white transition">Terms of Service</a>
+      </div>
+      <p class="text-sm mb-3 md:mb-0 md:order-2 order-1">&copy; 2025 2Sign. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

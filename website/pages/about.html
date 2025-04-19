@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us - 2Sign</title>
+  <!-- Lottie Player -->
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body class="text-gray-800">
+
+  <!-- Navbar / Header -->
+  <header class="w-full bg-white shadow-sm">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <!-- Left: Brand -->
+      <div class="text-2xl font-bold text-gray-900">2Sign</div>
+      <!-- Center: Menu links -->
+      <nav class="hidden md:flex space-x-6">
+        <a href="../website.html" class="text-gray-900 hover:text-gray-800 transition">Home</a>
+        <a href="#" class="text-gray-900 hover:text-gray-800 transition font-semibold">About</a>
+        <a href="workshops.html" class="text-gray-900 hover:text-gray-800 transition">Workshops</a>
+        <a href="community.html" class="text-gray-900 hover:text-gray-800 transition">Community</a>
+        <a href="resources.html" class="text-gray-900 hover:text-gray-800 transition">Resources</a>
+        <a href="contact.html" class="text-gray-900 hover:text-gray-800 transition">Contact</a>
+      </nav>
+      <!-- Right: CTA -->
+      <a href="../login.html" class="hidden md:inline-block text-sm font-medium bg-gray-900 border border-gray-900 text-white py-2 px-5 rounded-full hover:bg-gray-800 transition">Login</a>
+      <!-- Mobile Menu Icon -->
+      <button class="md:hidden text-gray-900 hover:text-gray-800 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+          <path d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- About Hero Section with Curved Design -->
+  <section class="relative bg-secondary py-20 overflow-hidden fade-in">
+    <div class="absolute bottom-0 w-full h-20 bg-white" style="border-top-left-radius: 50% 100%; border-top-right-radius: 50% 100%;"></div>
+    <div class="container mx-auto px-6 text-center relative z-10">
+      <h1 class="text-5xl md:text-7xl font-extrabold mb-6 text-gray-900">The conviction in <br/><span style="color: white;">our mission</span></h1>
+      <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-3xl mx-auto leading-relaxed">
+        Synergistically transform sign language education through innovative approaches,
+        creating seamless communication bridges between communities.
+      </p>
+    </div>
+  </section>
+
+  <!-- Our Story Section -->
+  <section class="relative bg-white py-20 fade-in">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center">Our Story</h2>
+      <div class="max-w-4xl mx-auto">
+        <p class="text-lg text-gray-700 mb-8 leading-relaxed">
+          The conviction in our mission came after being in the sign language education industry for two decades as
+          pioneers and innovators. Thus, 2Sign was born out of necessity, facing challenges like
+          accessibility barriers and communication gaps head-on.
+        </p>
+        <p class="text-lg text-gray-700 mb-12 leading-relaxed">
+          At 2Sign, we understand that such problems cannot be solved without new innovative
+          approaches. Thus, we use cutting-edge technology and methodologies to simplify sign language learning for everyday
+          communication.
+        </p>
+        <div class="grid md:grid-cols-3 gap-8 mt-16">
+          <div class="p-8 bg-gray-50 rounded-2xl transform hover:scale-105 transition-all duration-300">
+            <h3 class="text-xl font-semibold mb-4">Education First</h3>
+            <p class="text-gray-600">Comprehensive LSL resources designed for all learning paths and skill levels.</p>
+          </div>
+          <div class="p-8 bg-gray-50 rounded-2xl transform hover:scale-105 transition-all duration-300">
+            <h3 class="text-xl font-semibold mb-4">Community Driven</h3>
+            <p class="text-gray-600">Creating lasting connections between deaf and hearing communities.</p>
+          </div>
+          <div class="p-8 bg-gray-50 rounded-2xl transform hover:scale-105 transition-all duration-300">
+            <h3 class="text-xl font-semibold mb-4">Innovation Led</h3>
+            <p class="text-gray-600">Leveraging modern technology to make learning engaging and effective.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section with Modern Cards -->
+  <section class="relative bg-secondary py-24 fade-in">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-16 text-center">Meet our team</h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div class="bg-white p-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300">
+          <img src="../person1.jpg" alt="Team Member" class="w-40 h-40 rounded-2xl mx-auto mb-6 object-cover">
+          <div class="text-center">
+            <h3 class="text-xl font-semibold mb-2">Sarah Johnson</h3>
+            <p class="text-gray-600 mb-4">Founder & LSL Instructor</p>
+            <div class="flex justify-center space-x-3 text-gray-400">
+              <a href="#" class="hover:text-gray-600">LinkedIn</a>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white p-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300">
+          <img src="../person2.jpg" alt="Team Member" class="w-40 h-40 rounded-2xl mx-auto mb-6 object-cover">
+          <div class="text-center">
+            <h3 class="text-xl font-semibold mb-2">Michael Chen</h3>
+            <p class="text-gray-600 mb-4">Educational Director</p>
+            <div class="flex justify-center space-x-3 text-gray-400">
+              <a href="#" class="hover:text-gray-600">LinkedIn</a>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white p-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300">
+          <img src="../person3.jpeg" alt="Team Member" class="w-40 h-40 rounded-2xl mx-auto mb-6 object-cover">
+          <div class="text-center">
+            <h3 class="text-xl font-semibold mb-2">Leila Khoury</h3>
+            <p class="text-gray-600 mb-4">Community Coordinator</p>
+            <div class="flex justify-center space-x-3 text-gray-400">
+              <a href="#" class="hover:text-gray-600">LinkedIn</a>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white p-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300">
+          <img src="../person4.jpg" alt="Team Member" class="w-40 h-40 rounded-2xl mx-auto mb-6 object-cover">
+          <div class="text-center">
+            <h3 class="text-xl font-semibold mb-2">New Member</h3>
+            <p class="text-gray-600 mb-4">Role Description</p>
+            <div class="flex justify-center space-x-3 text-gray-400">
+              <a href="#" class="hover:text-gray-600">LinkedIn</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="w-full bg-black text-gray-200 py-6 mt-2 fade-in">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between">
+      <div class="space-x-4 text-sm md:order-1 order-2">
+        <a href="../privacy.html" class="hover:text-white transition">Privacy Policy</a>
+        <a href="../terms.html" class="hover:text-white transition">Terms of Service</a>
+      </div>
+      <p class="text-sm mb-3 md:mb-0 md:order-2 order-1">&copy; 2025 2Sign. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

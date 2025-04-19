@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 import os
+import config
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import control
 

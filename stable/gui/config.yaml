@@ -18,3 +18,4 @@ theme:
   header_color: "#1C1C1E"
   header_text_color: "#E6E6EB"
   icon_color: "#E6E6EB"
+  sidebar_width: 320

@@ -14,19 +14,57 @@ from tkinter import messagebox
 from tkinter import filedialog
 import cv2
 import os
+from box import Box
+import yaml
 
 current_image_label = None  # global holder to access image widget
 displayed_image = None      # to prevent image from being garbage collected
 
 mixer.init()
 
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+CONFIG_PATH = os.path.join(ROOT_DIR, "config.yaml")
+
+# Load config.yaml
+with open(CONFIG_PATH, "r") as file:
+    config = yaml.safe_load(file)
 ###################################Functions#####################################
 
-import tkinter as tk
-from tkinter import filedialog
-from PIL import Image, ImageTk
-import subprocess
-import os
+def load_theme():
+    with open("config.yaml", "r") as file:
+        return yaml.safe_load(file)["theme"]
+
+def set_background(parent):
+    parent.configure(bg=theme.background_color)
+
+# Function to create a themed label
+def create_label(parent, text, font_size=12, font_weight="normal", bg_color=None, fg_color=None):
+    bg_color = bg_color or theme.background_color
+    fg_color = fg_color or theme.font_color
+    return tk.Label(
+        parent,
+        text=text,
+        font=(theme.font_family, font_size, font_weight),
+        bg=bg_color,
+        fg=fg_color
+    )
+
+# Function to create a themed button
+def create_button(parent, text, command, font_size=12, bg_color=None, fg_color=None):
+    bg_color = bg_color or theme.button_color
+    fg_color = fg_color or theme.button_text_color
+    return tk.Button(
+        parent,
+        text=text,
+        font=(theme.font_family, font_size, "bold"),
+        bg=bg_color,
+        fg=fg_color,
+        activebackground=theme.button_hover_color,
+        activeforeground=theme.button_hover_text_color,
+        command=command
+    )
+
+
 
 def open_qr_and_run_js():
     # === Image and JS Paths ===
@@ -217,7 +255,9 @@ def setup_header(main_content):
 ###################################Create content#####################################
 
 def create_alarm_content(parent):
-    parent.configure(bg="#1a1f2c")
+    theme = load_theme()  # Get the theme settings
+
+    parent.configure(bg=theme['background_color'])
 
     # Clear previous widgets
     for widget in parent.winfo_children():
@@ -228,15 +268,15 @@ def create_alarm_content(parent):
         parent,
         text="⏰ Alarm / Reminder",
         font=("Segoe UI", 18),  # Removed "bold"
-        bg="#1a1f2c",
-        fg="#ffcc00"
+        bg=theme['background_color'],
+        fg=theme['accent_color']
     ).pack(pady=20)
 
     # Time selector frame (centered)
-    time_frame = tk.Frame(parent, bg="#1a1f2c")
+    time_frame = tk.Frame(parent, bg=theme['background_color'])
     time_frame.pack(pady=10)
 
-    tk.Label(time_frame, text="Time:", font=("Segoe UI", 12), bg="#1a1f2c", fg="white").grid(row=0, column=0, columnspan=3, pady=(0, 5))
+    tk.Label(time_frame, text="Time:", font=("Segoe UI", 12), bg=theme['background_color'], fg=theme['font_color']).grid(row=0, column=0, columnspan=3, pady=(0, 5))
 
     hours = [f"{h:02}" for h in range(1, 13)]
     minutes = [f"{m:02}" for m in range(0, 60)]
@@ -255,10 +295,10 @@ def create_alarm_content(parent):
     am_pm_box.grid(row=1, column=2, padx=10, pady=5)
 
     # Message input below time selectors
-    msg_frame = tk.Frame(parent, bg="#1a1f2c")
+    msg_frame = tk.Frame(parent, bg=theme['background_color'])
     msg_frame.pack(pady=(20, 10))
 
-    tk.Label(msg_frame, text="Message:", font=("Segoe UI", 12), bg="#1a1f2c", fg="white").pack(anchor="w")
+    tk.Label(msg_frame, text="Message:", font=("Segoe UI", 12), bg=theme['background_color'], fg=theme['font_color']).pack(anchor="w")
     message_entry = tk.Entry(msg_frame, font=("Segoe UI", 12), width=40)
     message_entry.pack(pady=5)
 
@@ -273,8 +313,8 @@ def create_alarm_content(parent):
         parent,
         text="➕ Set Reminder",
         font=("Segoe UI", 12, "bold"),
-        bg="#3a506b",
-        fg="white",
+        bg=theme['button_color'],
+        fg=theme['button_text_color'],
         padx=20,
         pady=10,
         relief="groove",

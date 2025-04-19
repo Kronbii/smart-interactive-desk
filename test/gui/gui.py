@@ -71,25 +71,19 @@ def remove_image():
     displayed_image = None  # Important: release reference to the image
 
 
-
-def schedule_reminder(reminder_time, message):
-    def check_time():
-        while True:
-            now = datetime.now().strftime("%H:%M")
-            if now == reminder_time:
-                messagebox.showinfo("Reminder", message)
-                break
-            time.sleep(30)
-    threading.Thread(target=check_time, daemon=True).start()
+def schedule_reminder(reminder_time_str, message):
     def alarm_loop():
         while True:
-            now = datetime.now().strftime("%H:%M")
-            if now == reminder_time:
-                messagebox.showinfo("⏰ Alarm!", f"{message}")
-                break
-            time.sleep(10)  # Check every 10 seconds
+            now = datetime.now()
+            current_time_str = now.strftime("%I:%M %p")  # Format: "HH:MM AM/PM"
+            
+            if current_time_str == reminder_time_str:
+                messagebox.showinfo("⏰ Reminder", message if message else "Time's up!")
+                break  # Stop loop after triggering
+            time.sleep(1)  # Wait 1 sec before checking again
 
     threading.Thread(target=alarm_loop, daemon=True).start()
+
 
 
 def save_note(text):

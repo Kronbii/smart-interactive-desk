@@ -16,8 +16,6 @@ import cv2
 import os
 from box import Box
 import yaml
-from pages import show_page
-from stable.gui.header import header_title
 
 CONFIG_PATH = os.path.join("/home/kronbii/github-repos/smart-interactive-desk/stable/gui/config.yaml")
 # Load config.yaml
@@ -47,7 +45,7 @@ def create_scrollable_page(page_frame):
     return page_container
 
 
-def show_page(page_name, pages):
+def show_page(page_name, pages, header_title):
     for page in pages.values():
         page.grid_forget()
     pages[page_name].grid(row=1, column=0, columnspan=2, sticky="nsew")

@@ -1,12 +1,8 @@
 import tkinter as tk
-from tkinter import ttk
 from PIL import Image, ImageTk
 from tkinter import filedialog
 import os
 import subprocess
-import platform
-import threading
-import time
 from datetime import datetime
 from pygame import mixer
 from tkinter import filedialog

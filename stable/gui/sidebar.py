@@ -16,14 +16,14 @@ import cv2
 import os
 from box import Box
 import yaml
-from pages import show_page
+from .pages import show_page
 
 CONFIG_PATH = os.path.join("/home/kronbii/github-repos/smart-interactive-desk/stable/gui/config.yaml")
 # Load config.yaml
 with open(CONFIG_PATH, "r") as file:
     config = Box(yaml.safe_load(file))
 
-def setup_sidebar(menu_items, icons, pages, sidebar):
+def setup_sidebar(menu_items, icons, pages, sidebar, header_title):
     for item, icon_key in menu_items:
         btn = tk.Button(
             sidebar, 
@@ -39,7 +39,7 @@ def setup_sidebar(menu_items, icons, pages, sidebar):
             font=(config.theme.font_family, 14, "bold"),  # Increased font size and made it bold
             bd=0,
             highlightthickness=0,
-            command=lambda name=item: show_page(name, pages)
+            command=lambda name=item: show_page(name, pages, header_title)  # Pass header title to show_page
         )
         btn.pack(fill="x", pady=3, padx=5)
         btn.bind("<Enter>", lambda e, b=btn: b.config(bg=config.theme.button_hover_color))  # Hover effect from theme

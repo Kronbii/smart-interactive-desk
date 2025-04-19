@@ -1,22 +1,7 @@
 import tkinter as tk
-from tkinter import ttk
-from PIL import Image, ImageTk
-from tkinter import filedialog
-import os
-import subprocess
-import platform
-import threading
-import time
-from datetime import datetime
-from pygame import mixer
-from tkinter import filedialog
-from tkinter import messagebox
-from tkinter import filedialog
-import cv2
 import os
 from box import Box
 import yaml
-from stable.gui.pages import *
 
 CONFIG_PATH = os.path.join("/home/kronbii/github-repos/smart-interactive-desk/stable/gui/config.yaml")
 # Load config.yaml

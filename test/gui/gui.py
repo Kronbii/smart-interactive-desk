@@ -23,7 +23,9 @@ displayed_image = None      # to prevent image from being garbage collected
 mixer.init()
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
-CONFIG_PATH = os.path.join(ROOT_DIR, "config.yaml")
+#CONFIG_PATH = os.path.join(ROOT_DIR, "config.yaml")
+CONFIG_PATH = os.path.join("/home/kronbii/github-repos/smart-interactive-desk/test/gui/config.yaml")
+print(f"Config path: {CONFIG_PATH}")
 
 # Load config.yaml
 with open(CONFIG_PATH, "r") as file:
@@ -192,14 +194,16 @@ def send_command(command):
     # Placeholder function for sending commands
     print(f"Command sent: {command}")
 
-def invert_icon_colors(image):
+def invert_icon_colors(image, hex_color=config.theme.icon_color):
     image = image.convert("RGBA")
     pixels = image.load()
+    # Convert hex color to RGB
+    target_color = tuple(int(hex_color.lstrip("#")[i:i+2], 16) for i in (0, 2, 4))
     for i in range(image.width):
         for j in range(image.height):
             r, g, b, a = pixels[i, j]
             if r == 0 and g == 0 and b == 0:
-                pixels[i, j] = (40, 0, 120, a)
+                pixels[i, j] = (*target_color, a)
     return image
 
 def load_icons(icon_names):
@@ -248,19 +252,19 @@ def setup_sidebar(menu_items, icons, pages, sidebar):
             image=icons[icon_key],
             compound="left",
             anchor="w",
-            bg=config.theme.button_color,  # Apply button color from theme
-            fg=config.theme.button_text_color,  # Apply text color from theme
+            bg=config.theme.bar_button_color,  # Apply button color from theme
+            fg=config.theme.bar_button_text_color,  # Apply text color from theme
             relief="flat",
             padx=20,
             pady=17,
-            font=(config.theme.font_family, 11),
+            font=(config.theme.font_family, 14, "bold"),  # Increased font size and made it bold
             bd=0,
             highlightthickness=0,
             command=lambda name=item: show_page(name, pages)
         )
         btn.pack(fill="x", pady=3, padx=5)
         btn.bind("<Enter>", lambda e, b=btn: b.config(bg=config.theme.button_hover_color))  # Hover effect from theme
-        btn.bind("<Leave>", lambda e, b=btn: b.config(bg=config.theme.button_color))  # Default color from theme
+        btn.bind("<Leave>", lambda e, b=btn: b.config(bg=config.theme.bar_button_color))  # Default color from theme
 
 def setup_header(main_content):
     header = tk.Frame(main_content, bg=config.theme.background_color)
@@ -592,6 +596,13 @@ def create_control_content(parent):
     frame = tk.Frame(parent, bg=config.theme.background_color)
     frame.pack(pady=40)
 
+    # Add custom style for Rounded.TButton
+    style = ttk.Style()
+    style.configure("Rounded.TButton", font=(config.theme.font_family, 10, "bold"), padding=10, relief="flat")
+    style.map("Rounded.TButton",
+              background=[("active", config.theme.button_hover_color), ("!disabled", config.theme.button_color)],
+              foreground=[("active", config.theme.button_hover_text_color), ("!disabled", config.theme.button_text_color)])
+
     def on_button_release():
         send_command("stop")
 
@@ -844,7 +855,7 @@ def main():
     main_content.grid(row=0, column=1, sticky="nsew")
     for row in range(2):
         for col in range(1):
-            cell = tk.Frame(main_content, bg=config.theme.root_color, highlightbackground="white", highlightthickness=1)
+            cell = tk.Frame(main_content, bg=config.theme.root_color)
             cell.grid(row=row, column=col, sticky="nsew")
             main_content.grid_rowconfigure(row, weight=(0 if row == 0 else 1))
             main_content.grid_columnconfigure(col, weight=1)

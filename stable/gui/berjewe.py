@@ -1,0 +1,1 @@
+print('shu ma ken')

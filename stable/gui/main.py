@@ -1,31 +1,19 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import filedialog
 from PIL import Image, ImageTk
-from tkinter import filedialog
 import os
-import subprocess
-import platform
-import threading
-import time
-from datetime import datetime
 from pygame import mixer
-from tkinter import filedialog
-from tkinter import messagebox
-from tkinter import filedialog
-import cv2
-import os
 from box import Box
 import yaml
 from .music import create_music_content
-from .setting import open_bluetooth_settings, open_wifi_settings
+from .setting import create_settings_content
 from .lists import create_list_content
-from .pages import create_scrollable_page, show_page
+from .pages import show_page
 from .sidebar import setup_sidebar
 from .header import setup_header
-from .notes import load_image, capture_image_from_webcam, remove_image, create_notes_content
-from .alarm import schedule_reminder, create_alarm_content
-from .control import create_control_content
-from .web import open_qr_and_run_js
+from .notes import create_notes_content
+from .alarm import create_alarm_content
+from .home import create_home_content
 
 current_image_label = None  # global holder to access image widget
 displayed_image = None      # to prevent image from being garbage collected
@@ -106,136 +94,6 @@ def open_remote_image():
         label = tk.Label(img_window, image=photo)
         label.image = photo
         label.pack()
-
-def create_home_content(parent):
-    parent.configure(bg=config.theme.background_color)
-
-    # === Control Section Title ===
-    tk.Label(
-        parent, 
-        text="🕹️ Control", 
-        font=("Poppins", 16, "bold"), 
-        bg=config.theme.background_color, 
-        fg=config.theme.font_color
-    ).pack(pady=(15, 5))
-
-    # === Control Section ===
-    control_frame = tk.Frame(parent, bg=config.theme.background_color)
-    control_frame.pack()
-    height_var, tilt_var = create_control_content(control_frame)
-
-    # === Statistics Section Title ===
-    tk.Label(
-        parent, 
-        text="📊 Statistics Overview", 
-        font=("Poppins", 16, "bold"), 
-        bg=config.theme.background_color, 
-        fg=config.theme.font_color
-    ).pack(pady=(20, 5))
-
-    stats_frame = tk.Frame(parent, bg=config.theme.background_color)
-    stats_frame.pack(pady=5)
-
-    stats = [
-        ("🧍 Time Standing", "120", "min"),
-        ("🪑 Time Sitting", "0", "min"),
-        ("🖥️ Time on Table", "120", "min"),
-    ]
-    colors = [config.theme.container_color, config.theme.container_color, config.theme.container_color]
-
-    stat_frame = tk.Frame(stats_frame, bg=config.theme.background_color)
-    stat_frame.pack(fill="x", padx=30, pady=5)
-
-    for i, (label_text, value, unit) in enumerate(stats):
-        stat_box = tk.Frame(
-            stat_frame,
-            bg=colors[i % len(colors)],
-            padx=15,
-            pady=8,
-            highlightbackground=config.theme.container_color,
-            highlightthickness=2
-        )
-        stat_box.pack(side="left", padx=8, expand=True)
-
-        tk.Label(
-            stat_box, 
-            text=label_text, 
-            font=("Poppins", 12, "bold"), 
-            bg=colors[i], 
-            fg=config.theme.accent_color  # Using accent color for text
-        ).pack(side="left")
-        tk.Label(
-            stat_box, 
-            text=value, 
-            font=("Poppins", 12), 
-            bg=colors[i], 
-            fg=config.theme.font_color
-        ).pack(side="left", padx=5)
-        tk.Label(
-            stat_box, 
-            text=unit, 
-            font=("Poppins", 12), 
-            bg=colors[i], 
-            fg=config.theme.font_color
-        ).pack(side="left")
-
-    # === Remote Control Button ===
-    tk.Button(
-        parent,
-        text="🖼️ Remote Control",
-        command=open_qr_and_run_js,
-        font=("Poppins", 12, "bold"),
-        bg=config.theme.button_color,
-        fg=config.theme.button_text_color,
-        relief="raised"
-    ).pack(pady=15)
-
-    return height_var, tilt_var
-
-
-def create_settings_content(parent):
-    parent.configure(bg=config.theme.background_color)
-
-    title = tk.Label(
-        parent,
-        text="⚙️ Settings Page",
-        font=(config.theme.font_family, 20, "bold"),
-        bg=config.theme.background_color,
-        fg=config.theme.font_color
-    )
-    title.grid(row=0, column=0, columnspan=2, pady=(30, 20))
-
-    # Bluetooth button
-    bluetooth_btn = tk.Button(
-        parent,
-        text="🔵 Bluetooth Settings",
-        command=open_bluetooth_settings,
-        bg=config.theme.button_color,
-        fg=config.theme.button_text_color,
-        font=(config.theme.font_family, 12, "bold"),
-        padx=20,
-        pady=10,
-        relief="groove"
-    )
-    bluetooth_btn.grid(row=1, column=0, padx=30, pady=10, sticky="ew")
-
-    # Wi-Fi button
-    wifi_btn = tk.Button(
-        parent,
-        text="📶 Wi-Fi Settings",
-        command=open_wifi_settings,
-        bg=config.theme.button_color,
-        fg=config.theme.button_text_color,
-        font=(config.theme.font_family, 12, "bold"),
-        padx=20,
-        pady=10,
-        relief="groove"
-    )
-    wifi_btn.grid(row=1, column=1, padx=30, pady=10, sticky="ew")
-
-    parent.grid_columnconfigure(0, weight=1)
-    parent.grid_columnconfigure(1, weight=1)
-
 
 ###################################create pages#####################################
 def create_placeholder_content(parent, title):

@@ -1,0 +1,12 @@
+#background color: "#BFD7ED
+#font popins
+#font color: "#000000"
+theme:
+  background_color: "#BFD7ED"
+  font_family: "Poppins"
+  font_color: "#101627"
+  accent_color: "#ffffff"
+  button_color: "#ffffff"
+  button_text_color: "#101627"
+  button_hover_color: "#101627"
+  button_hover_text_color: "#ffffff"

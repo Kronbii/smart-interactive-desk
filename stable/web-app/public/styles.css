@@ -1,79 +1,79 @@
-/* Welcome to the Table-top Multiverse */
 body {
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    text-align: center;
-    margin-top: 40px;
-    padding: 0 20px;
-    background: linear-gradient(to bottom, #2b2b2b, #1c1c1e);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #202124;
     color: #E6E6EB;
+    text-align: center;
+    padding: 20px;
 }
 
-/* The Mighty Header */
 h1 {
     font-size: 2.5em;
-    color: #C9B6E4;
     margin-bottom: 30px;
+    color: #C9B6E4;
 }
 
-/* Meet your noble buttons */
+#buttonContainer {
+    margin: 20px 0;
+}
+
 button {
-    margin: 12px;
-    padding: 15px 28px;
+    margin: 10px;
+    padding: 15px 30px;
     font-size: 16px;
+    cursor: pointer;
     border: none;
-    border-radius: 12px;
-    background: #C9B6E4;
+    border-radius: 8px;
+    background-color: #C9B6E4;
     color: #1C1C1E;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    animation: subtleBounce 2s infinite ease-in-out;
-    cursor: pointer;
 }
 
 button:hover {
-    background: #E6D9F5;
-    transform: scale(1.1) rotate(1deg);
+    background-color: #E6D9F5;
+    transform: scale(1.1);
 }
 
-/* Bouncy animations like a rising table */
-@keyframes subtleBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-3px); }
+/* Table Simulation */
+#tableSimulationWrapper {
+    position: relative;
+    width: 200px;
+    height: 300px;
+    margin: 0 auto 40px;
 }
 
-/* Action logs... because every table needs feedback */
+#tableBase {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 40px;
+    height: 100%;
+    background-color: #888;
+    transform: translateX(-50%);
+    border-radius: 10px;
+}
+
+#tableTop {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    width: 220px;
+    height: 20px;
+    background-color: #C9B6E4;
+    transform: translateX(-50%) rotate(0deg);
+    border-radius: 6px;
+    transition: bottom 0.3s ease, transform 0.3s ease;
+}
+
+/* Dummy Stats */
+#stats {
+    font-size: 1.1em;
+    margin-top: 20px;
+    color: #FFD580;
+}
+
 #actionDisplay {
     margin-top: 30px;
     font-size: 1.2em;
-    color: #FFD580;
     font-weight: bold;
-}
-
-/* Smart Table Simulator */
-#tableVisual {
-    width: 180px;
-    height: 20px;
-    margin: 0 auto 30px auto;
-    background: #a18cd1;
-    border-radius: 12px;
-    position: relative;
-    box-shadow: 0 0 30px #c9b6e4;
-    animation: floatTable 3s infinite alternate;
-}
-
-/* Floating desk simulation */
-@keyframes floatTable {
-    0% { transform: translateY(0) rotate(0deg); }
-    25% { transform: translateY(-5px) rotate(-1deg); }
-    50% { transform: translateY(0) rotate(0deg); }
-    75% { transform: translateY(5px) rotate(1deg); }
-    100% { transform: translateY(0) rotate(0deg); }
-}
-
-/* Make it responsive — so the desk doesn’t freak out on phones */
-@media (max-width: 600px) {
-    button {
-        width: 90%;
-        font-size: 18px;
-    }
+    color: #C9B6E4;
 }

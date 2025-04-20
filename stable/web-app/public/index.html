@@ -7,18 +7,26 @@
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-    <h1>📏 Smart Table Command Center</h1>
-    
-    <div id="tableVisual"></div>
+    <h1>Smart Table Control Panel</h1>
 
-    <div id="buttonContainer">
-        <button id="upBtn">⬆️ Rise to Glory</button>
-        <button id="downBtn">⬇️ Bow Down</button>
-        <button id="tiltUpBtn">🎯 Aim Higher</button>
-        <button id="tiltDownBtn">📉 Chill Down</button>
+    <div id="tableSimulationWrapper">
+        <div id="tableBase"></div>
+        <div id="tableTop"></div>
     </div>
 
-    <div id="actionDisplay">Waiting for your majestic command...</div>
+    <div id="buttonContainer">
+        <button id="upBtn">Up</button>
+        <button id="downBtn">Down</button>
+        <button id="tiltUpBtn">Tilt Up</button>
+        <button id="tiltDownBtn">Tilt Down</button>
+    </div>
+
+    <div id="stats">
+        <p>Height: <span id="heightValue">100</span> cm</p>
+        <p>Tilt Angle: <span id="tiltValue">0</span>°</p>
+    </div>
+
+    <div id="actionDisplay">Waiting for command...</div>
 
     <script src="script.js" defer></script>
 </body>

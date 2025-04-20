@@ -1,69 +1,79 @@
-
+/* Welcome to the Table-top Multiverse */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
     text-align: center;
-    margin-top: 50px;
+    margin-top: 40px;
     padding: 0 20px;
-    background: linear-gradient(to right, #ece9e6, #ffffff);
+    background: linear-gradient(to bottom, #2b2b2b, #1c1c1e);
+    color: #E6E6EB;
 }
 
+/* The Mighty Header */
 h1 {
-    font-size: 36px;
-    color: #333;
-    margin-bottom: 20px;
+    font-size: 2.5em;
+    color: #C9B6E4;
+    margin-bottom: 30px;
 }
 
+/* Meet your noble buttons */
 button {
-    margin: 10px;
-    padding: 15px 30px;
+    margin: 12px;
+    padding: 15px 28px;
     font-size: 16px;
-    cursor: pointer;
     border: none;
-    border-radius: 5px;
-    background-color: #4CAF50;
-    color: white;
-    transition: background-color 0.3s, transform 0.3s;
-    display: inline-block;
-    user-select: none; /* Prevent text selection */
-    -webkit-user-select: none; /* Safari */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
+    border-radius: 12px;
+    background: #C9B6E4;
+    color: #1C1C1E;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    animation: subtleBounce 2s infinite ease-in-out;
+    cursor: pointer;
 }
 
 button:hover {
-    background-color: #45a049;
-    transform: scale(1.1);
+    background: #E6D9F5;
+    transform: scale(1.1) rotate(1deg);
 }
 
-#buttonContainer {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+/* Bouncy animations like a rising table */
+@keyframes subtleBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
 }
 
+/* Action logs... because every table needs feedback */
 #actionDisplay {
-    margin-top: 20px;
-    font-size: 20px;
-    color: blue;
-    transition: color 0.3s, transform 0.3s;
+    margin-top: 30px;
+    font-size: 1.2em;
+    color: #FFD580;
+    font-weight: bold;
 }
 
-#actionDisplay:hover {
-    color: darkblue;
-    transform: scale(1.1);
+/* Smart Table Simulator */
+#tableVisual {
+    width: 180px;
+    height: 20px;
+    margin: 0 auto 30px auto;
+    background: #a18cd1;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 0 30px #c9b6e4;
+    animation: floatTable 3s infinite alternate;
 }
 
+/* Floating desk simulation */
+@keyframes floatTable {
+    0% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-5px) rotate(-1deg); }
+    50% { transform: translateY(0) rotate(0deg); }
+    75% { transform: translateY(5px) rotate(1deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* Make it responsive — so the desk doesn’t freak out on phones */
 @media (max-width: 600px) {
-    body {
-        margin-top: 20px;
-    }
-
     button {
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    #actionDisplay {
+        width: 90%;
         font-size: 18px;
     }
 }

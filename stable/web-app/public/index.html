@@ -1,17 +1,25 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>Smart Table Control Panel</title>
     <link rel="stylesheet" href="styles.css">
-    <title>Control Panel</title>
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-    <h1>Control Panel</h1>
-    <button id="upBtn">Up</button>
-    <button id="downBtn">Down</button>
-    <button id="tiltUpBtn">Tilting Up</button>
-    <button id="tiltDownBtn">Tilting Down</button>
+    <h1>📏 Smart Table Command Center</h1>
+    
+    <div id="tableVisual"></div>
 
-    <div id="actionDisplay"></div>
+    <div id="buttonContainer">
+        <button id="upBtn">⬆️ Rise to Glory</button>
+        <button id="downBtn">⬇️ Bow Down</button>
+        <button id="tiltUpBtn">🎯 Aim Higher</button>
+        <button id="tiltDownBtn">📉 Chill Down</button>
+    </div>
+
+    <div id="actionDisplay">Waiting for your majestic command...</div>
+
+    <script src="script.js" defer></script>
 </body>
-<script src="script.js" defer></script>
 </html>

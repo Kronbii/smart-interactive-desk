@@ -4,57 +4,142 @@
   <meta charset="UTF-8">
   <title>Smart Table Control Panel</title>
   <style>
-    /* Global */
-    * { box-sizing: border-box; }
-    body { margin: 0; padding-top: 60px; font-family: sans-serif; background: #121212; color: #e0e0e0; }
+    /* Global Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e1e1e 0%, #121212 100%);
+      color: #e0e0e0;
+      padding-top: 60px;
+      overflow-y: auto;
+    }
     body.light-mode { background: #f0f0f0; color: #000; }
     body.light-mode #navbar { background: #ddd; }
-    body.light-mode .panel, body.light-mode .gameBox, body.light-mode #overviewPage, body.light-mode #statusPage, body.light-mode #aboutPage, body.light-mode #gamesPanel { background: #fff; color: #000; }
+    body.light-mode .panel, body.light-mode .gameBox, body.light-mode #overviewPage, body.light-mode #statusPage, body.light-mode #aboutPage { background: #fff; color: #000; }
     body.crazy-mode h1::after { content: " You absolute table-flop!"; color: #ff4d4d; }
 
     /* Navbar */
-    #navbar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #1f1f1f; display: flex; justify-content: center; align-items: center; z-index: 1000; }
-    #navbar ul { list-style: none; padding: 0; margin: 0; display: flex; }
-    #navbar li { margin: 0 20px; cursor: pointer; position: relative; }
-    #navbar li ul { position: absolute; top: 100%; left: 0; background: #333; list-style: none; padding: 5px 0; display: none; margin: 0; }
-    #navbar li ul li { padding: 5px 15px; }
-    #navbar li ul li:hover { background: #444; }
+    #navbar {
+      position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+      background: rgba(30,30,30,0.95);
+      display: flex; justify-content: center; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.7);
+      z-index: 1000;
+    }
+    #navbar ul { list-style: none; display: flex; }
+    #navbar li {
+      margin: 0 20px; cursor: pointer; position: relative;
+      font-size: 1.1em;
+      transition: color 0.2s;
+    }
+    #navbar li:hover { color: #FFD700; }
+    /* Dropdown */
+    #settingsMenu {
+      display: none; position: absolute; top: 100%; left: 0;
+      background: #333; border-radius: 4px; overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    }
+    #settingsMenu li { padding: 8px 16px; white-space: nowrap; }
+    #settingsMenu li:hover { background: #444; }
 
     /* Pages */
-    .page { display: none; max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .page { display: none; padding: 20px; }
     .active { display: block; }
-    #overviewPage, #statusPage, #aboutPage { background: #1e1e1e; border-radius: 8px; color: #e0e0e0; }
-    .about-img { width: 150px; height: 150px; object-fit: cover; margin: 10px; }
-    .idcBtn, #backBtn { margin-top: 20px; padding: 12px 20px; background: #888; color: #fff; border: none; cursor: pointer; font-size: 1em; }
 
-    /* Table simulation */
-    #tableSimulationWrapper { position: relative; width: 200px; height: 10px; margin: 60px auto; }
-    #tableBase, #tableTop { position: absolute; left: 0; width: 200px; height: 10px; }
-    #tableBase { background: #444; }
-    #tableTop { background: #555; }
+    /* Headings */
+    h1 {
+      text-align: center;
+      margin: 30px 0;
+      font-size: 2.5em;
+      color: #FFD700;
+      text-shadow: 0 0 10px rgba(255,215,0,0.5);
+      animation: pulse 3s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
 
-    /* Controls & Stats */
-    .panel { background: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px auto; max-width: 400px; }
-    .panel button { margin: 8px; padding: 12px 20px; background: #333; color: #e0e0e0; border: none; cursor: pointer; font-size: 1em; }
-    .panel button:hover { background: #444; }
-    #stats p { margin: 8px 0; }
+    /* Table Simulation */
+    #tableSimulationWrapper {
+      position: relative;
+      width: 240px; height: 12px;
+      margin: 0 auto 40px;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    #tableBase { background: #555; width: 100%; height: 100%; }
+    #tableTop { 
+      background: linear-gradient(90deg, #666, #444);
+      width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+      transition: transform 0.15s;
+    }
 
-    /* Title */
-    h1 { animation: headerPulse 3s ease-in-out infinite; text-align: center; margin: 40px 0; color: #fff; }
-    @keyframes headerPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
+    /* Panels */
+    .panel {
+      background: rgba(30,30,30,0.9);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 500px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    }
+    .panel button {
+      margin: 10px 5px;
+      padding: 12px 24px;
+      background: #333;
+      border: none;
+      border-radius: 4px;
+      color: #e0e0e0;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .panel button:hover { background: #444; transform: scale(1.05); }
 
-    /* Games Panel */
-    #gamesPanel { background: #1e1e1e; border-radius: 8px; padding: 40px; margin: 20px auto; max-width: 1000px; }
-    /* Interactive section */
+    /* Stats */
+    #stats { width: 100%; }
+    #stats p { margin: 10px 0; font-size: 1.1em; }
+
+    /* Games Section */
+    #gamesPanel {
+      background: rgba(30,30,30,0.9);
+      border-radius: 8px;
+      padding: 40px;
+      margin: 20px auto;
+      max-width: 1000px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    }
     #interactiveSection { display: flex; justify-content: space-between; }
-    .gameBox { background: #1e1e1e; border-radius: 8px; padding: 20px; margin: 10px; width: 300px; text-align: center; }
-    .gameBox h2 { color: #FFD700; margin-top: 0; }
-    canvas { background: #222; border: 2px solid #fff; border-radius: 8px; }
+    .gameBox {
+      background: #222;
+      border-radius: 8px;
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: transform 0.2s;
+    }
+    .gameBox:hover { transform: translateY(-5px); }
+    .gameBox h2 { color: #FFD700; margin-bottom: 15px; }
+    .gameBtn { margin-top: 15px; }
+    canvas { background: #111; border: 2px solid #444; border-radius: 6px; }
 
-    /* Settings menu */
-    #settingsMenu { list-style: none; display: none; position: absolute; top: 100%; left: 0; background: #333; padding: 5px 0; border-radius: 4px; }
-    #settingsMenu li { padding: 5px 15px; color: #e0e0e0; }
-    #settingsMenu li:hover { background: #444; }
+    /* About & Status */
+    #aboutPage, #statusPage, #overviewPage {
+      background: rgba(30,30,30,0.9);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    }
+    #statusContent { max-height: 600px; overflow-y: auto; padding: 10px; margin-bottom: 20px; }
+
+    /* Overview & Buttons */
+    .idcBtn, #backBtn {
+      padding: 14px 28px; font-size: 1.1em; border-radius: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5); transition: background 0.2s;
+    }
+    .idcBtn:hover, #backBtn:hover { background: #555; }
   </style>
 </head>
 <body>
@@ -82,12 +167,12 @@
       <li>Adjust table <strong>Height</strong> between 75–120 cm</li>
       <li>Control table <strong>Tilt</strong> between 0–35°</li>
       <li>Monitor <strong>Live Sensor Stats</strong> (noise, power, posture, etc.)</li>
-      <li>Play four table-themed mini-games for fun and calibration:</li>
+      <li>Play four table-themed mini-games:</li>
       <ol>
-        <li><strong>Table Pac‑Man</strong> – navigate the table icon to collect dots.</li>
+        <li><strong>Table Pac‑Man</strong> – collect dots with the table icon.</li>
         <li><strong>Height Match</strong> – match a random target height.</li>
-        <li><strong>Tilt Balance</strong> – bring tilt to zero in record time.</li>
-        <li><strong>Table Snake</strong> – guide the table snake and avoid collisions.</li>
+        <li><strong>Tilt Balance</strong> – bring tilt to zero quickly.</li>
+        <li><strong>Table Snake</strong> – avoid self-collision.</li>
       </ol>
     </ul>
     <button class="idcBtn" onclick="showPage('mainContent')">Go to Controls</button>
@@ -107,14 +192,12 @@
       <div id="tableBase"></div>
       <div id="tableTop"></div>
     </div>
-
     <div class="panel" id="buttonContainer">
       <button id="upBtn">Up</button>
       <button id="downBtn">Down</button>
       <button id="tiltUpBtn">Tilt Up</button>
       <button id="tiltDownBtn">Tilt Down</button>
     </div>
-
     <div id="gamesPanel">
       <div id="interactiveSection">
         <div>
@@ -134,15 +217,15 @@
         </div>
         <div class="panel" id="stats">
           <p>Height: <span id="heightValue">100</span> cm</p>
-          <p>Tilt Angle: <span id="tiltValue">0</span>°</p>
-          <p>Ambient Noise: <span id="noiseValue">40</span> dB</p>
-          <p>Power Usage: <span id="powerValue">150</span> W</p>
-          <p>Connected Tables: <span id="tablesValue">2</span></p>
-          <p>Posture Status: <span id="postureValue">Good</span></p>
+          <p>Tilt: <span id="tiltValue">0</span>°</p>
+          <p>Noise: <span id="noiseValue">40</span> dB</p>
+          <p>Power: <span id="powerValue">150</span> W</p>
+          <p>Tables: <span id="tablesValue">2</span></p>
+          <p>Posture: <span id="postureValue">Good</span></p>
           <p>Network: <span id="networkValue">Connected</span></p>
           <p>Firmware: <span id="firmwareValue">v1.2.3</span></p>
-          <p>USB Ports: <span id="usbValue">4</span></p>
-          <p>Ambient Light: <span id="lightValue">300</span> lx</p>
+          <p>USB: <span id="usbValue">4</span></p>
+          <p>Light: <span id="lightValue">300</span> lx</p>
           <p>Temp: <span id="tempValue">22.0</span>°C</p>
           <p>Load: <span id="weightValue">15.0</span> kg</p>
         </div>
@@ -160,7 +243,7 @@
             <canvas id="snakeCanvas" width="300" height="300"></canvas>
             <div>Score: <span id="snakeScore">0</span></div>
             <button id="startSnake" class="gameBtn">Start Snake</button>
-            <p>Use W/A/S/D to guide the snake</p>
+            <p>Use W/A/S/D to guide</p>
           </div>
         </div>
       </div>
@@ -194,10 +277,7 @@
     }
     document.getElementById('nav-overview').onclick = () => showPage('overviewPage');
     document.getElementById('nav-status').onclick = () => showPage('statusPage');
-    document.getElementById('nav-stats').onclick = () => {
-      alert('no one has any control but Allah');
-      showPage('mainContent');
-    };
+    document.getElementById('nav-stats').onclick = () => { alert('no one has any control but Allah'); showPage('mainContent'); };
     document.getElementById('nav-about').onclick = () => showPage('aboutPage');
     document.querySelectorAll('.idcBtn, #backBtn').forEach(btn => btn.onclick = () => showPage('mainContent'));
 
@@ -206,12 +286,12 @@
       if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d'].includes(e.key)) e.preventDefault();
     });
 
-    // Table controls
+    // Table controls logic
     let height=100, tilt=0;
     const stats={noise:40,power:150,tables:2,posture:true,ambientLight:300,ambientTemp:22,loadWeight:15};
     const clamp=(v,m,M)=>Math.max(m,Math.min(M,v));
     function updateStats(){
-      stats.noise = clamp(stats.noise + (Math.random()-0.5)*3, 30, 80).toFixed(1);
+      stats.noise = clamp(stats.noise + (Math.random()-0.5)*3, 30,80).toFixed(1);
       stats.power = (140 + Math.random()*20).toFixed(1);
       stats.tables = Math.random()>0.5?2:3;
       stats.posture = Math.random()>0.3;
@@ -237,94 +317,116 @@
       top.style.transform = `translateY(${-offset}px) rotate(${tilt}deg)`;
     }
     ['upBtn','downBtn','tiltUpBtn','tiltDownBtn'].forEach(id => {
-      const codeMap={upBtn:'u',downBtn:'d',tiltUpBtn:'tu',tiltDownBtn:'td'};
-      const btn=document.getElementById(id), code=codeMap[id];
+      const codeMap = { upBtn:'u', downBtn:'d', tiltUpBtn:'tu', tiltDownBtn:'td' };
+      const code = codeMap[id];
+      const btn = document.getElementById(id);
       btn.onmousedown = () => {
         const step = () => {
-          if(code==='u') height = clamp(height+1,75,120);
-          if(code==='d') height = clamp(height-1,75,120);
-          if(code==='tu') tilt  = clamp(tilt+1,0,35);
-          if(code==='td') tilt  = clamp(tilt-1,0,35);
+          if(code==='u') height=clamp(height+1,75,120);
+          if(code==='d') height=clamp(height-1,75,120);
+          if(code==='tu') tilt=clamp(tilt+1,0,35);
+          if(code==='td') tilt=clamp(tilt-1,0,35);
           updateStats(); updateTable();
         };
-        step(); window._hold = setInterval(step,150);
+        step();
+        window._hold = setInterval(step,150);
       };
       btn.onmouseup = btn.onmouseleave = () => clearInterval(window._hold);
     });
     updateStats(); updateTable();
 
-    // Table Pac-Man
-    const pacCanvas=document.getElementById('pacCanvas'), pacCtx=pacCanvas.getContext('2d');
+    // Pac-Man game
+    const pacCanvas = document.getElementById('pacCanvas'), pacCtx = pacCanvas.getContext('2d');
     const G={size:15,count:20};
-    let pac, pacDots, pacScore, pacInt;
+    let pac, pacDots, pacScore=0, pacInt;
     function pacInit(){
-      pac={x:10,y:10,dx:0,dy:0}; pacDots=[]; pacScore=0;
-      for(let i=0;i<G.count;i++) for(let j=0;j<G.count;j++) if(i!==pac.x||j!==pac.y) pacDots.push({x:i,y:j});
-      document.getElementById('pacScore').innerText=pacScore; clearInterval(pacInt);
-      pacInt=setInterval(pacLoop,200); pacDraw();
+      pac={x:10,y:10,dx:0,dy:0};
+      pacDots=[]; for(let i=0;i<G.count;i++) for(let j=0;j<G.count;j++) if(i!==pac.x||j!==pac.y) pacDots.push({x:i,y:j});
+      pacScore=0; document.getElementById('pacScore').innerText=pacScore;
+      clearInterval(pacInt);
+      pacInt = setInterval(pacLoop,200); pacDraw();
     }
     function pacDraw(){
-      pacCtx.fillStyle='#000'; pacCtx.fillRect(0,0,pacCanvas.width,pacCanvas.height);
-      pacCtx.fillStyle='#FFD700'; pacDots.forEach(d=>pacCtx.fillRect(d.x*G.size+6,d.y*G.size+6,G.size-12,G.size-12));
+      pacCtx.fillStyle='#000'; pacCtx.fillRect(0,0,300,300);
+      pacDots.forEach(d=>{ pacCtx.fillStyle='#FFD700'; pacCtx.fillRect(d.x*G.size+6,d.y*G.size+6,G.size-12,G.size-12); });
       pacCtx.fillStyle='#8FBCD4'; pacCtx.fillRect(pac.x*G.size+2,pac.y*G.size+2,G.size-4,G.size-4);
     }
     function pacLoop(){
       pac.x=(pac.x+pac.dx+G.count)%G.count; pac.y=(pac.y+pac.dy+G.count)%G.count;
-      pacDots=pacDots.filter(d=>{if(d.x===pac.x&&d.y===pac.y){pacScore++;document.getElementById('pacScore').innerText=pacScore;return false;}return true;});
-      pacDraw(); if(pacDots.length===0) clearInterval(pacInt);
+      pacDots = pacDots.filter(d=>{ if(d.x===pac.x && d.y===pac.y){ pacScore++; document.getElementById('pacScore').innerText=pacScore; return false;} return true; });
+      pacDraw();
+      if(pacDots.length===0) clearInterval(pacInt);
     }
-    document.getElementById('startPac').onclick=pacInit;
-    window.addEventListener('keydown',e=>{
+    document.getElementById('startPac').onclick = pacInit;
+    window.addEventListener('keydown', e=>{
       if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){
-        e.preventDefault(); if(e.key==='ArrowUp'){pac.dx=0;pac.dy=-1;} if(e.key==='ArrowDown'){pac.dx=0;pac.dy=1;} if(e.key==='ArrowLeft'){pac.dx=-1;pac.dy=0;} if(e.key==='ArrowRight'){pac.dx=1;pac.dy=0;}
+        e.preventDefault();
+        if(e.key==='ArrowUp'){pac.dx=0;pac.dy=-1;}
+        if(e.key==='ArrowDown'){pac.dx=0;pac.dy=1;}
+        if(e.key==='ArrowLeft'){pac.dx=-1;pac.dy=0;}
+        if(e.key==='ArrowRight'){pac.dx=1;pac.dy=0;}
       }
     });
 
     // Height Match
-    document.getElementById('newTargetHeight').onclick=()=>{
-      const tgt=Math.floor(Math.random()*(120-75+1))+75;document.getElementById('targetHeight').innerText=tgt;
+    document.getElementById('newTargetHeight').onclick = ()=>{
+      const tgt=Math.floor(Math.random()*(120-75+1))+75;
+      document.getElementById('targetHeight').innerText=tgt;
     };
-    document.getElementById('checkHeight').onclick=()=>{
-      const tgt=+document.getElementById('targetHeight').innerText; const diff=Math.abs(height-tgt);
-      document.getElementById('heightResult').innerText=diff<=1?`Matched! (${height} cm)`:`Off by ${diff.toFixed(1)} cm`;
+    document.getElementById('checkHeight').onclick = ()=>{
+      const tgt=+document.getElementById('targetHeight').innerText;
+      const diff=Math.abs(height-tgt);
+      document.getElementById('heightResult').innerText = diff<=1?`Matched! (${height} cm)`: `Off by ${diff.toFixed(1)} cm`;
     };
     document.getElementById('newTargetHeight').click();
 
     // Tilt Balance
     let tStart=0;
-    document.getElementById('startBalance').onclick=()=>{tStart=performance.now();document.getElementById('tiltResult').innerText='';};
-    document.getElementById('checkBalance').onclick=()=>{
-      if(tilt===0){const t=((performance.now()-tStart)/1000).toFixed(2);
-        document.getElementById('balanceTime').innerText=t;document.getElementById('tiltResult').innerText='Balanced!';
+    document.getElementById('startBalance').onclick = ()=>{ tStart=performance.now(); document.getElementById('tiltResult').innerText=''; };
+    document.getElementById('checkBalance').onclick = ()=>{
+      if(tilt===0){
+        const elapsed=((performance.now()-tStart)/1000).toFixed(2);
+        document.getElementById('balanceTime').innerText=elapsed;
+        document.getElementById('tiltResult').innerText='Balanced!';
       } else document.getElementById('tiltResult').innerText='Not zero yet.';
     };
 
-    // Table Snake
-    const snakeCanvas=document.getElementById('snakeCanvas'), snakeCtx=snakeCanvas.getContext('2d');
+    // Snake Game
+    const snakeCanvas = document.getElementById('snakeCanvas'), snakeCtx = snakeCanvas.getContext('2d');
     let snake, dir, apple, snakeInt;
-    function placeApple(){apple={x:Math.floor(Math.random()*G.count),y:Math.floor(Math.random()*G.count)};}
+    function placeApple(){ apple={x:Math.floor(Math.random()*G.count),y:Math.floor(Math.random()*G.count)}; }
     function snakeDraw(){
-      snakeCtx.fillStyle='#000';snakeCtx.fillRect(0,0,300,300);
-      snakeCtx.fillStyle='#FFD700';snakeCtx.fillRect(apple.x*G.size+6,apple.y*G.size+6,G.size-12,G.size-12);
-      snakeCtx.fillStyle='#8FBCD4';snake.forEach(s=>snakeCtx.fillRect(s.x*G.size+2,s.y*G.size+2,G.size-4,G.size-4));
+      snakeCtx.fillStyle='#000'; snakeCtx.fillRect(0,0,300,300);
+      snakeCtx.fillStyle='#FFD700'; snakeCtx.fillRect(apple.x*G.size+6,apple.y*G.size+6,G.size-12,G.size-12);
+      snakeCtx.fillStyle='#8FBCD4'; snake.forEach(s=>snakeCtx.fillRect(s.x*G.size+2,s.y*G.size+2,G.size-4,G.size-4));
     }
     function snakeLoop(){
       const head={x:(snake[0].x+dir.x+G.count)%G.count,y:(snake[0].y+dir.y+G.count)%G.count};
-      if(snake.some(s=>s.x===head.x&&s.y===head.y)){clearInterval(snakeInt);alert('Game Over!');return;}
+      if(snake.some(s=>s.x===head.x&&s.y===head.y)){ clearInterval(snakeInt); alert('Snake Game Over'); return; }
       snake.unshift(head);
-      if(head.x===apple.x&&head.y===apple.y){document.getElementById('snakeScore').innerText=snake.length-1;placeApple();} else snake.pop();
+      if(head.x===apple.x&&head.y===apple.y){ placeApple(); document.getElementById('snakeScore').innerText=snake.length-1; }
+      else snake.pop();
       snakeDraw();
     }
-    document.getElementById('startSnake').onclick=()=>{snake=[{x:10,y:10}];dir={x:1,y:0};placeApple();snakeDraw();clearInterval(snakeInt);snakeInt=setInterval(snakeLoop,150);};
-    window.addEventListener('keydown',e=>{
-      if(['w','a','s','d'].includes(e.key.toLowerCase())){e.preventDefault();if(e.key==='w')dir={x:0,y:-1};if(e.key==='s')dir={x:0,y:1};if(e.key==='a')dir={x:-1,y:0};if(e.key==='d')dir={x:1,y:0};}
+    document.getElementById('startSnake').onclick = ()=>{
+      snake=[{x:10,y:10}]; dir={x:1,y:0}; placeApple(); snakeDraw(); clearInterval(snakeInt);
+      snakeInt=setInterval(snakeLoop,150);
+    };
+    window.addEventListener('keydown', e=>{
+      if(['w','a','s','d'].includes(e.key.toLowerCase())){
+        e.preventDefault();
+        if(e.key==='w') dir={x:0,y:-1};
+        if(e.key==='s') dir={x:0,y:1};
+        if(e.key==='a') dir={x:-1,y:0};
+        if(e.key==='d') dir={x:1,y:0};
+      }
     });
 
-    // Populate status essay (~4000 words) via JS
-    const longPara = `Once upon a day, perched in a modest living room, I–the humble table–greeted the morning sun with my cold, unfeeling surface. My legs, four in number, trembled at the thought of another day supporting the endless clutter of human existence: teacups, textbooks, remote controls, and discarded hopes. Each coffee ring etched into my finish felt like a scar upon my conscience, reminding me of my servitude. I whispered to myself in the silence, “Is this my purpose? To simply bear their burdens without question?”`;
-    let essayHTML = '';
-    for(let i=0;i<40;i++){ essayHTML += `<p>${longPara}</p>`; }
-    document.getElementById('statusContent').innerHTML = essayHTML;
+    // Generate ~4000-word essay
+    const longPara = `Once upon a day, perched in a modest living room, I–the humble table… `;
+    let essayHTML='';
+    for(let i=0;i<400;i++) essayHTML+=`<p>${longPara}</p>`;
+    document.getElementById('statusContent').innerHTML=essayHTML;
   </script>
 </body>
 </html>

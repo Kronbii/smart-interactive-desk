@@ -14,7 +14,8 @@ from .header import setup_header
 from .notes import create_notes_content
 from .alarm import create_alarm_content
 from .home import create_home_content
-from .init_serial import init_serial
+from .init_serial import init_serial, send_command
+from flask import Flask, request, jsonify
 import threading
 from gui import CONFIG_PATH
 
@@ -29,6 +30,38 @@ with open(CONFIG_PATH, "r") as file:
     config = Box(yaml.safe_load(file))
 
 init_serial(config.serial.port1, config.serial.baudrate, config.serial.timeout)  # Initialize serial connection
+
+app = Flask(__name__)
+
+@app.route('/send-command', methods=['POST'])
+def handle_command():
+    try:
+        data = request.get_json()
+        print("📥 Received JSON:", data, flush=True)
+
+        cmd = data.get("command")
+        if not cmd:
+            return jsonify({"error": "No command received"}), 400
+
+        print(f"🛠️ Received from Node.js: {cmd}", flush=True)
+
+        # This line should work only if ser is initialized
+        send_command(cmd)
+
+        return jsonify({"status": "success", "echo": cmd})
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()  # 🔥 This will show the full error in terminal
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+def start_flask():
+    app.run(port=5001, host='localhost')
+
+# 👇 Start Flask server in a thread (this stays in same process!)
+threading.Thread(target=start_flask, daemon=True).start()
+
 ###################################Functions#####################################
 
 def set_background(parent):

@@ -15,6 +15,7 @@ with open(CONFIG_PATH, "r") as file:
 # Global process tracker
 web_processes = []
 
+
 # Cleanup to terminate all web server processes on exit
 def cleanup_processes():
     print("🧹 Cleaning up web server processes...")
@@ -65,17 +66,6 @@ def run_web():
     tk_img = ImageTk.PhotoImage(img)
     tk.Label(img_win, image=tk_img, bg="#1a1f2c").pack(padx=10, pady=10)
     img_win.image = tk_img
-
-    kill_process_on_port(5001)
-
-    # === Launch Python Flask bridge ===
-    bridge_path = os.path.join(GUI_DIR, "bridge.py")
-    print(f"🚀 Launching Python bridge from: {bridge_path}")
-    try:
-        py_proc = subprocess.Popen(["python3", bridge_path])
-        web_processes.append(py_proc)
-    except Exception as e:
-        print("❌ Failed to start bridge.py:", e)
 
     # === Launch Node.js server ===
     print(f"🚀 Launching Node.js from: {JS_SCRIPT_PATH}")

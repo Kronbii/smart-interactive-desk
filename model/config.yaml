@@ -25,3 +25,6 @@ serial:
   port2: "/dev/ttyACM1"               # Alternate serial port
   baudrate: 115200                # Common baud rate for serial communication
   timeout: 1                      # Timeout for serial read/write operations
+
+segment:
+  resize_ratio: 3

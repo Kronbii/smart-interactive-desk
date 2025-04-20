@@ -1,13 +1,10 @@
 import tkinter as tk
-from PIL import Image, ImageTk
-from tkinter import messagebox
 from box import Box
 import yaml
-import os
 from .control import create_control_content
 from .web import run_web
+from gui import CONFIG_PATH
 
-CONFIG_PATH = os.path.join("/home/kronbii/github-repos/smart-interactive-desk/stable/gui/config.yaml")
 # Load config.yaml
 with open(CONFIG_PATH, "r") as file:
     config = Box(yaml.safe_load(file))

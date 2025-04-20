@@ -1,13 +1,7 @@
 import json
 import fcntl
 import os
-try:
-    CONTROL_FILE = os.path.join(os.path.dirname(__file__), 'control.json')
-except:
-    CONTROL_FILE = 'control.json'
-
-USER_FILE = 'users.json'
-HISTORY_FILE = 'history.json'
+from gui import CONFIG_PATH, CONTROL_FILE, USERS_FILE
 
 def read_json(path):
     with open(path, 'r') as f:
@@ -50,4 +44,4 @@ def get_sensor_feedback():
     return feedback['height'], feedback['tilt']
 
 def get_users():
-    return read_json(USER_FILE)['users']
+    return read_json(USERS_FILE)['users']

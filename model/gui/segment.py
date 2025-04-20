@@ -1,5 +1,12 @@
 import cv2
 import numpy as np
+import yaml
+from box import Box
+from gui import CONFIG_PATH
+
+
+with open(CONFIG_PATH, "r") as file:
+    config = Box(yaml.safe_load(file))
 
 def main(frame, i):
     # === Load and Resize Image Dimensions ===
@@ -36,7 +43,7 @@ def main(frame, i):
     rgba_frame[:, :, 3] = closed_frame
     
     # === Resize all for display or tiling ===
-    w, h = frame_x // 3, frame_y // 3
+    w, h = frame_x // config.segment.resize_ratio, frame_y // config.segment.resize_ratio
     frame      = cv2.resize(frame, (w, h))
     gray_frame = cv2.resize(gray_frame, (w, h))
     bin_frame  = cv2.resize(bin_frame, (w, h))

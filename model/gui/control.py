@@ -1,11 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
-import os
 from box import Box
 import yaml
 from .init_serial import send_command
+from gui import CONFIG_PATH
 
-CONFIG_PATH = os.path.join("/home/kronbii/github-repos/smart-interactive-desk/stable/gui/config.yaml")
 # Load config.yaml
 with open(CONFIG_PATH, "r") as file:
     config = Box(yaml.safe_load(file))

@@ -1,0 +1,10 @@
+import os
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+MODEL_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+GUI_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+WEB_PATH = os.path.join(MODEL_DIR, 'web-app')
+JS_SCRIPT_PATH = os.path.join(WEB_PATH, "server.js")
+CONFIG_PATH = os.path.join(MODEL_DIR, "config.yaml")
+ASSETS_DIR = os.path.join(GUI_DIR, "assets")
+CONTROL_FILE = os.path.join(MODEL_DIR, 'control.json')
+USERS_FILE = os.path.join(MODEL_DIR, 'users.json')

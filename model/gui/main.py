@@ -14,14 +14,15 @@ from .header import setup_header
 from .notes import create_notes_content
 from .alarm import create_alarm_content
 from .home import create_home_content
-from .init_serial import init_serial, send_command, close_serial
+from .init_serial import init_serial
+import threading
+from gui import CONFIG_PATH
+
 
 current_image_label = None  # global holder to access image widget
 displayed_image = None      # to prevent image from being garbage collected
 
 mixer.init()
-
-CONFIG_PATH = os.path.join("/home/kronbii/github-repos/smart-interactive-desk/stable/gui/config.yaml")
 
 # Load config.yaml
 with open(CONFIG_PATH, "r") as file:

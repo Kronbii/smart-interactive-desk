@@ -104,6 +104,13 @@ void read_rpi(String &command) {
     }
 }
 
+void write_rpi(float height, float tilt){
+    Serial.print("POS:");
+    Serial.print(height);
+    Serial.print(",");
+    Serial.println(tilt);
+}
+
 void update_flags(String &command, String &last_command, bool &move_up_flag, bool &move_down_flag, bool &tilt_up_flag, bool &tilt_down_flag, bool &stop_motion_flag) {
     if (command != last_command){
         if (command == "u") {
@@ -166,19 +173,22 @@ void perform_command() {
     }
 }
 
-float read_ultrasonic(){
+float read_ultrasonic() {
     float* distances = HCSR04.measureDistanceMm();
 
+    // Optional debug prints
     for (int i = 0; i < echoCount; i++) {
+        Serial.print("US");
         Serial.print(i + 1);
         Serial.print(": ");
         Serial.print(distances[i]);
-        Serial.println(" cm");
-    }  
-    Serial.println("---");
-    delay(50);
-    return (float((distance[0]+distance[1])/2))
+        Serial.println(" mm");
+    }
+
+    float average = (distances[0] + distances[1]) / 2.0;
+    return average;
 }
+
 
 void setup() {
     pinMode(M1IN1, OUTPUT);
@@ -234,7 +244,8 @@ void loop() {
         move_up_flag = false;
     }
 
-
+    write_rpi(height, height);
+    
     display.display();
 }
 

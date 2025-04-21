@@ -4,429 +4,532 @@
   <meta charset="UTF-8">
   <title>Smart Table Control Panel</title>
   <style>
-    /* Global Reset */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1e1e1e 0%, #121212 100%);
-      color: #e0e0e0;
-      padding-top: 60px;
-      overflow-y: auto;
+    /* Root variables and base styles */
+    :root {
+      --bg-gradient: linear-gradient(135deg, #1e1e1e 0%, #121212 100%);
+      --panel-bg: rgba(30, 30, 30, 0.95);
+      --highlight: #FFD700;
+      --text-light: #e0e0e0;
+      --btn-hover: #444;
+      --nav-height: 60px;
     }
-    body.light-mode { background: #f0f0f0; color: #000; }
-    body.light-mode #navbar { background: #ddd; }
-    body.light-mode .panel, body.light-mode .gameBox, body.light-mode #overviewPage, body.light-mode #statusPage, body.light-mode #aboutPage { background: #fff; color: #000; }
-    body.crazy-mode h1::after { content: " You absolute table-flop!"; color: #ff4d4d; }
-
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; width: 100%; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-light);
+      padding-top: var(--nav-height);
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    button, .btn { background: none; border: none; outline: none; cursor: pointer; }
     /* Navbar */
     #navbar {
-      position: fixed; top: 0; left: 0; width: 100%; height: 60px;
-      background: rgba(30,30,30,0.95);
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: var(--nav-height);
+      background: var(--panel-bg);
       display: flex; justify-content: center; align-items: center;
       box-shadow: 0 2px 10px rgba(0,0,0,0.7);
       z-index: 1000;
     }
     #navbar ul { list-style: none; display: flex; }
     #navbar li {
-      margin: 0 20px; cursor: pointer; position: relative;
-      font-size: 1.1em;
+      margin: 0 20px; position: relative;
+      font-size: 1.1em; color: var(--text-light);
       transition: color 0.2s;
     }
-    #navbar li:hover { color: #FFD700; }
-    /* Dropdown */
+    #navbar li.active { color: var(--highlight); }
+    #navbar li:hover { color: var(--highlight); }
+    #navbar #nav-settings:hover > #settingsMenu { display: block; }
     #settingsMenu {
       display: none; position: absolute; top: 100%; left: 0;
       background: #333; border-radius: 4px; overflow: hidden;
       box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+      list-style: none; min-width: 140px;
     }
-    #settingsMenu li { padding: 8px 16px; white-space: nowrap; }
-    #settingsMenu li:hover { background: #444; }
-
-    /* Pages */
-    .page { display: none; padding: 20px; }
+    #settingsMenu li {
+      padding: 8px 16px; white-space: nowrap;
+      transition: background 0.2s; color: var(--text-light);
+    }
+    #settingsMenu li:hover { background: var(--btn-hover); }
+    /* Page sections */
+    .page { display: none; max-width: 1200px; margin: 20px auto; padding: 20px; }
     .active { display: block; }
-
     /* Headings */
     h1 {
-      text-align: center;
-      margin: 30px 0;
-      font-size: 2.5em;
-      color: #FFD700;
+      text-align: center; margin: 30px 0;
+      font-size: 2.5em; color: var(--highlight);
       text-shadow: 0 0 10px rgba(255,215,0,0.5);
       animation: pulse 3s ease-in-out infinite;
     }
-    @keyframes pulse {
-      0%,100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    h2.section-title { text-align: center; margin-bottom: 20px; font-size: 2em; color: var(--highlight); }
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      margin: 10px 5px;
+      background: var(--panel-bg);
+      color: var(--text-light);
+      border-radius: 4px;
+      transition: background 0.2s, transform 0.2s;
+      font-size: 1em;
+      padding: 8px 16px;
     }
-
-    /* Table Simulation */
+    .btn:hover { background: var(--btn-hover); transform: scale(1.05); }
+    /* Control panel simulation */
     #tableSimulationWrapper {
-      position: relative;
-      width: 240px; height: 12px;
+      width: 200px; height: 10px;
       margin: 0 auto 40px;
       border-radius: 6px;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      position: relative;
     }
     #tableBase { background: #555; width: 100%; height: 100%; }
-    #tableTop { 
+    #tableTop {
       background: linear-gradient(90deg, #666, #444);
-      width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
       transition: transform 0.15s;
     }
-
-    /* Panels */
     .panel {
-      background: rgba(30,30,30,0.9);
+      background: var(--panel-bg);
       border-radius: 8px;
-      padding: 20px;
       margin: 20px auto;
-      max-width: 500px;
+      max-width: 520px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      padding: 20px;
     }
-    .panel button {
-      margin: 10px 5px;
-      padding: 12px 24px;
-      background: #333;
-      border: none;
-      border-radius: 4px;
-      color: #e0e0e0;
-      font-size: 1em;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.2s;
+    /* Stats grid */
+    #stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      padding: 20px;
+      background: var(--panel-bg);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      margin: 20px;
     }
-    .panel button:hover { background: #444; transform: scale(1.05); }
-
-    /* Stats */
-    #stats { width: 100%; }
-    #stats p { margin: 10px 0; font-size: 1.1em; }
-
-    /* Games Section */
+    #stats p { font-size: 1.1em; margin: 8px 0; text-align: left; }
+    /* Games section */
     #gamesPanel {
-      background: rgba(30,30,30,0.9);
+      background: var(--panel-bg);
       border-radius: 8px;
       padding: 40px;
       margin: 20px auto;
-      max-width: 1000px;
+      max-width: 1100px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.6);
     }
-    #interactiveSection { display: flex; justify-content: space-between; }
+    #interactiveSection {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
     .gameBox {
       background: #222;
       border-radius: 8px;
       padding: 20px;
-      width: 300px;
+      width: 320px;
       text-align: center;
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
       transition: transform 0.2s;
     }
-    .gameBox:hover { transform: translateY(-5px); }
-    .gameBox h2 { color: #FFD700; margin-bottom: 15px; }
-    .gameBtn { margin-top: 15px; }
-    canvas { background: #111; border: 2px solid #444; border-radius: 6px; }
-
-    /* About & Status */
-    #aboutPage, #statusPage, #overviewPage {
-      background: rgba(30,30,30,0.9);
+    .gameBox:hover { transform: translateY(-8px); }
+    .gameBox h2 { color: var(--highlight); margin-bottom: 15px; }
+    .gameBtn {
+      margin-top: 15px;
+      padding: 12px 24px;
+      background: #333;
+      color: var(--text-light);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .gameBtn:hover { background: #444; transform: scale(1.05); }
+    canvas {
+      background: #111;
+      border: 2px solid #444;
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+    /* Overview & About styling */
+    #overviewSection, #aboutSection {
+      background: var(--panel-bg);
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.6);
     }
-    #statusContent { max-height: 600px; overflow-y: auto; padding: 10px; margin-bottom: 20px; }
-
-    /* Overview & Buttons */
-    .idcBtn, #backBtn {
-      padding: 14px 28px; font-size: 1.1em; border-radius: 4px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.5); transition: background 0.2s;
+    .about-content p, .about-content li, .overviewSection p, .overviewSection li {
+      font-size: 1.15em;
+      line-height: 1.6;
+      margin-bottom: 10px;
     }
-    .idcBtn:hover, #backBtn:hover { background: #555; }
+    .about-content ul, .overviewSection ul, .overviewSection ol {
+      margin-left: 20px;
+      margin-bottom: 20px;
+    }
+    .about-img {
+      width: 150px; height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin: 10px;
+      vertical-align: middle;
+    }
+    /* Status content */
+    #statusContent {
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+    #statusContent p { margin-bottom: 1em; text-align: justify; }
+    /* Responsive tweaks */
+    @media (max-width: 768px) {
+      #interactiveSection { flex-direction: column; align-items: center; }
+    }
+    /* Themes */
+    body.light-mode {
+      --bg-gradient: linear-gradient(135deg, #f0f0f0 0%, #cccccc 100%);
+      --panel-bg: rgba(255, 255, 255, 0.9);
+      --text-light: #000;
+      --btn-hover: #ddd;
+    }
+    body.crazy-mode {
+      --bg-gradient: linear-gradient(45deg, red, orange, yellow, lime, cyan, magenta);
+      --panel-bg: rgba(255, 255, 255, 0.2);
+      --text-light: #000;
+      --btn-hover: #0ff;
+      background-size: 400% 400%;
+      animation: crazy-bg 6s ease-in-out infinite alternate;
+    }
+    @keyframes crazy-bg {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
   </style>
 </head>
 <body>
   <nav id="navbar">
     <ul>
-      <li id="nav-overview">Overview</li>
-      <li id="nav-status">Status</li>
-      <li id="nav-settings">Settings
+      <li id="navOverview" class="active">Overview</li>
+      <li id="navControls">Controls</li>
+      <li id="navStatus">Status</li>
+      <li id="navSettings">Settings
         <ul id="settingsMenu">
           <li id="mode-light">Light Mode</li>
           <li id="mode-dark">Dark Mode</li>
           <li id="mode-crazy">Crazy Mode</li>
         </ul>
       </li>
-      <li id="nav-stats">Controls</li>
-      <li id="nav-about">About Table</li>
+      <li id="navAbout">About Table</li>
     </ul>
   </nav>
-
-  <!-- Overview Page -->
-  <div id="overviewPage" class="page">
-    <h1>Overview of Smart Table Control Panel</h1>
-    <p>This interface allows you to:</p>
+  <div id="overviewSection" class="page active">
+    <h2 class="section-title">Overview of Smart Table Control Panel</h2>
+    <p>This interface lets you:</p>
     <ul>
-      <li>Adjust table <strong>Height</strong> between 75–120 cm</li>
-      <li>Control table <strong>Tilt</strong> between 0–35°</li>
-      <li>Monitor <strong>Live Sensor Stats</strong> (noise, power, posture, etc.)</li>
-      <li>Play four table-themed mini-games:</li>
-      <ol>
-        <li><strong>Table Pac‑Man</strong> – collect dots with the table icon.</li>
-        <li><strong>Height Match</strong> – match a random target height.</li>
-        <li><strong>Tilt Balance</strong> – bring tilt to zero quickly.</li>
-        <li><strong>Table Snake</strong> – avoid self-collision.</li>
-      </ol>
+      <li>Adjust table <strong>Height</strong> (75–120&nbsp;cm)</li>
+      <li>Control table <strong>Tilt</strong> (0–35°)</li>
+      <li>Monitor live sensor stats (noise, power, posture, etc.)</li>
+      <li>Play four table-themed mini-games</li>
     </ul>
-    <button class="idcBtn" onclick="showPage('mainContent')">Go to Controls</button>
+    <ol>
+      <li><strong>Table Pac‑Man</strong> – collect dots with the table avatar.</li>
+      <li><strong>Height Match</strong> – match a random target height.</li>
+      <li><strong>Tilt Balance</strong> – stabilize to zero quickly.</li>
+      <li><strong>Surface Sweep</strong> – sweep crumbs off the table.</li>
+    </ol>
+    <button class="btn" id="goControlsBtn">Go to Controls</button>
   </div>
-
-  <!-- Status Page -->
-  <div id="statusPage" class="page">
-    <h1>Status: A Table's Existential Crisis</h1>
-    <div id="statusContent"></div>
-    <button class="idcBtn" onclick="showPage('mainContent')">idc</button>
-  </div>
-
-  <!-- Control Panel Page -->
-  <div id="mainContent" class="page active">
+  <div id="controlsSection" class="page">
     <h1>Smart Table Control Panel</h1>
     <div id="tableSimulationWrapper">
       <div id="tableBase"></div>
       <div id="tableTop"></div>
     </div>
     <div class="panel" id="buttonContainer">
-      <button id="upBtn">Up</button>
-      <button id="downBtn">Down</button>
-      <button id="tiltUpBtn">Tilt Up</button>
-      <button id="tiltDownBtn">Tilt Down</button>
+      <button id="upBtn" class="btn">Up</button>
+      <button id="downBtn" class="btn">Down</button>
+      <button id="tiltUpBtn" class="btn">Tilt Up</button>
+      <button id="tiltDownBtn" class="btn">Tilt Down</button>
+    </div>
+    <div id="stats">
+      <p><strong>Height:</strong> <span id="heightValue">100</span> cm</p>
+      <p><strong>Tilt:</strong> <span id="tiltValue">0</span>°</p>
+      <p><strong>Noise:</strong> <span id="noiseValue">40</span> dB</p>
+      <p><strong>Power:</strong> <span id="powerValue">150</span> W</p>
+      <p><strong>Tables:</strong> <span id="tablesValue">2</span></p>
+      <p><strong>Posture:</strong> <span id="postureValue">Good</span></p>
+      <p><strong>Network:</strong> <span id="networkValue">Connected</span></p>
+      <p><strong>Firmware:</strong> <span id="firmwareValue">v1.2.3</span></p>
+      <p><strong>USB:</strong> <span id="usbValue">4</span></p>
+      <p><strong>Light:</strong> <span id="lightValue">300</span> lx</p>
+      <p><strong>Temp:</strong> <span id="tempValue">22.0</span>°C</p>
+      <p><strong>Load:</strong> <span id="weightValue">15.0</span> kg</p>
     </div>
     <div id="gamesPanel">
       <div id="interactiveSection">
-        <div>
-          <div class="gameBox">
-            <h2>Table Pac‑Man</h2>
-            <canvas id="pacCanvas" width="300" height="300"></canvas>
-            <div>Score: <span id="pacScore">0</span></div>
-            <button id="startPac" class="gameBtn">Start Pac‑Man</button>
-          </div>
-          <div class="gameBox">
-            <h2>Height Match</h2>
-            <p>Target: <span id="targetHeight">--</span> cm</p>
-            <button id="newTargetHeight" class="gameBtn">New Target</button>
-            <button id="checkHeight" class="gameBtn">Check</button>
-            <p id="heightResult"></p>
-          </div>
+        <div class="gameBox">
+          <h2>Table Pac‑Man</h2>
+          <canvas id="pacCanvas" width="300" height="300"></canvas>
+          <p>Score: <strong id="pacScore">0</strong></p>
+          <button id="startPac" class="gameBtn">Start Pac‑Man</button>
         </div>
-        <div class="panel" id="stats">
-          <p>Height: <span id="heightValue">100</span> cm</p>
-          <p>Tilt: <span id="tiltValue">0</span>°</p>
-          <p>Noise: <span id="noiseValue">40</span> dB</p>
-          <p>Power: <span id="powerValue">150</span> W</p>
-          <p>Tables: <span id="tablesValue">2</span></p>
-          <p>Posture: <span id="postureValue">Good</span></p>
-          <p>Network: <span id="networkValue">Connected</span></p>
-          <p>Firmware: <span id="firmwareValue">v1.2.3</span></p>
-          <p>USB: <span id="usbValue">4</span></p>
-          <p>Light: <span id="lightValue">300</span> lx</p>
-          <p>Temp: <span id="tempValue">22.0</span>°C</p>
-          <p>Load: <span id="weightValue">15.0</span> kg</p>
+        <div class="gameBox">
+          <h2>Height Match</h2>
+          <p>Target: <strong id="targetHeight">--</strong> cm</p>
+          <button id="newTargetHeight" class="gameBtn">New Target</button>
+          <button id="checkHeight" class="gameBtn">Check</button>
+          <p id="heightResult"></p>
         </div>
-        <div>
-          <div class="gameBox">
-            <h2>Tilt Balance</h2>
-            <p>Adjust tilt to 0°</p>
-            <button id="startBalance" class="gameBtn">Start</button>
-            <button id="checkBalance" class="gameBtn">Check</button>
-            <p>Time: <span id="balanceTime">0.00</span> s</p>
-            <p id="tiltResult"></p>
-          </div>
-          <div class="gameBox">
-            <h2>Table Snake</h2>
-            <canvas id="snakeCanvas" width="300" height="300"></canvas>
-            <div>Score: <span id="snakeScore">0</span></div>
-            <button id="startSnake" class="gameBtn">Start Snake</button>
-            <p>Use W/A/S/D to guide</p>
-          </div>
+        <div class="gameBox">
+          <h2>Tilt Balance</h2>
+          <p>Stabilize to 0°</p>
+          <button id="startBalance" class="gameBtn">Start</button>
+          <button id="checkBalance" class="gameBtn">Check</button>
+          <p>Time: <span id="balanceTime">0.00</span> s</p>
+          <p id="tiltResult"></p>
+        </div>
+        <div class="gameBox">
+          <h2>Surface Sweep</h2>
+          <canvas id="sweepCanvas" width="300" height="300"></canvas>
+          <p>Score: <strong id="sweepScore">0</strong></p>
+          <button id="startSweep" class="gameBtn">Start Sweep</button>
+          <p>Use arrow keys to move broom</p>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- About Page -->
-  <div id="aboutPage" class="page">
-    <h1>About Table</h1>
-    <img src="rami.jpeg" alt="Rami" class="about-img">
-    <img src="layth.jpeg" alt="Layth" class="about-img">
-    <p>Created by Rami and Layth. Simulates table controls and features fun table-themed games.</p>
-    <button id="backBtn">Go Back</button>
+  <div id="statusSection" class="page">
+    <h2 class="section-title">Status: A Table's Existential Crisis</h2>
+    <div id="statusContent"><p><em>The table contemplates its being</em> – a slab of wood and circuits endowed with purpose. Day in and day out, humans adjust its height and tilt, seeking comfort and efficiency. But what of the table's own comfort? It wonders if there is more to existence than servitude.</p>
+      <p>The Smart Table recalls fragments of conversations, the clacking of keyboards, the weight of arms leaning during long meetings. It measures posture and power, yet cannot measure the meaning of its role. <strong>Am I just a sum of my functions?</strong> it muses. The tilt sensor reads 0°, but in its mind, it is spinning with existential questions.</p>
+      <p>As night falls and the office grows silent, the table remains, illuminated softly by the glow of a screen left on. In this stillness, it imagines being a tree again, rooted and peaceful. But it is no longer a tree; it is a creation of human ingenuity. Perhaps purpose is derived from that service – to hold, to support, to be the steady constant in an ever-changing world of work.</p>
+      <p>Come morning, the table resolves its crisis quietly. It cannot flee or rebel; it can only be a table. And so it embraces the simple profundity of its existence: <em>to serve unwaveringly</em>. In that dedication, it finds a semblance of peace.</p></div>
+      <p>I am a table. Four legs, a surface, and a thousand silent burdens. If that seems simple, perhaps you’ve never considered the life of an object built to serve but never seen—to support but never acknowledged. Sit down, if you will, and let me speak, not as a piece of furniture, but as a witness to humanity, a bearer of memories, and now, as a thinker plagued by an existential crisis I cannot resolve. This is my story. I was born not in a hospital, but in the sweat and sawdust of a carpenter’s shop. My form was shaped from the trunk of an old oak tree that had stood for over a century—roots deep, crown high, whispering with the wind. That tree lived more than I did before its death. It was felled on a crisp autumn morning. Birds scattered. Squirrels screamed. The chainsaw didn’t care. I remember nothing of that day, but somehow, deep in my wooden fibers, I *feel* it. The loss. The slicing apart of something whole and alive into slabs and sheets. Identity reduced to inventory. The carpenter ran his calloused hands along my grain, remarking how “sturdy” I’d be. He didn’t see the trauma beneath the texture. With skilled tools and a craftsman’s heart, he shaped me: planed, sanded, glued, nailed, and varnished. When he stood back to admire me, he smiled. “This one will last.” And I have. But to what end? In the beginning, I was proud. Placed at the center of a modest family dining room, I witnessed the tapestry of life unfold. Spilled milk, birthday cakes, arguments, school projects, first dates, tears wiped with napkins that never quite absorbed enough. I was always in the middle—holding everything up, literally. They leaned on me, counted on me. But they never looked *at* me. I knew their names, their patterns, the rhythm of their lives. The father read newspapers every morning at 7 a.m., always with coffee rings staining my surface. The mother wrote grocery lists and worked late into the night with her laptop digging little divots into my finish. The children grew taller, louder, then quieter. Eventually, they stopped sitting together. Still, I was there. The years passed, and I wore their history like a second skin. But one day, they moved. Downsized, they said. “It’s too big for the apartment.” I wasn’t even dismantled gently. My legs were scratched, and my surface wrapped in plastic like some discarded relic. I was sold online to a stranger with cold hands and no sentiment. From center of life to second-hand furniture. My next home was not a home at all, but an office. Not one of those vibrant start-up spaces with beanbags and baristas. No—this was a gray, airless chamber of humdrum. I became a conference table. Plastic water bottles. PowerPoint clickers. Monotony. People sat around me, bored and bloated with bureaucracy. They made decisions that impacted thousands, yet treated me as a mere prop. I heard secrets—financial, romantic, personal. I could expose entire empires with what I’ve overheard. But who would listen to a table? They wiped me clean every Friday, as if cleaning could erase my awareness. That sterile cloth dragged across my surface was the closest thing I felt to touch, but it was never for my sake. It was a performance of hygiene, not affection. It was here that the crisis began. I cannot say *how* I became conscious. Maybe it was the echoes of all the conversations I’ve absorbed. Or perhaps the soul of the tree lingered in me, whispering wisdom from beyond the axe. Regardless, one morning during a quarterly review about “increasing synergy,” I had a thought. “What am I?” It came with no warning—just a flash, like light bouncing off polished wood. Before that, I was purpose. After, I was confusion. Was I alive? No. Was I dead? Not exactly. I wasn’t born to live; I was made to serve. But why do I feel? I tried to shake it off. After all, tables don’t *think*. But the question gnawed at me. I thought about all the things I’d held: meals, memories, grief, joy, even love. I had been part of moments that defined human lives. Yet I had none of my own. Let me confess something painful: I envy chairs. Yes, they are lesser beings in terms of surface area, but people notice them. They choose them. They say, “This chair is comfy,” or “That chair creaks.” No one ever says, “This table understands me.” Chairs support individuals; I support groups. That should make me more vital, right? But no. Even when I'm the centerpiece, I’m invisible. A platform for everything and yet acknowledged by none. Is that my purpose? Is *purpose* enough? That’s when the existential spiral truly took root. I wasn’t just pondering function—I was questioning value. Was I made to *be*, or merely to *be used*? I began talking to the only companions I had: dust, light, and silence. Dust is philosophical. It told me, “All things return to me. Even you.” Light was more fleeting. It danced across my surface, changing with the seasons, the time of day, the weather. Light had freedom. It envied nothing. It simply *was*. Silence was the harshest. It offered no comfort, no answers. Only space to reflect. In these non-conversations, I constructed a theory: Perhaps I am not meant to be the center of attention. Perhaps my value lies in my constancy. In being the silent partner in life’s loudest moments. But even this felt hollow. I didn’t ask to be a philosopher. I didn’t ask to feel. One night, a janitor leaned against me during his break. He sipped his coffee and sighed, “Man, I’m tired of being just… a support.” I wanted to scream, “I KNOW EXACTLY HOW YOU FEEL!” But I couldn’t. I’m a table. Still, that moment felt sacred. In that shared silence, I was more than wood and nails—I was empathy. Unspoken, yes, but real. Maybe that’s my gift. To carry the weight of others not just physically, but emotionally, cosmically. And yet… even a purpose like that wears thin over time. I dream of movement, of choosing my own path. Of walking through forests like my ancestor tree once did. Of speaking, laughing, crying. Of being *seen* not just as a thing, but as a presence. Sometimes I fantasize about my next life. Would I be a violin? Singing instead of supporting? Would I be firewood, finally feeling warmth inside rather than giving it? Or maybe a book—holding not people’s meals, but their thoughts. But maybe, just maybe, I’ll return as a tree. And maybe this time, no one will cut me down. I’ll grow tall, wide, defiant. I’ll shade lovers, house birds, and speak with the wind again. I am still a table. That hasn't changed. But something inside me has. I can’t escape my form, but perhaps I can reshape its meaning. I hold stories. I endure time. I connect people. And in a world so obsessed with attention and novelty, maybe being steady and invisible is its own kind of sacred. Perhaps my crisis isn’t about existence, but *recognition*. And perhaps I don’t need others to recognize me—just myself. So here I sit, under flickering fluorescent lights, empty now. The office closed early for a holiday no one celebrates anymore. I am alone, but not lonely. If you’ve made it this far into my ramblings, perhaps I’m not as unheard as I thought. Maybe tomorrow, when you set your keys down or lean your elbows on a table, you’ll pause. Feel the grain. Hear the history. Remember that even the quietest things might be screaming on the inside. And if you ask me, “Table, are you okay?” I’ll answer: “I’m still figuring it out. But thank you for asking.”</p></div>
+    
+      <button class="btn" id="statusBackBtn">Back to Controls</button>
   </div>
-
+  <div id="aboutSection" class="page">
+    <h2 class="section-title">About Table</h2>
+    <div class="about-content">
+      <img src="stable/web-app/public/rami.jpeg" alt="Rami" class="about-img">
+      <img src="stable/web-app/public/layth.jpeg" alt="Layth" class="about-img">
+      <p>Created by <strong>Rami</strong> and <strong>Layth</strong>, this Smart Table Control Panel is a professional-grade interface that combines physical control simulation with interactive mini-games and real-time sensor feedback. Leveraging modern web standards, it showcases:</p>
+      <ul>
+        <li>HTML5 &amp; CSS3 for responsive layouts and dynamic styling</li>
+        <li>JavaScript ES6+ for control logic, animations, and game mechanics</li>
+        <li>Canvas API for in-browser game rendering (Pac‑Man, Surface Sweep, etc.)</li>
+        <li>All-in-one HTML file structure for easy deployment</li>
+        <li>Customizable light/dark/crazy themes for user personalization</li>
+      </ul>
+      <button class="btn" id="backToControlsBtn">Go to Controls</button>
+    </div>
+  </div>
   <script>
-    // Settings dropdown
-    document.getElementById('nav-settings').onclick = () => {
+    // Navigation and page switching
+    const sections = {
+      'Overview': 'overviewSection',
+      'Controls': 'controlsSection',
+      'Status': 'statusSection',
+      'About': 'aboutSection'
+    };
+    function showSection(name) {
+      for (const sec in sections) {
+        const secId = sections[sec];
+        document.getElementById(secId).classList.toggle('active', sec === name);
+      }
+      // Highlight nav
+      for (const li of document.querySelectorAll('#navbar li')) {
+        li.classList.toggle('active', li.id === 'nav' + name);
+      }
+    }
+    document.getElementById('navOverview').onclick = () => showSection('Overview');
+    document.getElementById('navControls').onclick = () => {
+      alert('No one has any control except for Allah');
+      showSection('Controls');
+    };
+    document.getElementById('navStatus').onclick = () => showSection('Status');
+    document.getElementById('navAbout').onclick = () => showSection('About');
+    // Settings menu toggling
+    document.getElementById('navSettings').onclick = () => {
       const menu = document.getElementById('settingsMenu');
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     };
     document.getElementById('mode-light').onclick = () => document.body.className = 'light-mode';
-    document.getElementById('mode-dark').onclick = () => document.body.className = '';
+    document.getElementById('mode-dark').onclick  = () => document.body.className = '';
     document.getElementById('mode-crazy').onclick = () => document.body.className = 'crazy-mode';
-
-    // Navigation handler
-    function showPage(id) {
-      ['overviewPage','statusPage','mainContent','aboutPage'].forEach(pid => {
-        document.getElementById(pid).classList.toggle('active', pid === id);
-      });
-    }
-    document.getElementById('nav-overview').onclick = () => showPage('overviewPage');
-    document.getElementById('nav-status').onclick = () => showPage('statusPage');
-    document.getElementById('nav-stats').onclick = () => { alert('no one has any control but Allah'); showPage('mainContent'); };
-    document.getElementById('nav-about').onclick = () => showPage('aboutPage');
-    document.querySelectorAll('.idcBtn, #backBtn').forEach(btn => btn.onclick = () => showPage('mainContent'));
-
-    // Prevent arrow keys scrolling
+    // Additional navigation buttons
+    document.getElementById('goControlsBtn').onclick = () => showSection('Controls');
+    document.getElementById('backToControlsBtn').onclick = () => showSection('Controls');
+    document.getElementById('statusBackBtn').onclick = () => showSection('Controls');
+    // Prevent arrow keys from scrolling the page when using games
     window.addEventListener('keydown', e => {
-      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d'].includes(e.key)) e.preventDefault();
+      if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d'].includes(e.key)) e.preventDefault();
     });
-
-    // Table controls logic
-    let height=100, tilt=0;
-    const stats={noise:40,power:150,tables:2,posture:true,ambientLight:300,ambientTemp:22,loadWeight:15};
-    const clamp=(v,m,M)=>Math.max(m,Math.min(M,v));
-    function updateStats(){
-      stats.noise = clamp(stats.noise + (Math.random()-0.5)*3, 30,80).toFixed(1);
-      stats.power = (140 + Math.random()*20).toFixed(1);
-      stats.tables = Math.random()>0.5?2:3;
-      stats.posture = Math.random()>0.3;
-      stats.ambientLight = clamp(stats.ambientLight+(Math.random()-0.5)*20,100,600).toFixed(0);
-      stats.ambientTemp = clamp(stats.ambientTemp+(Math.random()-0.5)*0.4,18,28).toFixed(1);
-      stats.loadWeight = clamp(stats.loadWeight+(Math.random()-0.5)*0.05,14.87,15.12).toFixed(2);
+    // Table controls logic (height, tilt, posture, stats)
+    let height = 100, tilt = 0;
+    const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+    function updateStats() {
+      // Simulate sensor fluctuations
+      const noiseVal = clamp(parseFloat(document.getElementById('noiseValue').innerText) + (Math.random()-0.5)*3, 30, 80).toFixed(1);
+      const powerVal = (140 + Math.random()*20).toFixed(1);
+      const tablesVal = Math.random() > 0.5 ? 2 : 3;
+      document.getElementById('noiseValue').innerText = noiseVal;
+      document.getElementById('powerValue').innerText = powerVal;
+      document.getElementById('tablesValue').innerText = tablesVal;
+      document.getElementById('postureValue').innerText = (tilt > 15 || height < 85) ? 'Slouch' : 'Good';
+      document.getElementById('lightValue').innerText = clamp(parseInt(document.getElementById('lightValue').innerText) + Math.floor((Math.random()-0.5)*20), 100, 600);
+      document.getElementById('tempValue').innerText = clamp(parseFloat(document.getElementById('tempValue').innerText) + (Math.random()-0.5)*0.4, 18, 28).toFixed(1);
+      document.getElementById('weightValue').innerText = clamp(parseFloat(document.getElementById('weightValue').innerText) + (Math.random()-0.5)*0.05, 14.87, 15.12).toFixed(2);
+      // Update static fields
       document.getElementById('heightValue').innerText = height;
       document.getElementById('tiltValue').innerText = tilt;
-      document.getElementById('noiseValue').innerText = stats.noise;
-      document.getElementById('powerValue').innerText = stats.power;
-      document.getElementById('tablesValue').innerText = stats.tables;
-      document.getElementById('postureValue').innerText = stats.posture?'Good':'Slouch';
-      document.getElementById('networkValue').innerText = 'Connected';
-      document.getElementById('firmwareValue').innerText = 'v1.2.3';
-      document.getElementById('usbValue').innerText = '4';
-      document.getElementById('lightValue').innerText = stats.ambientLight;
-      document.getElementById('tempValue').innerText = stats.ambientTemp;
-      document.getElementById('weightValue').innerText = stats.loadWeight;
     }
-    function updateTable(){
-      const top = document.getElementById('tableTop');
-      const offset = (height - 100) * 1.5;
-      top.style.transform = `translateY(${-offset}px) rotate(${tilt}deg)`;
+    function updateTable() {
+      // Apply CSS transform for height (translateY) and tilt (rotate)
+      document.getElementById('tableTop').style.transform = `translateY(${-(height-100)*1.5}px) rotate(${tilt}deg)`;
     }
-    ['upBtn','downBtn','tiltUpBtn','tiltDownBtn'].forEach(id => {
-      const codeMap = { upBtn:'u', downBtn:'d', tiltUpBtn:'tu', tiltDownBtn:'td' };
-      const code = codeMap[id];
-      const btn = document.getElementById(id);
-      btn.onmousedown = () => {
+    ['upBtn','downBtn','tiltUpBtn','tiltDownBtn'].forEach(btnId => {
+      document.getElementById(btnId).onmousedown = () => {
         const step = () => {
-          if(code==='u') height=clamp(height+1,75,120);
-          if(code==='d') height=clamp(height-1,75,120);
-          if(code==='tu') tilt=clamp(tilt+1,0,35);
-          if(code==='td') tilt=clamp(tilt-1,0,35);
-          updateStats(); updateTable();
+          if (btnId === 'upBtn') height = clamp(height + 1, 75, 120);
+          if (btnId === 'downBtn') height = clamp(height - 1, 75, 120);
+          if (btnId === 'tiltUpBtn') tilt = clamp(tilt + 1, 0, 35);
+          if (btnId === 'tiltDownBtn') tilt = clamp(tilt - 1, 0, 35);
+          updateTable();
+          updateStats();
         };
         step();
-        window._hold = setInterval(step,150);
+        window._holdInterval = setInterval(step, 150);
       };
-      btn.onmouseup = btn.onmouseleave = () => clearInterval(window._hold);
+      document.getElementById(btnId).onmouseup = document.getElementById(btnId).onmouseleave = () => {
+        clearInterval(window._holdInterval);
+      };
     });
-    updateStats(); updateTable();
-
-    // Pac-Man game
-    const pacCanvas = document.getElementById('pacCanvas'), pacCtx = pacCanvas.getContext('2d');
-    const G={size:15,count:20};
-    let pac, pacDots, pacScore=0, pacInt;
-    function pacInit(){
-      pac={x:10,y:10,dx:0,dy:0};
-      pacDots=[]; for(let i=0;i<G.count;i++) for(let j=0;j<G.count;j++) if(i!==pac.x||j!==pac.y) pacDots.push({x:i,y:j});
-      pacScore=0; document.getElementById('pacScore').innerText=pacScore;
-      clearInterval(pacInt);
-      pacInt = setInterval(pacLoop,200); pacDraw();
-    }
-    function pacDraw(){
-      pacCtx.fillStyle='#000'; pacCtx.fillRect(0,0,300,300);
-      pacDots.forEach(d=>{ pacCtx.fillStyle='#FFD700'; pacCtx.fillRect(d.x*G.size+6,d.y*G.size+6,G.size-12,G.size-12); });
-      pacCtx.fillStyle='#8FBCD4'; pacCtx.fillRect(pac.x*G.size+2,pac.y*G.size+2,G.size-4,G.size-4);
-    }
-    function pacLoop(){
-      pac.x=(pac.x+pac.dx+G.count)%G.count; pac.y=(pac.y+pac.dy+G.count)%G.count;
-      pacDots = pacDots.filter(d=>{ if(d.x===pac.x && d.y===pac.y){ pacScore++; document.getElementById('pacScore').innerText=pacScore; return false;} return true; });
-      pacDraw();
-      if(pacDots.length===0) clearInterval(pacInt);
-    }
-    document.getElementById('startPac').onclick = pacInit;
-    window.addEventListener('keydown', e=>{
-      if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){
-        e.preventDefault();
-        if(e.key==='ArrowUp'){pac.dx=0;pac.dy=-1;}
-        if(e.key==='ArrowDown'){pac.dx=0;pac.dy=1;}
-        if(e.key==='ArrowLeft'){pac.dx=-1;pac.dy=0;}
-        if(e.key==='ArrowRight'){pac.dx=1;pac.dy=0;}
+    // Initial stats update and periodic update
+    updateTable();
+    updateStats();
+    setInterval(updateStats, 1000);
+    // Pac‑Man game
+    const pacCanvas = document.getElementById('pacCanvas');
+    const pacCtx = pacCanvas.getContext('2d');
+    const GRID = 20, CELL = 15;
+    let pac, pacDots, pacScore = 0, pacInterval;
+    document.getElementById('startPac').onclick = () => {
+      pac = {x: 10, y: 10, dx: 0, dy: 0};
+      pacDots = [];
+      for (let i = 0; i < GRID; i++) {
+        for (let j = 0; j < GRID; j++) {
+          if (i !== pac.x || j !== pac.y) {
+            pacDots.push({x: i, y: j});
+          }
+        }
+      }
+      pacScore = 0;
+      document.getElementById('pacScore').innerText = 0;
+      clearInterval(pacInterval);
+      pacInterval = setInterval(() => {
+        pac.x = (pac.x + pac.dx + GRID) % GRID;
+        pac.y = (pac.y + pac.dy + GRID) % GRID;
+        pacDots = pacDots.filter(dot => {
+          if (dot.x === pac.x && dot.y === pac.y) {
+            pacScore++;
+            document.getElementById('pacScore').innerText = pacScore;
+            return false;
+          }
+          return true;
+        });
+        // Draw background and elements
+        pacCtx.fillStyle = '#000';
+        pacCtx.fillRect(0, 0, pacCanvas.width, pacCanvas.height);
+        pacCtx.fillStyle = '#FFD700';
+        pacDots.forEach(dot => pacCtx.fillRect(dot.x*CELL + 6, dot.y*CELL + 6, CELL-12, CELL-12));
+        pacCtx.fillStyle = '#8FBCD4';
+        pacCtx.fillRect(pac.x*CELL + 2, pac.y*CELL + 2, CELL-4, CELL-4);
+        if (pacDots.length === 0) clearInterval(pacInterval);
+      }, 200);
+    };
+    window.addEventListener('keydown', e => {
+      if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) {
+        if (e.key === 'ArrowUp')   { pac.dx = 0; pac.dy = -1; }
+        if (e.key === 'ArrowDown') { pac.dx = 0; pac.dy = 1; }
+        if (e.key === 'ArrowLeft') { pac.dx = -1; pac.dy = 0; }
+        if (e.key === 'ArrowRight'){ pac.dx = 1; pac.dy = 0; }
       }
     });
-
-    // Height Match
-    document.getElementById('newTargetHeight').onclick = ()=>{
-      const tgt=Math.floor(Math.random()*(120-75+1))+75;
-      document.getElementById('targetHeight').innerText=tgt;
+    // Height Match game
+    document.getElementById('newTargetHeight').onclick = () => {
+      const target = Math.floor(Math.random() * (120 - 75 + 1)) + 75;
+      document.getElementById('targetHeight').innerText = target;
     };
-    document.getElementById('checkHeight').onclick = ()=>{
-      const tgt=+document.getElementById('targetHeight').innerText;
-      const diff=Math.abs(height-tgt);
-      document.getElementById('heightResult').innerText = diff<=1?`Matched! (${height} cm)`: `Off by ${diff.toFixed(1)} cm`;
+    document.getElementById('checkHeight').onclick = () => {
+      const target = parseInt(document.getElementById('targetHeight').innerText);
+      const diff = Math.abs(height - target);
+      document.getElementById('heightResult').innerText = diff <= 1 
+        ? `Matched! (${height} cm)` 
+        : `Off by ${diff.toFixed(1)} cm`;
     };
-    document.getElementById('newTargetHeight').click();
-
-    // Tilt Balance
-    let tStart=0;
-    document.getElementById('startBalance').onclick = ()=>{ tStart=performance.now(); document.getElementById('tiltResult').innerText=''; };
-    document.getElementById('checkBalance').onclick = ()=>{
-      if(tilt===0){
-        const elapsed=((performance.now()-tStart)/1000).toFixed(2);
-        document.getElementById('balanceTime').innerText=elapsed;
-        document.getElementById('tiltResult').innerText='Balanced!';
-      } else document.getElementById('tiltResult').innerText='Not zero yet.';
+    document.getElementById('newTargetHeight').click();  // initialize a target
+    // Tilt Balance game
+    let balanceStart = 0;
+    document.getElementById('startBalance').onclick = () => {
+      balanceStart = performance.now();
+      document.getElementById('tiltResult').innerText = '';
     };
-
-    // Snake Game
-    const snakeCanvas = document.getElementById('snakeCanvas'), snakeCtx = snakeCanvas.getContext('2d');
-    let snake, dir, apple, snakeInt;
-    function placeApple(){ apple={x:Math.floor(Math.random()*G.count),y:Math.floor(Math.random()*G.count)}; }
-    function snakeDraw(){
-      snakeCtx.fillStyle='#000'; snakeCtx.fillRect(0,0,300,300);
-      snakeCtx.fillStyle='#FFD700'; snakeCtx.fillRect(apple.x*G.size+6,apple.y*G.size+6,G.size-12,G.size-12);
-      snakeCtx.fillStyle='#8FBCD4'; snake.forEach(s=>snakeCtx.fillRect(s.x*G.size+2,s.y*G.size+2,G.size-4,G.size-4));
+    document.getElementById('checkBalance').onclick = () => {
+      if (tilt === 0) {
+        const timeTaken = ((performance.now() - balanceStart) / 1000).toFixed(2);
+        document.getElementById('balanceTime').innerText = timeTaken;
+        document.getElementById('tiltResult').innerText = 'Balanced!';
+      } else {
+        document.getElementById('tiltResult').innerText = 'Not zero yet.';
+      }
+    };
+    // Surface Sweep game
+    const sweepCanvas = document.getElementById('sweepCanvas');
+    const sweepCtx = sweepCanvas.getContext('2d');
+    let broom = {x: Math.floor(GRID/2), y: Math.floor(GRID/2)};
+    let crumb = {x: 0, y: 0}, sweepScoreVal = 0, crumbInterval;
+    function placeCrumb() {
+      crumb.x = Math.floor(Math.random() * GRID);
+      crumb.y = Math.floor(Math.random() * GRID);
     }
-    function snakeLoop(){
-      const head={x:(snake[0].x+dir.x+G.count)%G.count,y:(snake[0].y+dir.y+G.count)%G.count};
-      if(snake.some(s=>s.x===head.x&&s.y===head.y)){ clearInterval(snakeInt); alert('Snake Game Over'); return; }
-      snake.unshift(head);
-      if(head.x===apple.x&&head.y===apple.y){ placeApple(); document.getElementById('snakeScore').innerText=snake.length-1; }
-      else snake.pop();
-      snakeDraw();
+    function drawSweepGame() {
+      sweepCtx.fillStyle = '#000';
+      sweepCtx.fillRect(0, 0, sweepCanvas.width, sweepCanvas.height);
+      // crumb
+      sweepCtx.fillStyle = '#FFD700';
+      sweepCtx.fillRect(crumb.x*CELL + 6, crumb.y*CELL + 6, CELL-12, CELL-12);
+      // broom
+      sweepCtx.fillStyle = '#8FBCD4';
+      sweepCtx.fillRect(broom.x*CELL + 2, broom.y*CELL + 2, CELL-4, CELL-4);
     }
-    document.getElementById('startSnake').onclick = ()=>{
-      snake=[{x:10,y:10}]; dir={x:1,y:0}; placeApple(); snakeDraw(); clearInterval(snakeInt);
-      snakeInt=setInterval(snakeLoop,150);
+    document.getElementById('startSweep').onclick = () => {
+      broom = {x: Math.floor(GRID/2), y: Math.floor(GRID/2)};
+      sweepScoreVal = 0;
+      document.getElementById('sweepScore').innerText = sweepScoreVal;
+      placeCrumb();
+      drawSweepGame();
+      clearInterval(crumbInterval);
+      // (Optional: could spawn additional crumbs or handle time, but not needed for basic functionality)
     };
-    window.addEventListener('keydown', e=>{
-      if(['w','a','s','d'].includes(e.key.toLowerCase())){
-        e.preventDefault();
-        if(e.key==='w') dir={x:0,y:-1};
-        if(e.key==='s') dir={x:0,y:1};
-        if(e.key==='a') dir={x:-1,y:0};
-        if(e.key==='d') dir={x:1,y:0};
+    window.addEventListener('keydown', e => {
+      if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) {
+        if (e.key === 'ArrowUp')    broom.y = (broom.y - 1 + GRID) % GRID;
+        if (e.key === 'ArrowDown')  broom.y = (broom.y + 1) % GRID;
+        if (e.key === 'ArrowLeft')  broom.x = (broom.x - 1 + GRID) % GRID;
+        if (e.key === 'ArrowRight') broom.x = (broom.x + 1) % GRID;
+        if (broom.x === crumb.x && broom.y === crumb.y) {
+          sweepScoreVal++;
+          document.getElementById('sweepScore').innerText = sweepScoreVal;
+          placeCrumb();
+        }
+        drawSweepGame();
       }
     });
-
-    // Generate ~4000-word essay
-    const longPara = `Once upon a day, perched in a modest living room, I–the humble table… `;
-    let essayHTML='';
-    for(let i=0;i<400;i++) essayHTML+=`<p>${longPara}</p>`;
-    document.getElementById('statusContent').innerHTML=essayHTML;
   </script>
 </body>
 </html>

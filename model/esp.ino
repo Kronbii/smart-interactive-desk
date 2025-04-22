@@ -69,7 +69,7 @@ void setup() {
     display.begin();
     display.setContrast(60);  // Adjust this if screen is blank or too dim
     display.clearDisplay();
-    display.setTextSize(2);
+    display.setTextSize(1);
     display.setTextColor(BLACK);
     display.setCursor(0, 0);
     display.println("Hello Mega!");
@@ -82,6 +82,9 @@ void setup() {
 
 void loop() {
   display.clearDisplay();         // Clear old frame
+  display.setCursor(0, 16);
+  display.setTextSize(2);
+  display.setTextColor(BLACK);
   
   height = HCSR04.measureDistanceCm()[0];
   for (int i=0; i<NUM_SAMPLES; i++){
@@ -91,17 +94,8 @@ void loop() {
   height = height/ NUM_SAMPLES;
   disp_height = int(height);
 
-  String heightStr = String(disp_height) + " cm";  // Rounded to int
-  if (height >= 100){
-    display.setCursor(6, 16);
-  }
-  else{
-    display.setCursor(18, 16);
-}
-  display.setTextSize(2);
-  display.setTextColor(BLACK);
   Serial.println(height);
-  display.println(heightStr);
+  display.println(disp_height);
   display.display();
 
   bool man_up = digitalRead(man_up_pin);

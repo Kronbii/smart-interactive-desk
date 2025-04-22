@@ -4,290 +4,305 @@
 /* ================================================== */
 
 :root {
-    --bg-gradient: linear-gradient(135deg, #1e1e1e 0%, #121212 100%);
-    --panel-bg: rgba(30, 30, 30, 0.95);
-    --highlight: #FFD700;
-    --text-light: #e0e0e0;
-    --btn-hover: #444;
-    --nav-height: 60px;
-  }
-  
-  /*---------------------------------------------------*/
-  /* RESET & BASE STYLES                               */
-  /*---------------------------------------------------*/
-  *, *::before, *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  html, body {
-    height: 100%;
-    width: 100%;
-  }
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    background: var(--bg-gradient);
-    color: var(--text-light);
-    padding-top: var(--nav-height);
-    overflow-x: hidden;
-  }
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-  button, .btn {
-    background: none;
-    border: none;
-    outline: none;
-    cursor: pointer;
-  }
-  
-  /*---------------------------------------------------*/
-  /* NAVBAR                                            */
-  /*---------------------------------------------------*/
-  #navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: var(--nav-height);
-    background: var(--panel-bg);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
-    z-index: 1000;
-  }
-  #navbar ul {
-    list-style: none;
-    display: flex;
-  }
-  #navbar li {
-    margin: 0 20px;
-    position: relative;
-    font-size: 1.1em;
-    color: var(--text-light);
-    transition: color 0.2s;
-  }
-  #navbar li:hover {
-    color: var(--highlight);
-  }
-  #navbar li#nav-settings:hover > #settingsMenu {
-    display: block;
-  }
-  #settingsMenu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: #333;
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.7);
-    list-style: none;
-    min-width: 140px;
-  }
-  #settingsMenu li {
-    padding: 8px 16px;
-    white-space: nowrap;
-    transition: background 0.2s;
-    color: var(--text-light);
-  }
-  #settingsMenu li:hover {
-    background: var(--btn-hover);
-  }
-  
-  /*---------------------------------------------------*/
-  /* PAGE LAYOUT                                       */
-  /*---------------------------------------------------*/
-  .page {
-    display: none;
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-  }
-  .active {
-    display: block;
-  }
-  
-  /*---------------------------------------------------*/
-  /* BUTTONS                                           */
-  /*---------------------------------------------------*/
-  .btn {
-    display: inline-block;
-    padding: 12px 24px;
-    margin: 10px 5px;
-    background: var(--panel-bg);
-    color: var(--text-light);
-    border-radius: 4px;
-    transition: background 0.2s, transform 0.2s;
-    font-size: 1em;
-  }
-  .btn:hover {
-    background: var(--btn-hover);
-    transform: scale(1.05);
-  }
-  
-  /*---------------------------------------------------*/
-  /* HEADINGS                                          */
-  /*---------------------------------------------------*/
-  h1 {
-    text-align: center;
-    margin: 30px 0;
-    font-size: 2.5em;
-    color: var(--highlight);
-    text-shadow: 0 0 10px rgba(255,215,0,0.5);
-    animation: pulse 3s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-  }
-  h2.section-title {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 2em;
-    color: var(--highlight);
-  }
-  
-  /*---------------------------------------------------*/
-  /* CONTROL PANEL SIMULATION                          */
-  /*---------------------------------------------------*/
-  #tableSimulationWrapper {
-    width: 200px;
-    height: 10px;
-    margin: 0 auto 40px;
-    border-radius: 6px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    position: relative;
-  }
-  #tableBase {
-    background: #555;
-    width: 100%;
-    height: 100%;
-  }
-  #tableTop {
-    background: linear-gradient(90deg, #666, #444);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.15s;
-  }
-  .panel {
-    background: var(--panel-bg);
-    border-radius: 8px;
-    margin: 20px auto;
-    max-width: 520px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-    padding: 20px;
-  }
-  
-  /*---------------------------------------------------*/
-  /* STATISTICS GRID                                   */
-  /*---------------------------------------------------*/
-  #stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-    padding: 20px;
-    background: var(--panel-bg);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-    margin: 20px;
-  }
-  #stats p {
-    font-size: 1.1em;
-    margin: 8px 0;
-    text-align: left;
-  }
-  
-  /*---------------------------------------------------*/
-  /* GAMES SECTION                                     */
-  /*---------------------------------------------------*/
-  #gamesPanel {
-    background: var(--panel-bg);
-    border-radius: 8px;
-    padding: 40px;
-    margin: 20px auto;
-    max-width: 1100px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-  }
+  --bg-gradient: linear-gradient(135deg, #1e1e1e 0%, #121212 100%);
+  --panel-bg: rgba(30, 30, 30, 0.95);
+  --highlight: #FFD700;
+  --text-light: #e0e0e0;
+  --btn-hover: #e6e6fa;
+  --nav-height: 60px;
+}
+
+/*---------------------------------------------------*/
+/* RESET & BASE STYLES                               */
+/*---------------------------------------------------*/
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  width: 100%;
+}
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-gradient);
+  color: var(--text-light);
+  padding-top: var(--nav-height);
+  overflow-x: hidden;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+button, .btn {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+/*---------------------------------------------------*/
+/* NAVBAR                                            */
+/*---------------------------------------------------*/
+#navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--nav-height);
+  background: var(--panel-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+}
+#navbar ul {
+  list-style: none;
+  display: flex;
+}
+#navbar li {
+  margin: 0 20px;
+  position: relative;
+  font-size: 1.1em;
+  color: var(--text-light);
+  transition: color 0.2s;
+}
+#navbar li:hover {
+  color: var(--highlight);
+}
+#navbar li#nav-settings:hover > #settingsMenu {
+  display: block;
+}
+#settingsMenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #333;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+  list-style: none;
+  min-width: 140px;
+}
+#settingsMenu li {
+  padding: 8px 16px;
+  white-space: nowrap;
+  transition: background 0.2s;
+  color: var(--text-light);
+}
+#settingsMenu li:hover {
+  background: var(--btn-hover);
+}
+
+/*---------------------------------------------------*/
+/* PAGE LAYOUT                                       */
+/*---------------------------------------------------*/
+.page {
+  display: none;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+}
+.active {
+  display: block;
+}
+
+/*---------------------------------------------------*/
+/* BUTTONS                                           */
+/*---------------------------------------------------*/
+.btn {
+  display: inline-block;
+  padding: 16px 32px;
+  margin: 15px 10px;
+  background: lavender !important; /* Force lavender */
+  color: #222 !important; /* Force dark text */
+  border-radius: 8px;
+  font-size: 1.2em;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  transition: background 0.2s, transform 0.2s;
+}
+.btn:hover {
+  background: #e6e6fa !important;
+  transform: scale(1.08);
+}
+
+#controlButtonsContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+/*---------------------------------------------------*/
+/* HEADINGS                                          */
+/*---------------------------------------------------*/
+h1 {
+  text-align: center;
+  margin: 30px 0;
+  font-size: 2.5em;
+  color: var(--highlight);
+  text-shadow: 0 0 10px rgba(255,215,0,0.5);
+  animation: pulse 3s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+h2.section-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2em;
+  color: var(--highlight);
+}
+
+/*---------------------------------------------------*/
+/* CONTROL PANEL SIMULATION                          */
+/*---------------------------------------------------*/
+#tableSimulationWrapper {
+  width: 200px;
+  height: 10px;
+  margin: 0 auto 40px;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  position: relative;
+}
+#tableBase {
+  background: #555;
+  width: 100%;
+  height: 100%;
+}
+#tableTop {
+  background: linear-gradient(90deg, #666, #444);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.15s;
+}
+.panel {
+  background: var(--panel-bg);
+  border-radius: 8px;
+  margin: 20px auto;
+  max-width: 520px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  padding: 20px;
+}
+
+/*---------------------------------------------------*/
+/* STATISTICS GRID                                   */
+/*---------------------------------------------------*/
+#stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  padding: 20px;
+  background: var(--panel-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  margin: 20px;
+}
+#stats p {
+  font-size: 1.1em;
+  margin: 8px 0;
+  text-align: left;
+}
+
+/*---------------------------------------------------*/
+/* GAMES SECTION                                     */
+/*---------------------------------------------------*/
+#gamesPanel {
+  background: var(--panel-bg);
+  border-radius: 8px;
+  padding: 40px;
+  margin: 20px auto;
+  max-width: 1100px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+}
+#interactiveSection {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.gameBox {
+  background: #222;
+  border-radius: 8px;
+  padding: 20px;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  transition: transform 0.2s;
+}
+.gameBox:hover {
+  transform: translateY(-8px);
+}
+.gameBox h2 {
+  color: var(--highlight);
+  margin-bottom: 15px;
+}
+.gameBtn {
+  margin-top: 15px;
+  padding: 12px 24px;
+  background: #333;
+  color: var(--text-light);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.gameBtn:hover {
+  background: #444;
+  transform: scale(1.05);
+}
+canvas {
+  background: #111;
+  border: 2px solid #444;
+  border-radius: 6px;
+}
+
+/*---------------------------------------------------*/
+/* OVERVIEW & ABOUT PAGES                            */
+/*---------------------------------------------------*/
+#overviewPage, #aboutPage {
+  background: var(--panel-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+}
+.overview-content p, .about-content p, .overview-content li, .about-content li {
+  font-size: 1.15em;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+.overview-content ul, .overview-content ol, .about-content ul {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+.about-img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 10px;
+}
+
+/*---------------------------------------------------*/
+/* Responsive tweaks                                 */
+/*---------------------------------------------------*/
+@media (max-width: 768px) {
   #interactiveSection {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    gap: 20px;
+    flex-direction: column;
+    align-items: center;
   }
-  .gameBox {
-    background: #222;
-    border-radius: 8px;
-    padding: 20px;
-    width: 320px;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    transition: transform 0.2s;
+  #controlButtonsContainer {
+    flex-direction: column;
+    align-items: center;
   }
-  .gameBox:hover {
-    transform: translateY(-8px);
-  }
-  .gameBox h2 {
-    color: var(--highlight);
-    margin-bottom: 15px;
-  }
-  .gameBtn {
-    margin-top: 15px;
-    padding: 12px 24px;
-    background: #333;
-    color: var(--text-light);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
-  }
-  .gameBtn:hover {
-    background: #444;
-    transform: scale(1.05);
-  }
-  canvas {
-    background: #111;
-    border: 2px solid #444;
-    border-radius: 6px;
-  }
-  
-  /*---------------------------------------------------*/
-  /* OVERVIEW & ABOUT PAGES                           */
-  /*---------------------------------------------------*/
-  #overviewPage, #aboutPage {
-    background: var(--panel-bg);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-  }
-  .overview-content p, .about-content p, .overview-content li, .about-content li {
-    font-size: 1.15em;
-    line-height: 1.6;
-    margin-bottom: 10px;
-  }
-  .overview-content ul, .overview-content ol, .about-content ul {
-    margin-left: 20px;
-    margin-bottom: 20px;
-  }
-  .about-img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin: 10px;
-  }
-  
-  /*---------------------------------------------------*/
-  /* Responsive tweaks                                 */
-  /*---------------------------------------------------*/
-  @media (max-width: 768px) {
-    #interactiveSection {
-      flex-direction: column;
-      align-items: center;
-    }
-  }
+}

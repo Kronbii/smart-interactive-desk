@@ -2,6 +2,7 @@
 import serial
 import time
 import atexit
+import threading
 
 arduino_serial = None
 
@@ -24,6 +25,12 @@ def send_command(command):
             print(f"❌ Write failed: {e}")
     else:
         print("❌ Serial not connected.")
+        
+        
+def send_command_async(command):
+    def task():
+        send_command(command)  # or your comm.send_command(command)
+    threading.Thread(target=task, daemon=True).start()
 
 @atexit.register
 def close_serial():

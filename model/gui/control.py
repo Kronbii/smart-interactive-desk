@@ -26,25 +26,50 @@ def create_control_content(parent):
               background=[("active", config.theme.button_hover_color), ("!disabled", config.theme.button_color)],
               foreground=[("active", config.theme.button_hover_text_color), ("!disabled", config.theme.button_text_color)])
 
-    # Helper to create press-release buttons
-    def create_control_button(parent, label, cmd):
+    height_val = 75
+    tilt_val = 4
+    up_pressed = tk.BooleanVar(value=False)
+    down_pressed = tk.BooleanVar(value=False)
+    tilt_up_pressed = tk.BooleanVar(value=False)
+    tilt_down_pressed = tk.BooleanVar(value=False)
+
+    height_var = tk.StringVar(value="75 cm")
+    tilt_var = tk.StringVar(value="4°")
+
+    def update_height_tilt():
+        nonlocal height_val, tilt_val
+
+        if up_pressed.get():
+            height_val += 1.5
+            height_var.set(f"{height_val} cm")
+        elif down_pressed.get():
+            height_val = max(0, height_val - 1)
+            height_var.set(f"{height_val} cm")
+
+        if tilt_up_pressed.get():
+            tilt_val += 3
+            tilt_var.set(f"{tilt_val}°")
+        elif tilt_down_pressed.get():
+            tilt_val = max(0, tilt_val - 1)
+            tilt_var.set(f"{tilt_val}°")
+
+        frame.after(1000, update_height_tilt)
+
+    def create_control_button(parent, label, cmd, press_flag=None):
         btn = ttk.Button(parent, text=label, style="Rounded.TButton")
-        btn.bind("<ButtonPress-1>", lambda e: send_command(cmd))
-        btn.bind("<ButtonRelease-1>", on_button_release)
+        if press_flag is not None:
+            btn.bind("<ButtonPress-1>", lambda e: [press_flag.set(True), send_command(cmd)])
+            btn.bind("<ButtonRelease-1>", lambda e: [press_flag.set(False), on_button_release()])
+        else:
+            btn.config(command=lambda: send_command(cmd))
         return btn
 
-    # Command buttons
-    up_btn = create_control_button(frame, "↑ Up", "u")
-    down_btn = create_control_button(frame, "↓ Down", "d")
-    tilt_up_btn = create_control_button(frame, "↥ Tilt Up", "tu")
-    tilt_down_btn = create_control_button(frame, "↧ Tilt Down", "td")
+    up_btn = create_control_button(frame, "↑ Up", "u", up_pressed)
+    down_btn = create_control_button(frame, "↓ Down", "d", down_pressed)
+    tilt_up_btn = create_control_button(frame, "↥ Tilt Up", "tu", tilt_up_pressed)
+    tilt_down_btn = create_control_button(frame, "↧ Tilt Down", "td", tilt_down_pressed)
     stop_btn = ttk.Button(frame, text="■ Stop", style="Rounded.TButton", command=lambda: send_command("s"))
 
-    # Dynamic variables
-    height_var = tk.StringVar(value="0 cm")
-    tilt_var = tk.StringVar(value="0°")
-
-    # Labels
     height_label = tk.Label(frame, text="Height:", bg=config.theme.container_color, fg=config.theme.accent_color,
                             font=(config.theme.font_family, 10, "bold"), width=15, height=2)
     height_value_label = tk.Label(frame, textvariable=height_var, bg=config.theme.container_color, fg=config.theme.accent_color,
@@ -67,5 +92,7 @@ def create_control_content(parent):
     tilt_label.grid(row=3, column=0, padx=10, pady=(10, 5), sticky="ew")
     tilt_value_label.grid(row=3, column=1, padx=10, pady=(10, 5), sticky="ew")
     stop_btn.grid(row=4, column=0, columnspan=2, padx=10, pady=20, sticky="ew")
+
+    update_height_tilt()  # Start update loop
 
     return height_var, tilt_var

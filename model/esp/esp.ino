@@ -13,8 +13,14 @@ bool move_down_flag = false;
 bool tilt_up_flag = false;
 bool tilt_down_flag = false;
 bool stop_motion_flag = true;
-double height;
+double height, angle;
+int disp_angle;
 int disp_height;
+
+NewPing sonar[SONAR_NUM] = {
+  NewPing(HEIGHT_TRIG, HEIGHT_ECHO, MAX_DISTANCE),  // Sensor 0
+  NewPing(TILT_TRIG, TILT_ECHO, MAX_DISTANCE)   // Sensor 1
+};
 
 void setID() {
   digitalWrite(SHT_LOX1, LOW);
@@ -41,14 +47,12 @@ void setID() {
     while (1);
   }
 }
-
 void setup() {
-    digitalWrite(52, HIGH);
+  delay(2000);
+    digitalWrite(ARDRST, HIGH);
     comm.begin(115200);
     motion.init();
     table.init();
-
-    HCSR04.begin(12, 22);
 
     pinMode(man_up_pin, INPUT_PULLUP);
     pinMode(man_down_pin, INPUT_PULLUP);
@@ -72,36 +76,53 @@ void setup() {
     display.setTextSize(2);
     display.setTextColor(BLACK);
     display.setCursor(0, 0);
-    display.println("Hello Mega!");
+    display.println("WELCOME BEMO");
     display.display();
 
-    height = HCSR04.measureDistanceCm()[0];
-    disp_height = int(height);
-    pinMode(52, OUTPUT);
+    height = sonar[0].ping_cm();
+    angle = sonar[1].ping_cm();
+    pinMode(ARDRST, OUTPUT);
 }
 
 void loop() {
   display.clearDisplay();         // Clear old frame
   
-  height = HCSR04.measureDistanceCm()[0];
+  height = sonar[0].ping_cm();
+  angle = sonar[1].ping_cm();
+
   for (int i=0; i<NUM_SAMPLES; i++){
-    height = height + HCSR04.measureDistanceCm()[0];
+    height = height + sonar[0].ping_cm();
+    angle = angle + sonar[1].ping_cm();
   }
 
   height = height/ NUM_SAMPLES;
+  angle = angle / NUM_SAMPLES;
+  angle = atan2(angle, BASE) * 180.0 / PI;
   disp_height = int(height);
+  disp_angle = int(angle);
 
   String heightStr = String(disp_height) + " cm";  // Rounded to int
-  if (height >= 100){
-    display.setCursor(6, 16);
-  }
-  else{
-    display.setCursor(18, 16);
-}
+  String tiltStr = String(disp_angle) + " deg";
+
   display.setTextSize(2);
   display.setTextColor(BLACK);
-  Serial.println(height);
+
+  if (height >= 100){
+    display.setCursor(6, 4);
+  }
+  else{
+    display.setCursor(18, 4);
+}
+  
+  Serial.print("Height: ");
+  Serial.print(height);
+  Serial.print(" cm, Angle: ");
+  Serial.print(angle);
+  Serial.println(" deg");
   display.println(heightStr);
+
+  display.setCursor(12, 28);
+  display.println(tiltStr);
   display.display();
 
   bool man_up = digitalRead(man_up_pin);
@@ -111,7 +132,7 @@ void loop() {
 
   if(man_up == LOW && man_down == LOW){
     Serial.println("RESETING");
-    digitalWrite(52, LOW);
+    digitalWrite(ARDRST, LOW);
   }
   else if (man_up == LOW) {
     command = "u";

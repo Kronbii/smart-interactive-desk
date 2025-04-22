@@ -1,61 +1,150 @@
-#include <WiFi.h>
-#include <PubSubClient.h>
+#include "bemo.h"
 
-// Wi-Fi and MQTT Settings
-const char* ssid = "kronbii";
-const char* password = "kornbiii";
-const char* mqtt_server = "192.168.4.1";  // Change to your Raspberry Pi's IP if different
+SerialComm comm;
+MotionControl motion;
+TableStatus table;
+Adafruit_PCD8544 display = Adafruit_PCD8544(PIN_CLK, PIN_DIN, PIN_DC, PIN_CE, PIN_RST);
 
-WiFiClient espClient;
-PubSubClient client(espClient);
 
-void callback(char* topic, byte* message, unsigned int length) {
-    String command = "";
-    for (int i = 0; i < length; i++) {
-        command += (char)message[i];
-    }
+String command;
+String last_command;
+bool move_up_flag = false;
+bool move_down_flag = false;
+bool tilt_up_flag = false;
+bool tilt_down_flag = false;
+bool stop_motion_flag = true;
 
-    Serial.println("Received Command: " + command);
+void setID() {
+  digitalWrite(SHT_LOX1, LOW);
+  digitalWrite(SHT_LOX2, LOW);
+  delay(10);
+  digitalWrite(SHT_LOX1, HIGH);
+  digitalWrite(SHT_LOX2, HIGH);
+  delay(10);
 
-    if (command == "up") Serial.println("Raising Table...");
-    else if (command == "down") Serial.println("Lowering Table...");
-    else if (command == "tilt_up") Serial.println("Tilting Table Up...");
-    else if (command == "tilt_down") Serial.println("Tilting Table Down...");
-    else Serial.println("Unknown command received.");
-}
+  digitalWrite(SHT_LOX1, HIGH);
+  digitalWrite(SHT_LOX2, LOW);
 
-void reconnect() {
-    while (!client.connected()) {
-        Serial.print("Attempting MQTT connection...");
-        if (client.connect("ESP32_Client")) {
-            Serial.println("connected!");
-            client.subscribe("table/control");
-        } else {
-            Serial.print("failed, rc=");
-            Serial.print(client.state());
-            Serial.println(" trying again in 5 seconds...");
-            delay(5000);
-        }
-    }
+  if (!lox1.begin(LOX1_ADDRESS)) {
+    Serial.println(F("Failed to boot first VL53L0X"));
+    while (1);
+  }
+  delay(10);
+
+  digitalWrite(SHT_LOX2, HIGH);
+  delay(10);
+
+  if (!lox2.begin(LOX2_ADDRESS)) {
+    Serial.println(F("Failed to boot second VL53L0X"));
+    while (1);
+  }
 }
 
 void setup() {
-    Serial.begin(115200);
+    comm.begin(115200);
+    motion.init();
+    table.init();
+
+    HCSR04.begin(12, 22);
+
+    pinMode(man_up_pin, INPUT_PULLUP);
+    pinMode(man_down_pin, INPUT_PULLUP);
+    pinMode(man_tilt_up_pin, INPUT_PULLUP);
+    pinMode(man_tilt_down_pin, INPUT_PULLUP);
+
+    Serial.println(F("Starting..."));
+    //setID();
     
-    WiFi.begin(ssid, password);
-    while (WiFi.status() != WL_CONNECTED) { 
-        delay(500);
-        Serial.print("."); 
-    }
-    Serial.println("\nConnected to Wi-Fi!");
+    motion.stop();
+    //read_dual_sensors(sensor1, sensor2);
+    Serial.println("Begin of operations");
 
-    client.setServer(mqtt_server, 1883);
-    client.setCallback(callback);
+    display.begin();
+    display.setContrast(60);  // Adjust as needed
+    display.clearDisplay();
+    display.setTextSize(1);
+    display.setTextColor(BLACK);
+    display.setCursor(0, 0);
+    display.println("Smart Desk Ready");
+    display.display();
 
-    reconnect();
 }
 
 void loop() {
-    if (!client.connected()) reconnect();
-    client.loop();
+  double height = HCSR04.measureDistanceCm()[0];
+  Serial.println(height);
+
+  bool man_up = digitalRead(man_up_pin);
+  bool man_down = digitalRead(man_down_pin);
+  bool man_tilt_up = digitalRead(man_tilt_up_pin);
+  bool man_tilt_down = digitalRead(man_tilt_down_pin);
+
+  if (man_up == LOW) {
+    command = "u";
+    manual_active = true;
+  } else if (man_down == LOW) {
+    command = "d";
+    manual_active = true;
+  } else if (man_tilt_up == LOW) {
+    command = "tu";
+    manual_active = true;
+  } else if (man_tilt_down == LOW) {
+    command = "td";
+    manual_active = true;
+  } else if (manual_active) {
+    // A manual button was just released → send stop
+    command = "s";
+    manual_active = false; // reset
+  } else {
+    // No manual input → fallback to remote
+    comm.readCommand(command);
+  }
+
+  delay(100);
+
+  if (command != last_command) {
+    if (command == "u") {
+      move_up_flag = true; move_down_flag = tilt_up_flag = tilt_down_flag = false;
+      stop_motion_flag = false; last_command = command;
+    } else if (command == "d") {
+      move_down_flag = true; move_up_flag = tilt_up_flag = tilt_down_flag = false;
+      stop_motion_flag = false; last_command = command;
+    } else if (command == "s") {
+      move_up_flag = move_down_flag = tilt_up_flag = tilt_down_flag = false;
+      stop_motion_flag = true; last_command = command;
+    } else if (command == "tu") {
+      tilt_up_flag = true; move_up_flag = move_down_flag = tilt_down_flag = false;
+      stop_motion_flag = false; last_command = command;
+    } else if (command == "td") {
+      tilt_down_flag = true; move_up_flag = move_down_flag = tilt_up_flag = false;
+      stop_motion_flag = false; last_command = command;
+    } else {
+      command = last_command;
+    }
+  }
+
+    if(move_up_flag && height > 100){
+        move_up_flag = false;
+    }
+    if(move_down_flag && height < 80){
+        move_down_flag = false;
+    }
+
+  if (move_up_flag && !stop_motion_flag) {
+    motion.moveUp(); 
+    display.print("Going Up");
+  } else if (move_down_flag && !stop_motion_flag) {
+    motion.moveDown();
+    display.print("Going down");
+  } else if (tilt_up_flag && !stop_motion_flag) {
+    motion.tiltUp();
+    display.print("Tilting Up");
+  } else if (tilt_down_flag && !stop_motion_flag) {
+    motion.tiltDown();
+    display.print("Tilting Down");
+  } else {
+    motion.stop();
+    display.print("BEMO Awaiting Orders");
+  }
+
 }

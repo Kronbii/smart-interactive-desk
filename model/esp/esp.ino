@@ -3,9 +3,13 @@
 SerialComm comm;
 MotionControl motion;
 TableStatus table;
+<<<<<<< Updated upstream
 Adafruit_PCD8544 display = Adafruit_PCD8544(PIN_DC, PIN_CS, PIN_RST);
 
 
+=======
+
+>>>>>>> Stashed changes
 String command;
 String last_command;
 bool move_up_flag = false;
@@ -13,6 +17,7 @@ bool move_down_flag = false;
 bool tilt_up_flag = false;
 bool tilt_down_flag = false;
 bool stop_motion_flag = true;
+<<<<<<< Updated upstream
 double height, angle;
 int disp_angle;
 int disp_height;
@@ -22,6 +27,9 @@ NewPing sonar[SONAR_NUM] = {
   NewPing(TILT_TRIG, TILT_ECHO, MAX_DISTANCE)   // Sensor 1
 };
 
+=======
+
+>>>>>>> Stashed changes
 void setID() {
   digitalWrite(SHT_LOX1, LOW);
   digitalWrite(SHT_LOX2, LOW);
@@ -47,6 +55,7 @@ void setID() {
     while (1);
   }
 }
+<<<<<<< Updated upstream
 void setup() {
   delay(2000);
     digitalWrite(ARDRST, HIGH);
@@ -135,6 +144,39 @@ void loop() {
     digitalWrite(ARDRST, LOW);
   }
   else if (man_up == LOW) {
+=======
+
+void setup() {
+    comm.begin(115200);
+    motion.init();
+    table.init();
+
+    HCSR04.begin(12, 22);
+
+    pinMode(man_up_pin, INPUT_PULLUP);
+    pinMode(man_down_pin, INPUT_PULLUP);
+    pinMode(man_tilt_up_pin, INPUT_PULLUP);
+    pinMode(man_tilt_down_pin, INPUT_PULLUP);
+
+    Serial.println(F("Starting..."));
+    //setID();
+    
+    motion.stop();
+    //read_dual_sensors(sensor1, sensor2);
+    Serial.println("Begin of operations");
+}
+
+void loop() {
+  double height = HCSR04.measureDistanceCm()[0];
+  Serial.println(height);
+
+  bool man_up = digitalRead(man_up_pin);
+  bool man_down = digitalRead(man_down_pin);
+  bool man_tilt_up = digitalRead(man_tilt_up_pin);
+  bool man_tilt_down = digitalRead(man_tilt_down_pin);
+
+  if (man_up == LOW) {
+>>>>>>> Stashed changes
     command = "u";
     manual_active = true;
   } else if (man_down == LOW) {
@@ -194,7 +236,11 @@ void loop() {
   } else if (tilt_down_flag && !stop_motion_flag) {
     motion.tiltDown();
   } else {
+<<<<<<< Updated upstream
     motion.stop();
+=======
+    motion.stop(); 
+>>>>>>> Stashed changes
   }
 
 }

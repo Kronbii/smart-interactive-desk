@@ -7,15 +7,17 @@ def main(frame, i):
     
     # === Create a blank canvas ===
     try:
-        canvas = cv2.imread('canvas.png')
+        canvas = cv2.imread('test1.jpeg')
     except FileNotFoundError:
         canvas = np.zeros((frame_y, frame_x, 3), dtype=np.uint8)
     
     # === Convert frame to Grayscale ===
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    cv2.imwrite('gray_frame.png', gray_frame)  # Save the grayscale image
     
     # === Apply Gaussian Blur to Reduce Noise ===
     blur_frame = cv2.GaussianBlur(gray_frame, (5, 5), 0)
+    cv2.imwrite('blur_frame.png', blur_frame)  # Save the blurred image
     
     # === Adaptive Thresholding (Better Than Fixed) ===
     bin_frame = cv2.adaptiveThreshold(
@@ -23,12 +25,15 @@ def main(frame, i):
         cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
         cv2.THRESH_BINARY_INV, 15, 10
     )
+    cv2.imwrite('bin_frame.png', bin_frame)  # Save the binary image
     
     # === Morphological Cleaning (Open → Close) ===
     kernel = np.ones((3, 3), np.uint8)
     closed_frame = cv2.morphologyEx(bin_frame, cv2.MORPH_CLOSE, kernel, iterations=5)
+    cv2.imwrite('closed_frame.png', closed_frame)  # Save the closed image
     
     inv_frame = cv2.bitwise_not(closed_frame)
+    cv2.imwrite('inv_frame.png', inv_frame)  # Save the inverted image
     
     # === Create RGBA Image with Transparency ===
     rgba_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2BGRA)  # Convert to RGBA

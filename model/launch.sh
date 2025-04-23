@@ -1,29 +1,15 @@
 #!/bin/bash
 
 # === Navigate to base project directory ===
-cd "$(dirname "$0")/.."
+cd /home/bemo/smart-interactive-desk
 
 # === Activate Python virtual environment ===
 source bemo/bin/activate
 
 # === Start Python Bridge (background) ===
 cd model
-python3 bridge.py &
+python3 -m gui.main &
 BRIDGE_PID=$!
-
-# === Start GUI (foreground) ===
-cd gui
-python3 gui.py &
-GUI_PID=$!
-
-# === Start Web Server (background) ===
-cd ../web-app
-node server.js &
-SERVER_PID=$!
-
-# === Open Chrome tab to web server ===
-WEB_IP=$(hostname -I | awk '{print $1}')
-google-chrome "http://$WEB_IP:3000" &>/dev/null &
 
 # === Handle KeyboardInterrupt ===
 cleanup() {

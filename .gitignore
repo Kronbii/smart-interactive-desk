@@ -2,3 +2,5 @@
 /tree.sh
 /.vscode
 /test/segmentation/trocr-base-handwritten
+/test
+/stable

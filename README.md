@@ -12,50 +12,87 @@ Check the following link to access the resouces and reports used in this project
 
 [Project Resources](https://drive.google.com/drive/folders/1InH4OToC-3ZCmpd2p8zu-zYlxD98OoeB?usp=drive_link)
 
+# Smart Interactive Desk
 
-## **Repository Structure** #TODO: change the structure
+An interactive, dynamic, and intelligent desk that merges hardware control, computer vision, and ergonomic assistance into a single integrated system.
+
+---
+
+## 🧑‍💻 Public Overview
+
+### What is Smart Interactive Desk?
+
+The **Smart Interactive Desk** is an IoT-enabled, height-adjustable workstation designed to bring interactive learning and ergonomic benefits to classrooms, offices, and homes.  
+It combines sensors, motors, and smart software to allow users to control and monitor the desk via multiple interfaces (web app, game controller, etc.).
+
+By adjusting to user needs and promoting healthy movement, the desk aims to improve engagement, well-being, and posture during long hours of work or study.
+
+#### 📚 Why It Matters
+Studies show that adjustable desks and posture-monitoring can:
+- Reduce back pain
+- Improve concentration
+- Encourage healthy movement habits  
+*(Sources: [matellio.com](https://www.matellio.com) | [healthline.com](https://www.healthline.com))*
+
+---
+
+### 🎥 Demo / Preview (Concept)
+
+> **Note**: No real product images yet — these stock illustrations demonstrate the vision of an interactive, sensor-equipped smart desk.
+
+- **Image 1**: A modern, smart workstation with adjustable height and integrated computer interfaces.
+- **Image 2**: An imagined setup showing screens, sensors, and ergonomic controls on a desk surface.
+
+---
+
+### ✨ Features
+
+- **Motorized Height and Tilt**:  
+  Adjust desk surface for sitting or standing with motorized actuators.
+
+- **Posture Monitoring**:  
+  Real-time feedback using computer vision and/or ultrasonic sensors.
+
+- **Interactive Controls**:  
+  Web-based dashboard + Bluetooth PS4 controller support.
+
+- **Visual Feedback**:  
+  LCD or LED indicators display desk status, timers, or posture alerts.
+
+- **Computer Vision Capability**:  
+  OpenCV-based vision algorithms track posture, movement, or interaction.
+
+- **Data Logging and Analysis**:  
+  Usage stats and posture data can be collected for insight.
+
+- **Connectivity**:  
+  ESP32 microcontroller linked to a host computer via Serial or MQTT.
+
+---
+
+## 🧑‍💻 Developer Section
+
+### 🚀 Getting Started
+
+#### Clone the Repository
 ```bash
-├── CAD
-│   └── readme.md
-├── final-report
-│   └── readme.md
-├── mems
-│   └── readme.md
-├── progress-reports
-│   └── readme.md
-├── prototype-video
-│   └── readme.md
-├── README.md
-├── Report
-│   └── readme.md
-├── src
-│   ├── arduino
-│   │   └── readme.md
-│   └── python
-│       └── readme.md
-└── tree.sh
+git clone https://github.com/Kronbii/smart-interactive-desk.git
+cd smart-interactive-desk
 ```
 
----
-
-## **Initializing Node.js Web Application**
-Check the following link to check how to set-up the web app
-
-[How To Initialize Web App](src/web-app/README.md)
-
----
-
-## **ESP32 Boards Repo**
+#### Install requirements
+```bash
+pip install -r requirements.txt
 ```
-https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+```bash
+cd model/web-app
+npm install
 ```
----
-
-## **How To Control Desk Using Dual-shock 4**
-1- install pyPS4Controller python module
-2- put the ds4 in pairing mode
-3- connect the ds4 to ur linux/macOS machine
-4- run the python script
-5- read data from the terminal
-
-[How To Setup DS4](src/ds4_control/README.md)
+### Repository Structure
+```bash
+Directory | Status | Description
+model/ | ✅ Final Model | Only this should be used for production.
+test/ | ❌ Deprecated | Experimental testing modules (to be ignored).
+koubeissicly/ | ❌ Deprecated | Early architecture drafts (to be ignored).
+stable/ | ❌ Deprecated | Older stable version (before model/ finalization).
+```

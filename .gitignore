@@ -4,3 +4,5 @@
 /test/segmentation/trocr-base-handwritten
 /test
 /stable
+/canvas.png
+/output_image.png

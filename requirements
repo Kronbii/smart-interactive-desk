@@ -1,3 +1,7 @@
 serial
 pyserial
 opencv-python
+python-box
+tkinter
+ttkinter
+numpy

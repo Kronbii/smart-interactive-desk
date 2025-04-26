@@ -96,3 +96,4 @@ test/ | ❌ Deprecated | Experimental testing modules (to be ignored).
 koubeissicly/ | ❌ Deprecated | Early architecture drafts (to be ignored).
 stable/ | ❌ Deprecated | Older stable version (before model/ finalization).
 ```
+

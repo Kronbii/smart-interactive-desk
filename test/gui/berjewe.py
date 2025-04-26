@@ -1,1 +1,0 @@
-print('shu ma ken')

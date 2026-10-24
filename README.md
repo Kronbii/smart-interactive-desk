@@ -59,7 +59,7 @@ The **Smart Interactive Desk (BEMO)** is a comprehensive IoT-enabled workstation
 - 🌐 **Multi-Device Communication**: Desks can communicate with each other across classrooms via WiFi
 - 📱 **Multiple Control Interfaces**: Web app, desktop GUI, Bluetooth controller, and manual buttons
 - 🧠 **AI-Powered Features**: Handwriting recognition using Microsoft TrOCR, computer vision for posture monitoring
-- 🏃 **Automatic Posture Correction**: Real-time sensor feedback with motorized height and tilt adjustment
+- 🏃 **Automatic Posture Correction**: A camera-based posture model drives motorized height and tilt adjustment
 - 📊 **Comprehensive Analytics**: Usage statistics, posture tracking, and data logging
 - 🎨 **Modern UI/UX**: Custom-built GUI with theming support and responsive web interface
 
@@ -86,11 +86,11 @@ The **Smart Interactive Desk (BEMO)** is a comprehensive IoT-enabled workstation
   - Real-time height and angle display on LCD
 
 - **Automatic Posture Correction**
-  - Ultrasonic sensors for height measurement
-  - ToF (Time-of-Flight) sensors for tilt detection
+  - A camera-based computer-vision model monitors the user's posture
+  - Ultrasonic and ToF (Time-of-Flight) sensors measure the desk's own height and tilt, so the motors adjust it safely
   - Kalman filtering for sensor data smoothing
   - Real-time posture monitoring and alerts
-  - Automatic desk adjustment based on user position
+  - Automatic desk adjustment based on the detected posture
 
 ### 🌐 Connectivity & Communication
 

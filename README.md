@@ -76,7 +76,6 @@ python3 -m gui.main
 ```bash
 cd model/web-app
 npm install
-npm install socket.io   # server.js needs it, and package.json doesn't list it
 node server.js          # then open http://<the desk's IP>:3000
 ```
 

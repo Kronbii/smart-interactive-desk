@@ -7,3 +7,5 @@
 /canvas.png
 /output_image.png
 
+# installed by npm install
+node_modules/
